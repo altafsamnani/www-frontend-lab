@@ -4,6 +4,6 @@
     <p>
       Sorry, the page <code>{{ $route.params.notFound }}</code> you're looking for is not found
     </p>
-    <router-link :to="{ name: 'tasks' }">Back to your tasks</router-link>
+    <router-link :to="{ name: 'home' }">Back to home page</router-link>
   </div>
 </template>

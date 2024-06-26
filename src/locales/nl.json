@@ -30,7 +30,20 @@
     "reviews": "Reviews",
     "features": "Features",
     "posts": "Nieuws",
-    "pages": "Pagina's"
+    "pages": "Pagina's",
+    "products_burglary": "Inbraak",
+    "products_video": "Video",
+    "products_intercom": "Intercom",
+    "products_access_control": "Toegangsbeheer",
+    "products_building_automation": "Bouwautomatisering",
+    "products_fire": "Brand",
+    "products_burglary_text": "Satel, Honeywell en Hikvision",
+    "products_video_text": "Hikvision, Dahua en Honeywell",
+    "products_intercom_text": "Dahua, Hikvision, Paxton & BAS-IP",
+    "products_access_control_text": "Paxton, XPR, Honeywell en Acco",
+    "products_building_automation_text": "Satel, Grenton en Tedee",
+    "products_fire_text": "Branddetectie en evacuatiealarm"
+
   },
   "button": {
     "new": "Nieuw",

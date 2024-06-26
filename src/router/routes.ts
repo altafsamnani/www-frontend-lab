@@ -1,6 +1,8 @@
 import NotFoundErrorPage from '@/views/errors/NotFoundErrorPage.vue'
 import Login from '@/views/Login.vue'
-import Home from '../views/Home.vue'
+import Home from '../views/home/Home.vue'
+import Aboutus from '../views/Aboutus.vue'
+import Contactus from '../views/Contactus.vue'
 import Categories from '@/views/Categories.vue'
 import Brands from '@/views/Brands.vue'
 
@@ -20,6 +22,16 @@ const routes = [
     path: '/',
     component: Home,
     name: 'home'
+  },
+  {
+    path: '/aboutus',
+    name: 'aboutus',
+    component: Aboutus
+  },
+  {
+    path: '/contactus',
+    name: 'contactus',
+    component: Contactus
   },
   {
     path: '/categories/:id?',

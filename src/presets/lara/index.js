@@ -4,10 +4,12 @@ import tree from './tree'
 import dropdown from './dropdown'
 import multiselect from './multiselect'
 import calendar from './calendar'
+import carousel from './carousel'
 import button from './button'
 import togglebutton from './togglebutton'
 import splitbutton from './splitbutton'
 import menu from './menu'
+import megamenu from './megamenu'
 import tieredmenu from './tieredmenu'
 import inputtext from './inputtext'
 import inputnumber from './inputnumber'
@@ -43,11 +45,13 @@ export default {
   dropdown,
   multiselect,
   calendar,
+  carousel,
   checkbox,
   button,
   togglebutton,
   splitbutton,
   menu,
+  megamenu,
   tieredmenu,
   inputtext,
   inputnumber,
