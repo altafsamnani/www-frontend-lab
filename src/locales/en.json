@@ -19,7 +19,19 @@
     "posts": "Posts",
     "posts_edit": "Edit post",
     "pages": "Pages",
-    "pages_edit": "Edit page"
+    "pages_edit": "Edit page",
+    "products_burglary": "Burglary",
+    "products_video": "Video",
+    "products_intercom": "Intercom",
+    "products_access_control": "Access control",
+    "products_building_automation": "Building automation",
+    "products_fire": "Fire",
+    "products_burglary_text": "Satel, Honeywell and Hikvision",
+    "products_video_text": "Hikvision, Dahua and Honeywell",
+    "products_intercom_text": "Dahua, Hikvision, Paxton & BAS-IP",
+    "products_access_control_text": "Paxton, XPR, Honeywell and Acco",
+    "products_building_automation_text": "Satel, Grenton and Tedee",
+    "products_fire_text": "Fire detection & evacuation alarm"
   },
   "button": {
     "back": "Back",
