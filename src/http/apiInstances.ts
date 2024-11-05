@@ -7,11 +7,7 @@ axios.defaults.withCredentials = true
 axios.defaults.baseURL = import.meta.env.VITE_API_URL
 
 export const api = axios.create()
-
-api.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`
-api.defaults.headers.common['Accept-Language'] = localStorage.getItem('locale')
-  ? localStorage.getItem('locale')
-  : import.meta.env.VITE_DEFAULT_LOCALE
+//api.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`
 
 api.defaults.headers.get['Content-Type'] = 'application/json'
 api.defaults.headers.get['Accept'] = 'application/vnd.osec.default.v1+json'
@@ -28,10 +24,16 @@ api.defaults.headers.delete['Accept'] = 'application/json'
 api.defaults.headers.put['Content-Type'] = 'application/vnd.osec.default.v1+json'
 api.defaults.headers.put['Accept'] = 'application/json'
 
+api.interceptors.request.use(
+  (config) => handleHeaders(config)
+)
+
 api.interceptors.response.use(
   (response) : any => response.data,
   (error) => handleError(error)
 )
+
+
 
 export const loginApi = axios.create({
   headers: {
@@ -46,11 +48,9 @@ export const uploadApi = axios.create({
   }
 })
 
-uploadApi.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
-uploadApi.defaults.headers.common['Accept-Language'] = localStorage.getItem('locale')
-  ? localStorage.getItem('locale')
-  : import.meta.env.VITE_DEFAULT_LOCALE
-
+uploadApi.interceptors.request.use(
+  (config) => handleHeaders(config)
+)
 uploadApi.interceptors.response.use(
   (response) => response.data,
   (error) => handleError(error)
@@ -65,6 +65,13 @@ export const usetoastservice = () => {
 
   return { showtoast };
 };
+
+const handleHeaders = (config) => {
+  config.headers['Accept-Language'] = localStorage.getItem('lang')
+  config.headers['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`
+
+  return config
+}
 
 const handleError = (error) => {
   const { showtoast } = usetoastservice();
