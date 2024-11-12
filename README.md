@@ -18,6 +18,11 @@ npm run dev
 ```sh
 npm run build
 ```
+### To Avoid Type-Check, Compile and Minify for Production
+
+```sh
+npm run build-only
+```
 
 ### Lint with [ESLint](https://eslint.org/)
 
