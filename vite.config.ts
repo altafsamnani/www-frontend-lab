@@ -9,7 +9,19 @@ const require = createRequire( import.meta.url );
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
+  build: {
+    chunkSizeWarningLimit: 1600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id.toString().split('node_modules/')[1].split('/')[0];
+          }
+        }
+      }
+    }
+  },
+  plugins: [  
     vue(),
     ckeditor5( { theme: require.resolve( '@ckeditor/ckeditor5-theme-lark' ) } ),
   ],
