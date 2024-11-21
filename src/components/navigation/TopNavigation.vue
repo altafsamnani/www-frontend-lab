@@ -12,7 +12,7 @@
             </a>
 
             <div class="flex items-center justify-center">
-                <img class="h-8 w-auto" src="/images/logos/logo-osec-wit.svg?color=indigo&shade=600" alt="" />
+                <img class="h-8 w-auto" :src="theme == 'light' ? '/images/logos/logo-osec-wit.svg' : '/images/logos/logo-osec.svg'" alt="" />
 
             </div>
             <div class="flex items-center flex-auto ml-4 lg:ml-12">
@@ -62,7 +62,7 @@
                     </li>
                     <li class="inline-flex relative border-r-1 border-surface-200 dark:border-surface-700">
                         <!-- Darkmode Switcher -->
-                        <Button :icon="theme == 'light' ? 'pi pi-sun text-surface-0' : 'pi pi-moon text-surface-900'"
+                        <Button :icon="theme == 'light' ? 'pi pi-moon text-surface-0' : 'pi pi-sun text-surface-900'"
                             @click="handleToggleDarkModeClick()" severity="secondary" text 
                             aria-label="Select Dark Mode" />
                     </li>
@@ -159,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { SUPPORT_LOCALES as supportLocales, setI18nLanguage } from '@/i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -189,8 +189,15 @@ const submitLogout = async () => {
     router.push({ name: 'login' })
 }
 
-const storedTheme = localStorage.getItem('theme') || 'light'
-const theme = ref(storedTheme)
+const theme = ref()
+
+onMounted(() => {
+  theme.value = (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : localStorage.getItem('theme') || 'light';
+  document.querySelector('html')?.setAttribute('data-theme', theme.value)
+  document.querySelector('html')?.setAttribute('class', theme.value)
+  localStorage.setItem('theme', theme.value)
+})
+
 const handleToggleDarkModeClick = () => {
     theme.value = theme.value === 'light' ? 'dark' : 'light'
     document.querySelector('html')?.setAttribute('data-theme', theme.value)

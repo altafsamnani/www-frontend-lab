@@ -17,12 +17,12 @@ export default {
             'font-bold',
 
             // Spacing
-            'p-4',
+            //'p-4',
 
             // Color
             'text-surface-800 dark:text-white/80',
-            'bg-surface-50 dark:bg-surface-800',
-            'border-surface-200 dark:border-surface-700 border-y'
+            //'bg-surface-50 dark:bg-surface-800',
+            //'border-surface-200 dark:border-surface-700 border-y'
         ]
     }
 };
