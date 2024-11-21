@@ -96,6 +96,6 @@ app.use(ConfirmationService);
 app.use(ToastService);
 app.use(PrimeVue, { 
     unstyled: true, 
-    pt: Lara 
+    pt: Lara
 });
 app.mount('#app')

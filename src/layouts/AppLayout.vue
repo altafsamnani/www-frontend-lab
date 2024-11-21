@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0 z-40 items-center h-20 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 bg-surface-800 dark:bg-surface-950 ">
+  <div class="sticky top-0 z-40 items-center h-20 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 bg-surface-800 dark:bg-surface-50">
     <TopNavigationNew />
   </div>
   <div class="flex">
@@ -22,7 +22,6 @@ import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import Footer from '@/layouts/Footer.vue';
 import Header from '@/components/navigation/Header.vue';
-import TopNavigation from '@/components/navigation/TopNavigationOld.vue'
 import { useNotifyStore } from '@/stores/notify'
 import Divider from 'primevue/divider';
 import { useToast } from 'primevue/usetoast'
@@ -35,10 +34,7 @@ const { notifications } = storeToRefs(notifyStore)
 const toast = useToast()
 
 
-onMounted(() => {
-  const theme = localStorage.getItem('theme') || 'light'
-  document.querySelector('html')?.setAttribute('class', theme)
-})
+
 
 const toasts = notifyStore.notifications
 

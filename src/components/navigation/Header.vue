@@ -1,10 +1,9 @@
 <template>
-    <div class="h-full w-full bg-surface-0 dark:bg-surface-950 ">
+    <div class="h-full w-full">
         <nav class="relative w-full flex items-center" @mouseleave="closeMenu">
 
             <div
-                class="osecheader border-b shadow-sm dark:border-white/10 border-surface-900/10 bg-surface-100  lg:bg-surface-0  
-                animate-fadeinup absolute lg:static  w-full pb-4 lg:py-0 hidden lg:flex flex-1 items-center top-0 left-0 z-10">
+                class="hidden osecheader w-full lg:flex flex-1 items-center pb-4 border-b animate-fadeinup absolute lg:static  lg:py-0  top-0 left-0 z-10">
 
                 <ul class="select-none relative flex-1 flex lg:flex-row flex-col lg:mb-0 mb-4 lg:justify-start gap-2 lg:gap-8 pr-4"
                     @mouseleave="hoveredItem = null">
