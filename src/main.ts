@@ -30,7 +30,7 @@ import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 import Popover from 'primevue/popover';
 import Toast from 'primevue/toast';
-import Lara from '@/presets/lara_old';
+import Lara from '@/presets/lara';
 import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
 import Tabs from 'primevue/tabs';
