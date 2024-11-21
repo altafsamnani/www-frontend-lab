@@ -40,5 +40,5 @@ module.exports = {
   //   themes: ['light', 'dark']
   // },
   //plugins: [require('@tailwindcss/typography'), require('daisyui')]
-  plugins: [require('@tailwindcss/typography')]
+  plugins: [require('tailwindcss-primeui')]
 }

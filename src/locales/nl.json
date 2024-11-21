@@ -42,7 +42,9 @@
     "products_intercom_text": "Dahua, Hikvision, Paxton & BAS-IP",
     "products_access_control_text": "Paxton, XPR, Honeywell en Acco",
     "products_building_automation_text": "Satel, Grenton en Tedee",
-    "products_fire_text": "Branddetectie en evacuatiealarm"
+    "products_fire_text": "Branddetectie en evacuatiealarm",
+    "products_search": "Alle producten",
+    "products_search_text": "Vind je product"
 
   },
   "button": {

@@ -25,7 +25,7 @@
               <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">We have worked with thousands of amazing people</p>
             </div>
             <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 grid-rows-1 gap-8 text-sm leading-6 text-gray-900 sm:mt-20 sm:grid-cols-2 xl:mx-0 xl:max-w-none xl:grid-flow-col xl:grid-cols-4">
-              <figure class="col-span-2 hidden sm:block sm:rounded-2xl sm:bg-white sm:shadow-lg sm:ring-1 sm:ring-gray-900/5 xl:col-start-2 xl:row-end-1">
+              <figure class="col-span-2 hidden sm:block sm:rounded-2xl sm:shadow-lg sm:ring-1 sm:ring-gray-900/5 xl:col-start-2 xl:row-end-1">
                 <blockquote class="p-12 text-xl font-semibold leading-8 tracking-tight text-gray-900">
                   <p>{{ `“${featuredTestimonial.body}”` }}</p>
                 </blockquote>
@@ -40,7 +40,7 @@
               </figure>
               <div v-for="(columnGroup, columnGroupIdx) in testimonials" :key="columnGroupIdx" class="space-y-8 xl:contents xl:space-y-0">
                 <div v-for="(column, columnIdx) in columnGroup" :key="columnIdx" :class="[(columnGroupIdx === 0 && columnIdx === 0) || (columnGroupIdx === testimonials.length - 1 && columnIdx === columnGroup.length - 1) ? 'xl:row-span-2' : 'xl:row-start-1', 'space-y-8']">
-                  <figure v-for="testimonial in column" :key="testimonial.author.handle" class="rounded-2xl bg-white p-6 shadow-lg ring-1 ring-gray-900/5">
+                  <figure v-for="testimonial in column" :key="testimonial.author.handle" class="rounded-2xl p-6 shadow-lg ring-1 ring-gray-900/5">
                     <blockquote class="text-gray-900">
                       <p>{{ `“${testimonial.body}”` }}</p>
                     </blockquote>

@@ -173,7 +173,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const staffs = [
   {
     department: 'Internal Sales',
@@ -183,7 +183,7 @@ const staffs = [
         name: 'Luc Otten',
         role: 'Co-Founder / Head of Internal Sales',
         imageUrl:
-          'https://scontent-ams2-1.xx.fbcdn.net/v/t1.18169-9/15073476_1827997954113633_5794254805340558154_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=jE74NZ_gjqoQ7kNvgESnkb3&_nc_ht=scontent-ams2-1.xx&oh=00_AYCpasWHO-zF9Vl9sO6Os9NIGWRVQjt38EjrNMerzmM6SQ&oe=66A0D336',
+          '/images/team/luc.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 ​​666 662 (option 1 06 86 865 095)',
@@ -194,7 +194,7 @@ const staffs = [
         name: 'Ryan Beentjes',
         role: 'Staff',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E03AQHqFtmbAyie4w/profile-displayphoto-shrink_800_800/0/1691613437415?e=1724889600&v=beta&t=v_nC6qgR7vrpH9uCq3w-i4o2xLEHXLm-7qwScct9Z6U',
+          '/images/team/ryan.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 ​​666 662 (option 1 06 86 865 095)',
@@ -205,8 +205,7 @@ const staffs = [
       {
         name: 'Steve Soetekouw',
         role: 'Staff',
-        imageUrl:
-          'https://media.licdn.com/dms/image/C4E03AQGg8Rd3JOjv-Q/profile-displayphoto-shrink_800_800/0/1642962650015?e=1724889600&v=beta&t=5V2q-I2V_zNU43BhuJkJDDwY76nbruU2Fvy-nvs1W-A',
+        imageUrl:'/images/team/steve.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 ​​666 662 option 1',
@@ -217,7 +216,7 @@ const staffs = [
         name: 'Nathan de Vries',
         role: 'Internal Fire Department',
         imageUrl:
-          'https://media.licdn.com/dms/image/C4E03AQF4ifUAi8B-_w/profile-displayphoto-shrink_800_800/0/1539172694678?e=1724889600&v=beta&t=UN44ilpIG_3GX4lPngzo31rtJyHVkAJLYJDFnPWOdBs',
+          '/images/team/nathan.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 ​​666 662 option 5',
@@ -236,7 +235,7 @@ const staffs = [
         name: 'Sander van Wijk',
         role: 'Account manager',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E03AQFwPbUzu169gg/profile-displayphoto-shrink_800_800/0/1682491728398?e=1724889600&v=beta&t=NP0xACjKj0G3PGR6e9P2i_CR0IPHv5Ied2ugRifmp50',
+          '/images/team/sander.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 52 336 202',
@@ -247,7 +246,7 @@ const staffs = [
         name: 'Wesley Kloppenburg',
         role: 'Account manager',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E03AQEaBVKP20l2KQ/profile-displayphoto-shrink_800_800/0/1684741511663?e=1724889600&v=beta&t=TZLvqTKRPSF1OargwxPvLiV-9E-qT3V61H1hPDCI0Qc',
+          '/images/team/wesley.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 12 293 865',
@@ -258,7 +257,7 @@ const staffs = [
         name: 'Wim Jonker',
         role: 'Account manager',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E03AQHjxVCjKYlkBg/profile-displayphoto-shrink_800_800/0/1696327176857?e=1724889600&v=beta&t=j-XWzISVgV2KNxxMKDrPyjLO8q2-IHpXEsBswKnETwY',
+          '/images/team/wim.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 30 162 551',
@@ -269,7 +268,7 @@ const staffs = [
         name: 'Marco Kramer',
         role: 'Fire specialist',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E03AQH4WyoItr3Mqg/profile-displayphoto-shrink_800_800/0/1712225450779?e=1724889600&v=beta&t=qwOzwbL63fVnA0fWqsk66bhlk3AbEqWQVBGKog0oZro',
+          '/images/team/marco.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 51 526 436',
@@ -280,7 +279,7 @@ const staffs = [
         name: 'Richard Robert',
         role: 'Sales manager',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E03AQHw1l7bzBlflA/profile-displayphoto-shrink_800_800/0/1696324946743?e=1724889600&v=beta&t=bjTCFZCJ5ZI1kbXJCDOiZmbyU7FjL46dl39214wXfIU',
+          '/images/team/richard.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 30 238 653',
@@ -291,7 +290,7 @@ const staffs = [
         name: 'Dennis Joor',
         role: 'Account manager / Fire specialist',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E22AQGnHYh0Pd0aOw/feedshare-shrink_1280/0/1689840102058?e=1721865600&v=beta&t=hqrHIybLljdKqW4y1ZxuRnPsH-5-SCYS5INmqZWQxuA',
+          '/images/team/dennis.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 10 548 204',
@@ -309,7 +308,7 @@ const staffs = [
         name: 'Paula Roelvink',
         role: 'Administration',
         imageUrl:
-          'https://media.licdn.com/dms/image/C4E03AQHX0DSLE6RUnw/profile-displayphoto-shrink_800_800/0/1516998071282?e=1724889600&v=beta&t=a-8NQzzpeqKgNJ1MCxZgxlYY1S-Tb-mRXLUC_pgAOT8',
+          '/images/team/paula.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 ​​666 662 option 3',
@@ -320,7 +319,7 @@ const staffs = [
         name: 'Diane de Kruijff',
         role: 'Human Resources',
         imageUrl:
-          'https://media.licdn.com/dms/image/D4E03AQFpNwxiLRFkkQ/profile-displayphoto-shrink_800_800/0/1687421153347?e=1724889600&v=beta&t=Elt49DIg_y2R7TlO-tS640IVQtMNV7URwX7mk9FYO20',
+          '/images/team/diane.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 ​​666 662 option 3',
@@ -331,7 +330,7 @@ const staffs = [
         name: 'Frank Hoffer',
         role: 'Purchase',
         imageUrl:
-          'https://media.licdn.com/dms/image/C4D03AQF9KxHli0C2Vg/profile-displayphoto-shrink_800_800/0/1600118851507?e=1724889600&v=beta&t=30B787q9uvO9zHJwn_1cco-1OBazkvc47bFArjlhucI',
+          '/images/team/frank.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 12 882 373',
@@ -342,7 +341,7 @@ const staffs = [
         name: 'David Harmsen',
         role: 'Purchase',
         imageUrl:
-          'https://media.licdn.com/dms/image/C4D03AQHC3m5LeN0Viw/profile-displayphoto-shrink_800_800/0/1570439713244?e=1724889600&v=beta&t=sEYzEEDGat5TW0jZKd47dBeHRlcw0xTL411toizM-uw',
+          '/images/team/david.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '06 20 883 406',
@@ -359,7 +358,7 @@ const staffs = [
         name: 'Conrad Maayen',
         role: 'CTO ',
         imageUrl:
-          'https://i.pinimg.com/280x280_RS/67/01/25/670125d8d6d09e6b501841aaedba2adb.jpg',
+          '/images/team/conrad.png',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 666 662 option 2',
@@ -370,7 +369,7 @@ const staffs = [
         name: 'Altaf Samnani',
         role: 'Lead developer ',
         imageUrl:
-          'https://b4dev.net/assets/6.-AltafTeam.jpg',
+          '/images/team/altaf.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 666 662 option 2',
@@ -387,7 +386,7 @@ const staffs = [
         name: 'Erwin Otten',
         role: 'Founder / CEO',
         imageUrl:
-          'https://scontent-ams2-1.xx.fbcdn.net/v/t1.18169-9/23031206_889361284556046_2750698606624123421_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5f2048&_nc_ohc=5OIq9Wl7OwUQ7kNvgFpDzxZ&_nc_ht=scontent-ams2-1.xx&oh=00_AYDcnd3JWrbWE5bITWn3x4ANeQv2nv4aEjVWtSTwK0uk2A&oe=66A0F729',
+          '/images/team/erwin.jpeg',
         xUrl: '#',
         linkedinUrl: '#',
         phone: '0299 ​​666 662 (option 1 06 86 865 095)',
