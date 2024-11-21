@@ -11,7 +11,7 @@
               <div class="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
                 <p class="text-lg leading-8 text-gray-600">We have a selective portfolio of electronic security products in the areas of Burglary, Video, Intercom, Access Control, Building Automation and Fire: we know the products we carry inside and out. With this solid foundation we offer reliability to our customers. But we like to go a few steps further...</p>
               </div>
-              <img src="https://www.beveiliging.nl/wp-content/uploads/2019/08/Osec_Honeywell-502x376.jpg" alt="" class="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36" />
+              <img src="/images/aboutus/1.jpg" alt="" class="mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36" />
             </div>
           </div>
           <div class="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-white sm:h-32" />
@@ -48,17 +48,17 @@
               </div>
               <div class="flex flex-wrap items-start justify-end gap-6 sm:gap-8 lg:contents">
                 <div class="w-0 flex-auto lg:ml-auto lg:w-auto lg:flex-none lg:self-end">
-                  <img src="https://scontent-ams4-1.xx.fbcdn.net/v/t1.6435-9/60526521_2100646756718856_6818580858111262720_n.png?_nc_cat=111&ccb=1-7&_nc_sid=5f2048&_nc_ohc=ZqZjb3WGre0Q7kNvgFFhJ_h&_nc_ht=scontent-ams4-1.xx&oh=00_AYA9IMu8bMtefk_b4KQiMW2CFclwR5djt7iZ8o7Kly5Qzg&oe=669CC99F" alt="" class="aspect-[7/5] w-[37rem] max-w-none rounded-2xl bg-gray-50 object-cover" />
+                  <img src="/images/aboutus/7.jpeg" alt="" class="aspect-[7/5] w-[37rem] max-w-none rounded-2xl bg-gray-50 object-cover" />
                 </div>
                 <div class="contents lg:col-span-2 lg:col-end-2 lg:ml-auto lg:flex lg:w-[37rem] lg:items-start lg:justify-end lg:gap-x-8">
                   <div class="order-first flex w-64 flex-none justify-end self-end lg:w-auto">
-                    <img src="https://scontent-ams2-1.xx.fbcdn.net/v/t31.18172-8/1888903_615546348562245_4301228664570448853_o.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=CZu-elLwITQQ7kNvgHLIYTO&_nc_ht=scontent-ams2-1.xx&oh=00_AYD1z18HFfbbs7zALW0nZJjqzuUc9mp93BnwGArQ4N2yxQ&oe=669CD50A" alt="" class="aspect-[4/3] w-[24rem] max-w-none flex-none rounded-2xl bg-gray-50 object-cover" />
+                    <img src="/images/aboutus/5.jpg" alt="" class="aspect-[4/3] w-[24rem] max-w-none flex-none rounded-2xl bg-gray-50 object-cover" />
                   </div>
                   <div class="flex w-96 flex-auto justify-end lg:w-auto lg:flex-none">
-                    <img src="https://scontent-ams4-1.xx.fbcdn.net/v/t1.6435-9/50586593_1928444007272466_3109924057403883520_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=5f2048&_nc_ohc=4TiDh2m5xokQ7kNvgH6ZcDK&_nc_ht=scontent-ams4-1.xx&oh=00_AYD_TeDmMYSQyIzuwPR4-4b4Qsv3VTdzwt3y2VX5uhJ-Bw&oe=669CF39B" alt="" class="aspect-[7/5] w-[37rem] max-w-none flex-none rounded-2xl bg-gray-50 object-cover" />
+                    <img src="/images/aboutus/3.jpg" alt="" class="aspect-[7/5] w-[37rem] max-w-none flex-none rounded-2xl bg-gray-50 object-cover" />
                   </div>
                   <div class="hidden sm:block sm:w-0 sm:flex-auto lg:w-auto lg:flex-none">
-                    <img src="https://scontent-ams4-1.xx.fbcdn.net/v/t1.18169-9/971939_499199786863569_714410390_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_ohc=jj-zNxc7bXMQ7kNvgHsawqk&_nc_ht=scontent-ams4-1.xx&oh=00_AYABxyAO4pwD6HoJMcBLITsisGb_LqArUi70a0uQFq37MQ&oe=669CF15A" alt="" class="aspect-[4/3] w-[24rem] max-w-none rounded-2xl bg-gray-50 object-cover" />
+                    <img src="/images/aboutus/6.jpeg" alt="" class="aspect-[4/3] w-[24rem] max-w-none rounded-2xl bg-gray-50 object-cover" />
                   </div>
                 </div>
               </div>
@@ -103,7 +103,7 @@
             <div class="w-full lg:max-w-lg lg:flex-auto">
               <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">We’re always looking for awesome people to join us</h2>
               <p class="mt-6 text-xl leading-8 text-gray-600">In order to continue to serve our customers at a high level, our driven team of professionals is looking for enthusiastic colleagues for the following positions:</p>
-              <img src="https://scontent-ams2-1.xx.fbcdn.net/v/t31.18172-8/10630669_618365591613654_1069702682005175175_o.jpg?_nc_cat=108&ccb=1-7&_nc_sid=5f2048&_nc_ohc=EAKUQZinRDcQ7kNvgGi6RVH&_nc_ht=scontent-ams2-1.xx&oh=00_AYAGiEziYnI5aLdlobDH9lEyLnFkfjR-vXke7x8dYj2-mg&oe=669CD674" alt="" class="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]" />
+              <img src="/images/aboutus/2.png" alt="" class="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]" />
             </div>
             <div class="w-full lg:max-w-xl lg:flex-auto">
               <h3 class="sr-only">Job openings</h3>

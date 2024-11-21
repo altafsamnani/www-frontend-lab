@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { api } from '@/http/apiInstances.js'
+import { api, uploadApi } from '@/http/apiInstances.js'
 import { csrfCookie, login, register, logout, getUser } from '../http/auth'
 
 export const isLoggedIn = (): boolean => (localStorage.getItem('access_token') ? true : false)
@@ -24,6 +24,8 @@ export const useAuthStore = defineStore('authStore', () => {
     accessToken.value = res.headers['x-token']
     localStorage.setItem('access_token', accessToken.value)
     api.defaults.headers.common['Authorization'] = `Bearer ${accessToken.value}`
+    api.defaults.headers.common['Authorization'] = `Bearer ${accessToken.value}`
+    uploadApi.defaults.headers.common['Authorization'] = `Bearer ${accessToken.value}`
   }
 
   const handleLogin = async (credentials) => {

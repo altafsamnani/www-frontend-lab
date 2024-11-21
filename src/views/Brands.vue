@@ -23,7 +23,7 @@
         />
       </div>
       <div class="">
-        <Dropdown
+        <Select
           v-model="selectedStatus"
           :options="statusses"
           optionLabel="name"
@@ -34,7 +34,7 @@
           class="w-full"
           @update:modelValue="handleStatusChange"
         >
-        </Dropdown>
+        </Select>
       </div>
       <div class="space-x-2">
         <Button

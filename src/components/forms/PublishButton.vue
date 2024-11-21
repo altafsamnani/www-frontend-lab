@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex items-center justify-start space-x-6">
-      <Calendar
+      <DatePicker
         v-model="newPublishDate"
         dateFormat="dd-mm-yy"
         v-if="isChanging"
