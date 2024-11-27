@@ -183,6 +183,8 @@
     "name": "Naam",
     "path": "Bestand",
     "categories": "Categorieën",
+    "brands": "Merken",
+    "price": "Prijs",
     "label_all": "Alle",
     "description": "Omschrijving",
     "label_active": "Weergave",
