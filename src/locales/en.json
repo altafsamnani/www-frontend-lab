@@ -171,6 +171,8 @@
     "name": "Name",
     "path": "Path",
     "categories": "Categories",
+    "brands": "Brands",
+    "price": "Price",
     "label_all": "All",
     "description": "Description",
     "label_active": "Show",

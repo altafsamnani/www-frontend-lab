@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "../intra-frontend/src/presets/lara/carousel"],
+  "include": ["env.d.ts", "src/**/*", "../intra-frontend/src/presets/lara/carousel"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
