@@ -12,14 +12,19 @@
             </a>
 
             <div class="flex items-center justify-center">
-                <img class="h-8 w-auto" :src="theme == 'light' ? '/images/logos/logo-osec-wit.svg' : '/images/logos/logo-osec.svg'" alt="" />
+                <RouterLink to="/">
+                    <img class="h-8 w-auto"
+                        :src="theme == 'light' ? '/images/logos/logo-osec-wit.svg' : '/images/logos/logo-osec.svg'"
+                        alt="" />
+                </RouterLink>
 
             </div>
             <div class="flex items-center flex-auto ml-4 lg:ml-12">
                 <div class="p-input-icon-left w-full p-input-filled">
                     <IconField icon-position="left" class="w-full">
                         <InputIcon class="pi pi-search" />
-                        <InputText placeholder="Product search" class="w-full" />
+                        <InputText v-model="productSearch" placeholder="Product search" class="w-full"
+                            @keydown.enter="router.push({ name: 'Search', params: { q: productSearch } })" />
                     </IconField>
                 </div>
             </div>
@@ -42,7 +47,7 @@
                     <li class="inline-flex relative">
                         <!-- language selector -->
                         <Button :icon="theme == 'light' ? 'pi pi-globe text-surface-0' : 'pi pi-globe text-surface-900'"
-                            severity="secondary" text  aria-label="Select Dark Mode" @click="toggleLocale"
+                            severity="secondary" text aria-label="Select Dark Mode" @click="toggleLocale"
                             aria-haspopup="true" aria-controls="locale_menu" />
                         <Menu :model="localeItems" ref="localeMenu" id="locale_menu" :popup="true">
                             <template #item="{ item, props }">
@@ -63,13 +68,13 @@
                     <li class="inline-flex relative border-r-1 border-surface-200 dark:border-surface-700">
                         <!-- Darkmode Switcher -->
                         <Button :icon="theme == 'light' ? 'pi pi-moon text-surface-0' : 'pi pi-sun text-surface-900'"
-                            @click="handleToggleDarkModeClick()" severity="secondary" text 
+                            @click="handleToggleDarkModeClick()" severity="secondary" text
                             aria-label="Select Dark Mode" />
                     </li>
                 </ul>
-                </div>
-                    <div class="flex ml-4 lg:ml-12">
-                        <ul class="list-none p-0 m-0 flex">
+            </div>
+            <div class="flex ml-4 lg:ml-12">
+                <ul class="list-none p-0 m-0 flex">
                     <li class="inline-flex relative">
                         <a v-styleclass="{
                             selector: '@next',
@@ -182,6 +187,7 @@ interface settings {
 }
 
 const { t } = useI18n()
+const productSearch = ref('')
 
 const submitLogout = async () => {
     await handleLogout()
@@ -192,11 +198,12 @@ const submitLogout = async () => {
 const theme = ref()
 
 onMounted(() => {
-  theme.value = (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : localStorage.getItem('theme') || 'light';
-  document.querySelector('html')?.setAttribute('data-theme', theme.value)
-  document.querySelector('html')?.setAttribute('class', theme.value)
-  localStorage.setItem('theme', theme.value)
+    theme.value = (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : localStorage.getItem('theme') || 'light';
+    document.querySelector('html')?.setAttribute('data-theme', theme.value)
+    document.querySelector('html')?.setAttribute('class', theme.value)
+    localStorage.setItem('theme', theme.value)
 })
+
 
 const handleToggleDarkModeClick = () => {
     theme.value = theme.value === 'light' ? 'dark' : 'light'

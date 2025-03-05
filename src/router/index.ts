@@ -16,6 +16,11 @@ router.beforeEach(async (to, from) => {
       }
     }
   }
+  console.log('to', to)
+  /*if (to.params.categorySlug !== '') {
+    console.log('to2', to)
+    return false
+  } */
 })
 
 export default router

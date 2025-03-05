@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="w-full space-y-2 sm:w-56 lg:max-w-64" :key="num" v-for="num in prop.count">
-      <Skeleton height="11rem" />
+  <div :class="layout === 'grid' ? 'grid grid-cols-12 gap-4' : 'flex flex-col'">
+    <div class="col-span-12 sm:col-span-12 md:col-span-6 xl:col-span-4 p-2" :key="num" v-for="num in prop.count">
+      <Skeleton class="mb-2" height="11rem" />
       <Skeleton class="mb-2"></Skeleton>
       <Skeleton width="10rem" class="mb-2"></Skeleton>
       <Skeleton width="5rem" class="mb-2"></Skeleton>
@@ -14,5 +14,6 @@ import { defineProps } from 'vue'
 
 const prop = defineProps<{
   count: number
+  layout: string
 }>()
 </script>

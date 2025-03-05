@@ -45,7 +45,6 @@
     "products_fire_text": "Branddetectie en evacuatiealarm",
     "products_search": "Alle producten",
     "products_search_text": "Vind je product"
-
   },
   "button": {
     "new": "Nieuw",
@@ -198,7 +197,9 @@
     "publication_planned": "Wordt gepubliceerd op",
     "publication_published": "Gepubliceerd",
     "publication_not_published": "Niet gepubliceerd",
-    "deleted": "Verwijderd"
+    "deleted": "Verwijderd",
+    "true": "Ja",
+    "false": "Nee"
   },
   "categories": {
     "title": "Categorieën",
@@ -540,5 +541,10 @@
     "select_title": "Selecteer onderwerp",
     "image": "Afbeelding",
     "updated_at": "Bijgewerkt"
+  },
+  "search": {
+    "filter": "Filter",
+    "clear_all": "Alles wissen",
+    "rangeTag": "Van {min} tot {max}"
   }
 }
