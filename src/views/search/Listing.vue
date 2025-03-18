@@ -7,7 +7,7 @@
       :currentPageReportTemplate="`Showing {first} to {last} of {totalRecords}`" @page="clickOnPaginator" :lazy="true">
       <template #header>
         <div class="flex justify-between flex-wrap ">
-          <div class="flex items-center mb-4 hidden">
+          <div class="flex items-center mb-4 ">
             <Select v-model="sortKey" :options="sortOptions" optionLabel="label" :placeholder="`Sort by Relevance`"
               @change="onSortChange($event)" />
           </div>
@@ -36,9 +36,12 @@
               <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
                 <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                   <div>
-                    <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{ item.category.slug
-                      }}</span>
-                    <div class="text-lg font-medium mt-2">{{ item.name }}</div>
+                    <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
+                      item.category.map(category => t('categories.' + category.slug)).join(', ')
+                    }}</span>
+
+                    <div class="text-lg font-medium mt-1">{{ item.name }}</div>
+
                   </div>
                   <div class="bg-surface-100 p-1" style="border-radius: 30px">
                     <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"

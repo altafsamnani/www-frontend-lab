@@ -47,6 +47,7 @@ export default function setupI18n() {
       locale: locale,
       allbackWarn: false,
       warnHtmlInMessage: 'off',
+      silentTranslationWarn: true,
       fallbackLocale: 'en',
       datetimeFormats: dateTimeFormats()
     })

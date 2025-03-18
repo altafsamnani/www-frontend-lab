@@ -16,15 +16,20 @@
             </div>
             <div class="pt-6">
                 <div class="flex flex-row justify-between items-start gap-2">
+
                     <div>
-                        <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{ item.category.slug
+                        <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
+                            item.category.map(category => t('categories.' + category.slug)).join(', ')
                             }}</span>
+
                         <div class="text-lg font-medium mt-1">{{ item.name }}</div>
+
                     </div>
                     <div class="bg-surface-100 dark:bg-surface-700 p-1" style="border-radius: 30px">
                         <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"
                             style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
-                            <span class="text-surface-900 dark:text-surface-100 font-medium text-sm">{{ item.rating ?? 4
+                            <span class="text-surface-900 dark:text-surface-100 font-medium text-sm">{{ item.rating
+                                ?? 4
                                 }}</span>
                             <i class="pi pi-star-fill text-yellow-500"></i>
                         </div>

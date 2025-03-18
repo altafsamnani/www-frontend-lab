@@ -17,7 +17,7 @@
         <AccordionPanel value="0"
             v-if="Object.keys(facets?.static_categories_agg).length !== 0 && Object.keys(facets?.static_categories_agg?.items).length !== 0">
             <AccordionHeader>
-                <div class="text-lg lg:text-xl font-semibold">{{ t('general.categories') }}</div>
+                <div class="text-lg lg:text-xl font-semibold text-left">{{ t('general.categories') }}</div>
             </AccordionHeader>
             <AccordionContent>
                 <FilterList :facet-items="facets?.static_categories_agg?.items" :es-key="staticEsKeys.categories"
@@ -29,7 +29,7 @@
         <AccordionPanel value="1"
             v-if="Object.keys(facets?.static_brands_agg).length !== 0 && Object.keys(facets?.static_brands_agg?.items).length !== 0">
             <AccordionHeader>
-                <div class="text-lg lg:text-xl font-semibold">{{ t('general.brands') }}</div>
+                <div class="text-lg lg:text-xl font-semibold text-left">{{ t('general.brands') }}</div>
             </AccordionHeader>
             <AccordionContent>
                 <FilterList :facet-items="facets?.static_brands_agg?.items" :es-key="staticEsKeys.brand"
@@ -39,7 +39,7 @@
         </AccordionPanel>
         <AccordionPanel value="2" v-if="facets?.static_price_agg?.items">
             <AccordionHeader>
-                <div class="text-lg lg:text-xl font-semibold">{{ t('general.price') }}</div>
+                <div class="text-lg lg:text-xl font-semibold text-left">{{ t('general.price') }}</div>
             </AccordionHeader>
             <AccordionContent>
                 <FilterRange :query="props.query" :facet-item="facets?.static_price_agg?.items"
@@ -52,7 +52,7 @@
             <AccordionPanel v-for="(facetAttribute, attributeKey, index) in facets?.attributes_agg" :key="index"
                 :value="accordionValue(index)">
                 <AccordionHeader>
-                    <div class="text-lg lg:text-xl font-semibold">{{ t('attributes.' +
+                    <div class="text-lg lg:text-xl font-semibold text-left">{{ t('attributes.' +
                         facetAttribute.html.filter_translation_key) }}</div>
                 </AccordionHeader>
                 <AccordionContent>
@@ -89,7 +89,7 @@
     <Button label="Apply" class="w-full mt-10" />
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -115,67 +115,48 @@ import type Tags from '@/types/Tags'
 const props = defineProps<{
     query: Query
     staticEsKeys: Object
-    facets: Facet
 }>()
 const emit = defineEmits(['applySearch', 'setHeader'])
 const query = ref(props.query)
-/* const staticEsKeys = ref({
-    brand: 'brand.slug',
-    price: 'price',
-    categories: 'categoriesAll.slug'
-}) */
 const Google = ref('')
 const searchStore = useSearchStore()
-//const { facets } = storeToRefs(searchStore)
-const facets = ref(props.facets)
-const facetCatFilterData = ref(facets?.static_categories_agg?.html?.filter_data)
-const facetBrandFilterData = ref(facets?.static_brands_agg?.html?.filter_data)
+const { facets } = storeToRefs(searchStore)
+
 const { t } = useI18n()
 const route = useRoute()
 const activeIndexes = ref(['0', '1', '2', '3', '4'])
 const checkedEsValuesCollection = ref({})
-const tagsFilter = ref<Tags[]>([])
 const tagsToggle = ref<Tags[]>([])
 const tags = ref<Tags[]>([])
 const routeCategorySlug = ref(route.params.categorySlug)
 const routeBrandSlug = ref(route.params.brandSlug)
-const routettributes = ref(route.params.attribute)
 const staticEsKeys = ref(props.staticEsKeys)
-/* const staticEsKeys = ref({
-    brand: 'brand.slug',
-    price: 'price',
-    categories: 'categoriesAll.slug'
-}) */
 const getEsKey = (attributeKey: string) => 'attributes.' + attributeKey
 
 onMounted(async () => {
     let esKey
     let esValue
-    let filterHtmlData
 
     if (routeCategorySlug.value !== '') {
         esKey = staticEsKeys.value.categories
         esValue = routeCategorySlug.value
-        filterHtmlData = facets?.static_categories_agg?.html?.filter_data
         setFilter(esKey, 'equals', esValue, 'general.categories', t('categories.' + routeCategorySlug.value))
-
     }
 
     if (routeBrandSlug.value !== '') {
         esKey = staticEsKeys.value.brand
         esValue = routeBrandSlug.value
-
         setFilter(esKey, 'equals', esValue, 'general.brands', capitalizeFirstWord(routeBrandSlug.value.toString()))
 
     }
 
     emit('applySearch', query.value)
-    console.log('SearchReset: onMounted', facetCatFilterData);
-    setHeader(true, esKey, esValue, routeBrandSlug.value ? facetBrandFilterData : facetCatFilterData.value)
 
-    // Category: SearchReset: onMounted true categoriesAll.slug video undefined
-    // Brand:    SearchReset: onMounted true brand.slug dahua undefined
-
+    watch(
+        () => facets.value,
+        () => setHeader(true, esKey, esValue, routeCategorySlug.value !== '' ? facets?.value.static_categories_agg?.html?.filter_data : routeBrandSlug.value !== '' ? facets?.value.static_brands_agg?.html?.filter_data : ''),
+        { once: true }
+    )
 })
 
 const setFilter = (esKey: string, filterOp: string, esValue: any, labelKey: string, labelValue: string) => {
@@ -211,7 +192,6 @@ function clickOnFilter(event, esKey: string, headerLabel: string, filterHtmlData
 
     setHeader(event.checked, esKey, event.esValue, filterHtmlData)
 
-    console.log('SearchReset: clickOnFilter', event.checked, esKey, event.esValue, filterHtmlData);
     emit('applySearch', query.value)
 }
 
@@ -246,11 +226,12 @@ function clickOnToggle(event, facet: Facet, attributeKey: string) {
     }
 
     checkedEsValuesCollection.value[esKey] = event.value
-    console.log('SearchReset: clickOnToggle');
+
     emit('applySearch', query.value)
 }
 
 function clickOnRange(event: { labelValue: string[], esValue: number[] }, esKey: string, headerLabel: string) {
+
     let tag = {
         labelKey: headerLabel,
         labelValue: t('search.rangeTag', { min: event.labelValue[0], max: event.labelValue[1] }),
@@ -263,9 +244,7 @@ function clickOnRange(event: { labelValue: string[], esValue: number[] }, esKey:
     resetQuery(esKey, event.esValue, 'range')
 
     checkedEsValuesCollection.value[esKey] = event.esValue
-    console.log(esKey, event.esValue);
 
-    console.log('SearchReset: clickOnRange');
     emit('applySearch', query.value)
 }
 
@@ -284,7 +263,6 @@ function clickOnClearTags(tags: Tags) {
     }
     setHeader(false)
 
-    console.log('SearchReset: clickOnClearTags');
     emit('applySearch', query.value)
 }
 
@@ -302,8 +280,8 @@ function setHeader(checked: boolean, esKey?: string, clickedEsValue?: string, fi
     if (checked) {
         switch (esKey) {
             case staticEsKeys.value.categories:
-                title = t('categories.' + clickedEsValue)
-                description = filterHtmlData[clickedEsValue].description
+                title = 'categories.' + clickedEsValue
+                description = 'categories_description.' + clickedEsValue
 
                 break;
             case staticEsKeys.value.brand:
@@ -312,8 +290,7 @@ function setHeader(checked: boolean, esKey?: string, clickedEsValue?: string, fi
                 break;
         }
     }
-    console.log('headerTitle', title);
-    console.log('description', description);
+
     emit('setHeader', title, description)
 }
 
@@ -338,7 +315,6 @@ function resetQuery(esKey: string, esValue?: any, esCrud: string = 'update', fil
             break;
         case 'remove':
             //For removal exactly key and value needs to be matched
-            console.log('query', query.value.filter);
 
             index = query.value.filter?.findIndex(queryFilter => queryFilter.key === esKey && queryFilter.value === esValue)
             console.log('index', index);

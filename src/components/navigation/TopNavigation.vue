@@ -55,12 +55,12 @@
                                     @click="handleLocaleClick('nl')">
                                     <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'nl' }">{{
                                         $t('languages.nl')
-                                    }}</span>
+                                        }}</span>
                                 </a>
                                 <a v-else @click="handleLocaleClick('en')" class="block p-2 cursor-pointer">
                                     <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'en' }">{{
                                         $t('languages.en')
-                                    }}</span>
+                                        }}</span>
                                 </a>
                             </template>
                         </Menu>

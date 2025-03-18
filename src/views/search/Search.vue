@@ -3,17 +3,16 @@
     <div class="flex sm:flex-row flex-col items-start sm:items-end gap-2">
       <div class="flex-1">
         <h2 v-if="headerTitle"
-          class="text-3xl text-surface-900 dark:text-surface-0 font-bold inline-flex items-center gap-2">{{ headerTitle
-          }}</h2>
+          class="text-3xl text-surface-900 dark:text-surface-0 font-bold inline-flex items-center gap-2">{{
+            t(headerTitle) }}</h2>
         <p v-if="headerDescription" class="mt-2 text-surface-600 dark:text-surface-400 text-xl"
-          v-html="headerDescription"></p>
+          v-html="t(headerDescription)"></p>
       </div>
     </div>
     <Divider v-if="headerTitle || headerDescription" class="!my-6" />
     <div class="flex lg:flex-row flex-col gap-8">
       <div class="w-full lg:w-72">
-        <Facets :static-es-keys="staticEsKeys" :query="query" :facets="facets" @applySearch="applySearch"
-          @setHeader="setHeader" />
+        <Facets :static-es-keys="staticEsKeys" :query="query" @applySearch="applySearch" @setHeader="setHeader" />
       </div>
       <div class="flex-1  rounded-lg min-h-72">
         <FacetTop v-if="categoryFacets" :category-facets="categoryFacets" :query="query"
@@ -38,8 +37,8 @@ import FacetTop from './FacetTop.vue';
 
 
 const searchStore = useSearchStore()
-const { facets, products } = storeToRefs(searchStore)
 const { fetchSearch } = searchStore
+const { facets, products } = storeToRefs(searchStore)
 const { t } = useI18n()
 const router = useRouter()
 const categoryFacets = ref(facets)
@@ -71,6 +70,7 @@ const applySearch = async (params?: Query) => {
   query.value = params
   resetRoutes()
   await fetchSearch(params)
+
 }
 
 const resetRoutes = () => {

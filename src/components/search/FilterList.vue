@@ -12,8 +12,8 @@
                     data-pc-name="checkbox" pc217="" data-pc-section="root"
                     :data-p-checked="checkedValueExists(esKey, esValue)" data-p-disabled="false">
                     <input :id="esValue.toString()" @change="clickOnFilter"
-                        :aria-describedby="getAttributeOptionTranslation(esValue) + checkedValueExists(esKey, esValue)"
-                        :value="esValue" :name="esKey" type="checkbox" :checked="checkedValueExists(esKey, esValue)"
+                        :aria-describedby="getAttributeOptionTranslation(esValue)" :value="esValue" :name="esKey"
+                        type="checkbox" :checked="checkedValueExists(esKey, esValue)"
                         class="peer w-full h-full absolute top-0 left-0 z-10 p-0 m-0 opacity-0 rounded-md outline-none border-2 border-surface-200 dark:border-surface-700 appearance-none cursor-pointer"
                         data-pc-section="input">
                     <div :class="!checkedValueExists(esKey, esValue) ? 'border-2' : 'bg-primary'"
@@ -31,7 +31,7 @@
                 </div>
 
                 <label :for="esValue" class="flex-1 text-surface-900 dark:text-surface-0">
-                    {{ getAttributeOptionTranslation(esValue) + checkedValueExists(esKey, esValue) }}</label>
+                    {{ getAttributeOptionTranslation(esValue) }}</label>
             </div>
 
             <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs 

@@ -1,6 +1,5 @@
 <template>
-    <template
-        v-if="false && Object.keys(facets).length !== 0 && Object.keys(facets?.static_categories_agg).length !== 0">
+    <template v-if="Object.keys(facets).length !== 0 && Object.keys(facets?.static_categories_agg).length !== 0">
         <Carousel :value="getImages(facets?.static_categories_agg?.html?.filter_data)" :numVisible="5" :numScroll="3"
             :responsiveOptions="responsiveOptions" containerClass="flex items-center bg-surface-800 dark:bg-surface-50">
             <template #item="slotProps">

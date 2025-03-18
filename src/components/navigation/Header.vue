@@ -84,16 +84,13 @@
     </div>
 </template>
 <script setup lang="ts">
-import Button from 'primevue/button';
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { SUPPORT_LOCALES as supportLocales, setI18nLanguage } from '@/i18n'
+import { setI18nLanguage } from '@/i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { useNotifyStore, NotificationType } from '@/stores/notify'
 import { localize } from '@vee-validate/i18n'
-import Search from '@/components/navigation/Search.vue'
-import Header from './Header.vue';
 
 const notifyStore = useNotifyStore()
 const router = useRouter()
@@ -147,7 +144,7 @@ const navs = ref([
             {
                 label: 'navigation.products_burglary',
                 description: 'navigation.products_burglary_text',
-                to: '/categories/burglary',
+                to: '/search/burglary',
                 icon: 'pi pi-bell',
                 categories: [
                     { title: 'Wireless', to: '#' },
@@ -157,7 +154,7 @@ const navs = ref([
             {
                 label: 'navigation.products_video',
                 description: 'navigation.products_video_text',
-                to: '/categories/video',
+                to: '/search/video',
                 icon: 'pi pi-video',
                 categories: [
                     { title: 'IP', to: '#' },
@@ -168,7 +165,7 @@ const navs = ref([
             {
                 label: 'navigation.products_fire',
                 description: 'navigation.products_fire_text',
-                to: '/categories/fire',
+                to: '/search/fire',
                 icon: 'pi pi-building',
                 categories: [
                     { title: 'Satel', to: '#' },
@@ -183,19 +180,19 @@ const navs = ref([
             {
                 label: 'navigation.products_intercom',
                 description: 'navigation.products_intercom_text',
-                to: '/categories/intercom',
+                to: '/search/intercom',
                 icon: 'pi pi-phone'
             },
             {
                 label: 'navigation.products_access_control',
                 description: 'navigation.products_access_control_text',
-                to: '/categories/access_control',
+                to: '/search/access_control',
                 icon: 'pi pi-calculator'
             },
             {
                 label: 'navigation.products_building_automation',
                 description: "navigation.products_building_automation_text",
-                to: '/categories/building_automation',
+                to: '/search/building_automation',
                 icon: 'pi pi-home'
             },
 
