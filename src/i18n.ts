@@ -45,6 +45,9 @@ export default function setupI18n() {
       globalInjection: true,
       legacy: false, // you must set `false`, to use Composition API
       locale: locale,
+      allbackWarn: false,
+      warnHtmlInMessage: 'off',
+      silentTranslationWarn: true,
       fallbackLocale: 'en',
       datetimeFormats: dateTimeFormats()
     })

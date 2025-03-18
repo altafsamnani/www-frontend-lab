@@ -1,11 +1,22 @@
 <template>
-    <div class="h-full w-full">
+    <div class="h-full w-full bg-surface-0 dark:bg-surface-950">
         <nav class="relative w-full flex items-center" @mouseleave="closeMenu">
-
+            <a href="#" class="-m-1.5 p-1.5">
+                <span class="sr-only">Osec B.V.</span>
+                <img class="h-8 w-auto" src="/images/logo-osec.svg?color=indigo&shade=600" alt="" />
+            </a>
+            <a v-styleclass="{
+                selector: '@next',
+                enterFromClass: 'hidden',
+                leaveToClass: 'hidden',
+                hideOnOutsideClick: true
+            }"
+                class="relative z-20 cursor-pointer block lg:hidden text-surface-700 dark:text-surface-100 mr-0 ml-auto">
+                <i class="pi pi-bars text-3xl" />
+            </a>
             <div
-                class="hidden osecheader w-full lg:flex flex-1 items-center pb-4 border-b animate-fadeinup absolute lg:static  lg:py-0  top-0 left-0 z-10 bg-surface-0 dark:bg-surface-900">
-
-                <ul class="select-none relative flex-1 flex lg:flex-row flex-col lg:mb-0 mb-4 lg:justify-start gap-2 lg:gap-8 pr-4"
+                class="border-b border-surface lg:border-0 animate-fadeinup absolute lg:static bg-surface-50 dark:bg-surface-900 lg:bg-transparent lg:dark:bg-transparent w-full pt-14 pb-4 lg:py-0 hidden lg:flex flex-1 items-center top-0 left-0">
+                <ul class="border-y mt-6 lg:mt-0 border-surface lg:border-0 select-none relative flex-1 flex lg:flex-row flex-col lg:mb-0 mb-4 lg:justify-end gap-2 lg:gap-8 p-4"
                     @mouseleave="hoveredItem = null">
                     <template v-for="(item, index) of navs" :key="index">
                         <li @mouseenter="setActiveItem(item)" @click="setActiveItem(item)">
@@ -79,18 +90,63 @@
                         </div>
                     </div>
                 </ul>
+                <Search />
+
+                <div class="flex items-center justify-between lg:justify-center gap-6 px-8 lg:px-0">
+                    <Button label="Login" text />
+                    <Button label="Register" />
+                </div>
+                <div v-if="$route.meta.layout != 'login'"
+                    class="hidden lg:block lg:h-6 lg:w-px bg-surface-900/10 dark:bg-white/10" aria-hidden="true"></div>
+                <Button icon="pi pi-bell" severity="secondary" text rounded aria-label="" @click="toggleNotifications"
+                    aria-haspopup="true" aria-controls="notifications" v-if="$route.meta.layout != 'login'"
+                    class="hidden lg:flex" />
+                <Popover ref="notificationsPanel">
+                    <div>
+                        <h2 class="mb-2 text-lg font-semibold">Notifications</h2>
+                        <p v-for="notification in notifications" :key="notification.id">
+                            {{ notification.msg }}
+                        </p>
+                    </div>
+                </Popover>
+
+                <!-- language selector -->
+
+                <Button icon="pi pi-globe" severity="secondary" text rounded aria-label="Select Dark Mode"
+                    @click="toggleLocale" aria-haspopup="true" aria-controls="locale_menu" />
+                <Menu :model="localeItems" ref="localeMenu" id="locale_menu" :popup="true">
+                    <template #item="{ item, props }">
+                        <a v-if="item.language == 'nl'" class="block p-2 cursor-pointer"
+                            @click="handleLocaleClick('nl')">
+                            <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'nl' }">{{
+                                $t('languages.nl')
+                                }}</span>
+                        </a>
+                        <a v-else @click="handleLocaleClick('en')" class="block p-2 cursor-pointer">
+                            <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'en' }">{{
+                                $t('languages.en')
+                                }}</span>
+                        </a>
+                    </template>
+                </Menu>
+
+                <!-- Darkmode Switcher -->
+                <Button :icon="theme == 'light' ? 'pi pi-sun' : 'pi pi-moon'" @click="handleToggleDarkModeClick()"
+                    severity="secondary" text rounded aria-label="Select Dark Mode" />
             </div>
         </nav>
     </div>
 </template>
 <script setup lang="ts">
+import Button from 'primevue/button';
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { setI18nLanguage } from '@/i18n'
+import { SUPPORT_LOCALES as supportLocales, setI18nLanguage } from '@/i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { useNotifyStore, NotificationType } from '@/stores/notify'
 import { localize } from '@vee-validate/i18n'
+import Search from '@/components/navigation/Search.vue'
 
 const notifyStore = useNotifyStore()
 const router = useRouter()
@@ -144,7 +200,7 @@ const navs = ref([
             {
                 label: 'navigation.products_burglary',
                 description: 'navigation.products_burglary_text',
-                to: '/search/burglary',
+                to: '/categories/burglary',
                 icon: 'pi pi-bell',
                 categories: [
                     { title: 'Wireless', to: '#' },
@@ -154,7 +210,7 @@ const navs = ref([
             {
                 label: 'navigation.products_video',
                 description: 'navigation.products_video_text',
-                to: '/search/video',
+                to: '/categories/video',
                 icon: 'pi pi-video',
                 categories: [
                     { title: 'IP', to: '#' },
@@ -163,9 +219,27 @@ const navs = ref([
                 ]
             },
             {
+                label: 'navigation.products_intercom',
+                description: 'navigation.products_intercom_text',
+                to: '/categories/intercom',
+                icon: 'pi pi-phone'
+            },
+            {
+                label: 'navigation.products_access_control',
+                description: 'navigation.products_access_control_text',
+                to: '/categories/access_control',
+                icon: 'pi pi-calculator'
+            },
+            {
+                label: 'navigation.products_building_automation',
+                description: "navigation.products_building_automation_text",
+                to: '/categories/building_automation',
+                icon: 'pi pi-home'
+            },
+            {
                 label: 'navigation.products_fire',
                 description: 'navigation.products_fire_text',
-                to: '/search/fire',
+                to: '/categories/fire',
                 icon: 'pi pi-building',
                 categories: [
                     { title: 'Satel', to: '#' },
@@ -177,25 +251,6 @@ const navs = ref([
                     { title: 'Protect', to: '#' }
                 ]
             },
-            {
-                label: 'navigation.products_intercom',
-                description: 'navigation.products_intercom_text',
-                to: '/search/intercom',
-                icon: 'pi pi-phone'
-            },
-            {
-                label: 'navigation.products_access_control',
-                description: 'navigation.products_access_control_text',
-                to: '/search/access_control',
-                icon: 'pi pi-calculator'
-            },
-            {
-                label: 'navigation.products_building_automation',
-                description: "navigation.products_building_automation_text",
-                to: '/search/building_automation',
-                icon: 'pi pi-home'
-            },
-
             {
                 label: 'navigation.products_search',
                 description: 'navigation.products_search_text',

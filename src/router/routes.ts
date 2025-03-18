@@ -5,8 +5,7 @@ import Aboutus from '../views/Aboutus.vue'
 import Contactus from '../views/Contactus.vue'
 import Categories from '@/views/Categories.vue'
 import Brands from '@/views/Brands.vue'
-
-
+import Search from '@/views/search/Search.vue'
 
 const routes = [
   {
@@ -43,19 +42,28 @@ const routes = [
     }
   },
   {
-      path: '/brands/:page?',
-      name: 'Brands',
-      component: Brands,
-      meta: {
-        guest: true,
-        group: 'products',
-      }
+    path: '/brands/:page?',
+    name: 'Brands',
+    component: Brands,
+    meta: {
+      guest: true,
+      group: 'products'
+    }
+  },
+  {
+    path: '/search/:categorySlug?/:brandSlug?/:attribute?',
+    name: 'Search',
+    component: Search,
+    meta: {
+      guest: true,
+      group: 'products'
+    }
   },
   {
     path: '/:notFound(.*)',
     name: 'error.404',
     component: NotFoundErrorPage
-  },
+  }
 ]
 
 export default routes

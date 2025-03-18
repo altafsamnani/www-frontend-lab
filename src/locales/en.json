@@ -194,7 +194,9 @@
     "active": "Active",
     "inactive": "Inactive",
     "published": "Published",
-    "empty": "Empty"
+    "empty": "Empty",
+    "true": "True",
+    "false": "False"
   },
   "categories": {
     "title": "Categories",
@@ -540,5 +542,10 @@
     "select_title": "Select title",
     "image": "Image",
     "updated_at": "Updated At"
+  },
+  "search": {
+    "filter": "Filter",
+    "clear_all": "Clear all",
+    "rangeTag": "From {min} to {max}"
   }
 }
