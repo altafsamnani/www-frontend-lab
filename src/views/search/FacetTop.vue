@@ -3,7 +3,7 @@
         <Carousel :value="getImages(facets?.static_categories_agg?.html?.filter_data)" :numVisible="5" :numScroll="3"
             :responsiveOptions="responsiveOptions" containerClass="flex items-center bg-surface-800 dark:bg-surface-50">
             <template #item="slotProps">
-                <div
+                <div v-if="slotProps.data.filterData.images.length > 0"
                     class="border border-surface-200 dark:border-surface-700 rounded m-3 px-4 bg-surface-0 dark:bg-surface-900">
                     <div class="mb-4">
                         <div class="relative mx-auto">

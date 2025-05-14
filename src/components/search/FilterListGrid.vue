@@ -3,13 +3,13 @@
         <Galleria :value="getGrids" :responsive-options="responsiveOptions" container-class="h-full !border-0"
             :num-visible="1" :show-thumbnails="false" :show-indicators="true">
             <template #item="slotProps">
-                <div class="flex flex-wrap w-full h-auto overflow-hidden justify-center gap-3">
+                <div class="flex flex-wrap w-full h-auto overflow-hidden gap-3">
                     <div v-for="grid of slotProps.item.page" :key="grid"
                         class="h-8 flex justify-center items-center text-sm cursor-pointer !rounded-lg ounded-[16px]"
                         :class="{
                             'bg-surface-100 dark:bg-surface-700 text-surface-900 dark:text-surface-0 ': !checkedValueExists(esKey, grid.value),
                             'bg-highlight text-highlight-contrast': checkedValueExists(esKey, grid.value)
-                        }" @click="clickOnFilter(grid.value)">
+                        }" @click="clickOnFilterToInsertEs(grid.value)">
                         {{ grid.value }}
                         <div class="ml-1 w-6 h-6 rounded-full flex items-center justify-center text-xs 
                         font-bold bg-surface-200 dark:bg-surface-700 text-surface-900 dark:text-surface-0">
@@ -84,11 +84,11 @@ const responsiveOptions = ref([
     }
 ]);
 
-const emit = defineEmits(['clickOnFilter'])
+const emit = defineEmits(['clickOnFilterToInsertEs'])
 
 
-function clickOnFilter(esValue: string, checked: boolean) {
-    emit('clickOnFilter', {
+function clickOnFilterToInsertEs(esValue: string, checked: boolean) {
+    emit('clickOnFilterToInsertEs', {
         labelValue: getAttributeOptionTranslation(esValue),
         esValue: esValue,
         checked: !checkedValueExists(esKey.value, esValue)

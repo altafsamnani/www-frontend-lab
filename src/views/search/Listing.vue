@@ -38,10 +38,10 @@
                   <div>
                     <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
                       item.category.map(category => t('categories.' + category.slug)).join(', ')
-                    }}</span>
-
-                    <div class="text-lg font-medium mt-1">{{ item.name }}</div>
-
+                      }}</span>
+                    <router-link :to="{ name: 'Products', params: { id: item.id } }">
+                      <div class="text-lg font-medium mt-1">{{ item.name }}</div>
+                    </router-link>
                   </div>
                   <div class="bg-surface-100 p-1" style="border-radius: 30px">
                     <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"

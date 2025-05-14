@@ -56,3 +56,19 @@ export const capitalizeFirstWord = (str: string) => {
     .map((word, index) => (index === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word))
     .join(' ')
 }
+
+export const getAttributeOptionTranslation = (t, facetItemLabelKey: number | string, facetItemsKey?: string) => {
+  if (!isNaN(Number(facetItemLabelKey))) {
+      return facetItemLabelKey.toString()
+  }
+
+  return facetItemsKey
+      ? t('attributeOptions.' + facetItemsKey + '.' + facetItemLabelKey)
+      : capitalizeFirstWord(facetItemLabelKey.toString())
+}
+
+export const facetCountClass = (str: any): string => {
+  const count = 5 + str.toString().length;
+
+  return 'w-' + count + ' h-' + count
+}

@@ -12,7 +12,8 @@
     <Divider v-if="headerTitle || headerDescription" class="!my-6" />
     <div class="flex lg:flex-row flex-col gap-8">
       <div class="w-full lg:w-72">
-        <Facets :static-es-keys="staticEsKeys" :query="query" @applySearch="applySearch" @setHeader="setHeader" />
+        <Facets view='fieldset' :static-es-keys="staticEsKeys" :query="query" @applySearch="applySearch"
+          @setHeader="setHeader" />
       </div>
       <div class="flex-1  rounded-lg min-h-72">
         <FacetTop v-if="categoryFacets" :category-facets="categoryFacets" :query="query"

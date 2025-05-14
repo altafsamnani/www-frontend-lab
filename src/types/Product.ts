@@ -1,0 +1,34 @@
+export default interface Product {
+  id: null
+  name: string
+  nameSub: string
+  discountCode: string
+  eanCode: string
+  description: string
+  price: number
+  priceQuote: boolean
+  purchasePrice: number
+  status: number
+  statusPrice: number
+  discontinued: boolean
+  replacedBy: number
+  stocktext: string
+  brandId: number
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
+  containers: string[]
+  imageIds: number[]
+  categories: string[]
+  category: number
+  texts: string[]
+  description_long: string
+  details: string
+  specifications: string
+  statisticGroup: number
+  productGroup: number
+  marketability: number
+  guaranteeTermCode: string
+  guaranteeTerm: number
+}
