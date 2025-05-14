@@ -23,7 +23,7 @@
                 <FilterList :facet-items="facets?.static_categories_agg?.items" :es-key="staticEsKeys.categories"
                     :facet-items-key="'categories'" :facet-search="Google" :can-search=false
                     :checked-es-values="getSelectedKey(staticEsKeys.categories)"
-                    @clickOnFilter="clickOnFilter($event, staticEsKeys.categories, 'general.categories', facets?.static_categories_agg?.html?.filter_data)" />
+                    @clickOnFilterToInsertEs="clickOnFilterToInsertEs($event, staticEsKeys.categories, 'general.categories', facets?.static_categories_agg?.html?.filter_data)" />
             </AccordionContent>
         </AccordionPanel>
         <AccordionPanel value="1"
@@ -34,7 +34,7 @@
             <AccordionContent>
                 <FilterList :facet-items="facets?.static_brands_agg?.items" :es-key="staticEsKeys.brand"
                     :can-search=false :facet-search="Google" :checked-es-values="getSelectedKey(staticEsKeys.brand)"
-                    @clickOnFilter="clickOnFilter($event, staticEsKeys.brand, 'general.brands', facets?.static_brands_agg?.html?.filter_data)" />
+                    @clickOnFilterToInsertEs="clickOnFilterToInsertEs($event, staticEsKeys.brand, 'general.brands', facets?.static_brands_agg?.html?.filter_data)" />
             </AccordionContent>
         </AccordionPanel>
         <AccordionPanel value="2" v-if="facets?.static_price_agg?.items">
@@ -49,28 +49,23 @@
             </AccordionContent>
         </AccordionPanel>
         <template v-if="facets?.attributes_agg && Object.keys(facets.attributes_agg).length">
-            <AccordionPanel v-for="(facetAttribute, attributeKey, index) in facets?.attributes_agg" :key="index"
-                :value="accordionValue(index)">
-                <AccordionHeader>
-                    <div class="text-lg lg:text-xl font-semibold text-left">{{ t('attributes.' +
-                        facetAttribute.html.filter_translation_key) }}</div>
-                </AccordionHeader>
-                <AccordionContent>
-                    <FilterList v-if="facetAttribute.html.filter_style === 'list'" :es-key="getEsKey(attributeKey)"
-                        :facet-items-key="'attributeOptions.' + facetAttribute.html.filter_translation_key"
+            <FilterAccordionPanel :facetAttributeAgg="facets?.attributes_agg" view="fieldset">
+                <template #header></template>
+                <template #content="{ facetAttribute, attributeKey }">
+                    <FilterMultiSelect v-if="facetAttribute.html.filter_style === 'list'"
+                        :es-key="getEsKey(attributeKey)" :facet-items-key="facetAttribute.html.filter_translation_key"
                         :facet-items="facetAttribute?.items" :can-search=false
-                        :checked-es-values="getSelectedKey(getEsKey(attributeKey))" @clickOnFilter="clickOnFilter($event, getEsKey(attributeKey), 'attributes.' +
+                        :checked-es-values="getSelectedKey(getEsKey(attributeKey))" @clickOnFilterToUpdateEs="clickOnFilterToUpdateEs($event, getEsKey(attributeKey),
                             facetAttribute.html.filter_translation_key)" />
-                    <FilterList v-if="facetAttribute.html.filter_style === 'listmultiple'"
-                        :es-key="getEsKey(attributeKey)"
-                        :facet-items-key="'attributeOptions.' + facetAttribute.html.filter_translation_key"
-                        :facet-items="facetAttribute?.items" :can-search=true
-                        :checked-es-values="getSelectedKey(getEsKey(attributeKey))" @clickOnFilter="clickOnFilter($event, getEsKey(attributeKey), 'attributes.' +
+                    <FilterMultiSelect v-if="facetAttribute.html.filter_style === 'listmultiple'"
+                        :es-key="getEsKey(attributeKey)" :facet-items-key="facetAttribute.html.filter_translation_key"
+                        :facet-items="facetAttribute?.items" :can-search=false
+                        :checked-es-values="getSelectedKey(getEsKey(attributeKey))" @clickOnFilterToUpdateEs="clickOnFilterToUpdateEs($event, getEsKey(attributeKey),
                             facetAttribute.html.filter_translation_key)" />
                     <FilterListGrid v-if="facetAttribute.html.filter_style === 'grid'" :es-key="getEsKey(attributeKey)"
                         :facet-items-key="'attributeOptions.' + facetAttribute.html.filter_translation_key"
                         :facet-items="facetAttribute?.items" :checked-es-values="getSelectedKey(getEsKey(attributeKey))"
-                        @clickOnFilter="clickOnFilter($event, getEsKey(attributeKey), 'attributes.' +
+                        @clickOnFilterToInsertEs="clickOnFilterToInsertEs($event, getEsKey(attributeKey), 'attributes.' +
                             facetAttribute.html.filter_translation_key)" />
                     <SelectButton v-if="facetAttribute.html.filter_style === 'toggle'"
                         :checked="getSelectedKey(getEsKey(attributeKey))"
@@ -82,8 +77,8 @@
                         :checked-es-values="getSelectedRangeKey(getEsKey(attributeKey), facetAttribute?.items)"
                         :facet-item="facetAttribute?.items" @clickOnRange="clickOnRange($event, getEsKey(attributeKey), 'attributes.' +
                             facetAttribute.html.filter_translation_key)" />
-                </AccordionContent>
-            </AccordionPanel>
+                </template>
+            </FilterAccordionPanel>
         </template>
     </Accordion>
     <Button label="Apply" class="w-full mt-10" />
@@ -105,16 +100,20 @@ import FilterList from '@/components/search/FilterList.vue'
 import FilterRange from '@/components/search/FilterRange.vue'
 import SelectButton from 'primevue/selectbutton'
 import FilterListGrid from '@/components/search/FilterListGrid.vue'
+import FilterAccordionPanel from '@/components/search/FilterAccordionPanel.vue'
 import LoaderFacets from '@/components/icons/LoaderFacets.vue'
-import { capitalizeFirstWord } from '@/includes/helpers'
+import { capitalizeFirstWord, getAttributeOptionTranslation } from '@/includes/helpers'
 
 import type Facet from '@/types/Facet'
 import type Query from '@/types/Query'
 import type Tags from '@/types/Tags'
+import FilterMultiSelect from '@/components/search/FilterMultiSelect.vue'
+
 
 const props = defineProps<{
     query: Query
     staticEsKeys: Object
+    view: string
 }>()
 const emit = defineEmits(['applySearch', 'setHeader'])
 const query = ref(props.query)
@@ -152,6 +151,7 @@ onMounted(async () => {
 
     emit('applySearch', query.value)
 
+
     watch(
         () => facets.value,
         () => setHeader(true, esKey, esValue, routeCategorySlug.value !== '' ? facets?.value.static_categories_agg?.html?.filter_data : routeBrandSlug.value !== '' ? facets?.value.static_brands_agg?.html?.filter_data : ''),
@@ -170,12 +170,12 @@ const setFilter = (esKey: string, filterOp: string, esValue: any, labelKey: stri
 
     resetTags(tag, 'create')
 
-    resetQuery(esKey, esValue, 'create')
+    crudQuery(esKey, esValue, 'create')
 
     setCheckedEsValuesForFilter(esKey, esValue, true)
 }
 
-function clickOnFilter(event, esKey: string, headerLabel: string, filterHtmlData?: any) {
+function clickOnFilterToInsertEs(event, esKey: string, headerLabel: string, filterHtmlData?: any) {
     let tag = {
         labelKey: headerLabel,
         labelValue: event.labelValue,
@@ -186,11 +186,37 @@ function clickOnFilter(event, esKey: string, headerLabel: string, filterHtmlData
 
     resetTags(tag, event.checked ? 'create' : 'remove')
 
-    resetQuery(esKey, event.esValue, event.checked ? 'create' : 'remove')
+    crudQuery(esKey, event.esValue, event.checked ? 'create' : 'remove')
 
     setCheckedEsValuesForFilter(esKey, event.esValue, event.checked)
 
     setHeader(event.checked, esKey, event.esValue, filterHtmlData)
+
+    emit('applySearch', query.value)
+}
+
+function clickOnFilterToUpdateEs(event, esKey: string, facetItemsKey: string) {
+    console.log('event', event);
+    let constTag = {
+        key: esKey,
+        labelKey: 'attributes.' + facetItemsKey,
+        type: 'filter'
+    }
+    
+    resetTags(constTag, 'clear')
+    crudQuery(esKey, '', 'clear')
+    checkedEsValuesCollection.value[esKey] = [];
+
+    //console.log('tags', tags.value);
+    //console.log('query.value.filter', query.value.filter);
+    event.map((esValue: string) => {
+        let tag = { ...constTag, labelValue: getAttributeOptionTranslation(t, esValue, facetItemsKey), value: esValue }
+        //console.log('loop tag', tag);
+        //console.log('loop esvalue', esValue);
+        resetTags(tag, 'create')
+        crudQuery(esKey, esValue, 'create')
+        setCheckedEsValuesForFilter(esKey, esValue, true)
+    })
 
     emit('applySearch', query.value)
 }
@@ -200,7 +226,6 @@ function getSelectedKey(attributeKey: string) {
 }
 
 function getSelectedRangeKey(attributeKey: string, facetItem: { min: number, max: number }) {
-    console.log(attributeKey, checkedEsValuesCollection.value[attributeKey]);
     return checkedEsValuesCollection.value[attributeKey] !== undefined ? checkedEsValuesCollection.value[attributeKey] : [facetItem.min, facetItem.max];
 }
 
@@ -215,14 +240,14 @@ function clickOnToggle(event, facet: Facet, attributeKey: string) {
         resetTags(tagYes, event.value.includes('true') ? 'create' : 'remove')
         resetTags(tagNo, event.value.includes('false') ? 'create' : 'remove')
 
-        event.value.includes('true') ? resetQuery(esKey, 'true', 'create') : ''
-        event.value.includes('false') ? resetQuery(esKey, 'false', 'create') : ''
+        event.value.includes('true') ? crudQuery(esKey, 'true', 'create') : ''
+        event.value.includes('false') ? crudQuery(esKey, 'false', 'create') : ''
         //resetQuery(esKey, event.value, 'update', 'in')
     } else {
         resetTags(tagYes, 'remove')
         resetTags(tagNo, 'remove')
 
-        resetQuery(esKey, event.value, 'clear')
+        crudQuery(esKey, event.value, 'clear')
     }
 
     checkedEsValuesCollection.value[esKey] = event.value
@@ -241,7 +266,7 @@ function clickOnRange(event: { labelValue: string[], esValue: number[] }, esKey:
     }
     resetTags(tag, 'update')
 
-    resetQuery(esKey, event.esValue, 'range')
+    crudQuery(esKey, event.esValue, 'range')
 
     checkedEsValuesCollection.value[esKey] = event.esValue
 
@@ -254,12 +279,12 @@ function clickOnClearTags(tags: Tags) {
     if (tags.type === 'range') {
         checkedEsValuesCollection.value[tags.key] = null
 
-        resetQuery(tags.key, tags.value, 'clear')
+        crudQuery(tags.key, tags.value, 'clear')
 
     } else {
         setCheckedEsValuesForFilter(tags.key, tags.value, false)
 
-        resetQuery(tags.key, tags.value, 'remove')
+        crudQuery(tags.key, tags.value, 'remove')
     }
     setHeader(false)
 
@@ -294,9 +319,8 @@ function setHeader(checked: boolean, esKey?: string, clickedEsValue?: string, fi
     emit('setHeader', title, description)
 }
 
-function resetQuery(esKey: string, esValue?: any, esCrud: string = 'update', filterOp: string = 'equals') {
+function crudQuery(esKey: string, esValue?: any, esCrud: string = 'update', filterOp: string = 'equals') {
     // Find the index of the object with the matching `key`
-
     query.value.page!.number = 1
     let index, indexLessThan, indexGreaterThan;
     switch (esCrud) {
@@ -315,11 +339,11 @@ function resetQuery(esKey: string, esValue?: any, esCrud: string = 'update', fil
             break;
         case 'remove':
             //For removal exactly key and value needs to be matched
-
+            console.log('query.value.filter', query.value.filter);
+            console.log('esKey', esKey);
+            console.log('esValue', esValue);
             index = query.value.filter?.findIndex(queryFilter => queryFilter.key === esKey && queryFilter.value === esValue)
-            console.log('index', index);
             if (query.value.filter && index !== undefined && index !== -1) {
-                console.log('query2', query.value.filter);
                 query.value.filter?.splice(index, 1)
             }
             break;
@@ -342,16 +366,13 @@ function resetQuery(esKey: string, esValue?: any, esCrud: string = 'update', fil
 
             break;
         case 'clear':
-            //For removal of the key match
-            index = query.value.filter?.findIndex(queryFilter => queryFilter.key === esKey)
-            if (query.value.filter && index !== undefined && index !== -1) {
-                query.value.filter?.splice(index, 1)
-            }
+            // For removal of all matching keys
+            query.value.filter = query.value.filter?.filter(queryFilter => queryFilter.key !== esKey) || [];
             break;
     }
 }
 
-const resetTags = (tagItem: Tags, tagCrud: string = 'create') => {
+const resetTags = (tagItem: any, tagCrud: string = 'create') => {
     let index;
     switch (tagCrud) {
         case 'create':
@@ -370,6 +391,11 @@ const resetTags = (tagItem: Tags, tagCrud: string = 'create') => {
             if (index !== -1) {
                 tags.value.splice(index, 1)
             }
+            break;
+        case 'clear':
+            tags.value = tags.value.filter((tag) => tag.key !== tagItem.key)
+            break;
+        default:
             break;
     }
 }
@@ -396,10 +422,6 @@ const onUpdateActiveIndex = (newActiveIndexes) => {
     activeIndexes.value = stringArray
 }
 
-const accordionValue = (index) => {
-    index = index + 3
-    return index.toString()
-}
 
 const radioFilterLabel = (facet: Facet, attributeKey: string): Tags[] => {
     let labelKey = t('attributes.' + facet.html?.filter_translation_key)

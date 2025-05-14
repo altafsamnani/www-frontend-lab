@@ -11,7 +11,7 @@
                     class="group relative inline-flex align-bottom w-6 h-6 cursor-pointer select-none"
                     data-pc-name="checkbox" pc217="" data-pc-section="root"
                     :data-p-checked="checkedValueExists(esKey, esValue)" data-p-disabled="false">
-                    <input :id="esValue.toString()" @change="clickOnFilter"
+                    <input :id="esValue.toString()" @change="clickOnFilterToInsertEs"
                         :aria-describedby="getAttributeOptionTranslation(esValue)" :value="esValue" :name="esKey"
                         type="checkbox" :checked="checkedValueExists(esKey, esValue)"
                         class="peer w-full h-full absolute top-0 left-0 z-10 p-0 m-0 opacity-0 rounded-md outline-none border-2 border-surface-200 dark:border-surface-700 appearance-none cursor-pointer"
@@ -34,7 +34,7 @@
                     {{ getAttributeOptionTranslation(esValue) }}</label>
             </div>
 
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs 
+            <div :class="facetCountClass(facetItemCount)" class="rounded-full flex items-center justify-center text-xs 
             font-bold bg-surface-200 dark:bg-surface-700 text-surface-900 dark:text-surface-0">
                 {{ facetItemCount }}
             </div>
@@ -49,10 +49,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import Checkbox from 'primevue/checkbox';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
-import { capitalizeFirstWord } from '@/includes/helpers'
+import { capitalizeFirstWord, facetCountClass } from '@/includes/helpers'
 
 const props = defineProps<{
     esKey: string
@@ -67,11 +66,11 @@ const esKey = ref(props.esKey)
 const localFacetSearch = ref(props.facetSearch)
 const facetItemsKey = ref(props.facetItemsKey)
 const checkedEsValues = ref(props.checkedEsValues);
-const emit = defineEmits(['clickOnFilter', 'setHeader'])
+const emit = defineEmits(['clickOnFilterToInsertEs', 'setHeader'])
 
-function clickOnFilter(event) {
+function clickOnFilterToInsertEs(event) {
     console.log('event', event.target.name, event.target.value, event.target.checked);
-    emit('clickOnFilter', {
+    emit('clickOnFilterToInsertEs', {
         labelValue: getAttributeOptionTranslation(event.target.value),
         esValue: event.target.value,
         checked: event.target.checked
