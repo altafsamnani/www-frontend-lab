@@ -30,7 +30,6 @@ import Card from 'primevue/card'
 import Tag from 'primevue/tag'
 import Popover from 'primevue/popover'
 import Toast from 'primevue/toast'
-import Lara from '@/presets/lara'
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 import Tabs from 'primevue/tabs'
@@ -96,8 +95,17 @@ app.use(CKEditor)
 
 app.use(ConfirmationService)
 app.use(ToastService)
-app.use(PrimeVue, {
-  unstyled: true,
-  pt: Lara
-})
+import { definePreset } from '@primeuix/themes';
+import Lara from '@primevue/themes/lara';
+//import LaraOld3 from "./presets/lara";
+
+//const presetValues = definePreset(Lara, LaraOld3)
+app.use(PrimeVue, { 
+    theme: {
+        preset: Lara,
+        options: {
+            darkModeSelector: '.dark',
+        }
+    }
+});
 app.mount('#app')

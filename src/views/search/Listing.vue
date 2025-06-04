@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useSearchStore } from '@/stores/search';

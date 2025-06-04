@@ -50,7 +50,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { getSeverity } from '@/includes/helpers'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
