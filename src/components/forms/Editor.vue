@@ -1,29 +1,42 @@
+<template>
+  <div>
+    <ckeditor
+      :editor="ClassicEditor"
+      v-model="editorDescription"
+      :config="editorConfig"
+      @ready="onEditorReady"
+    ></ckeditor>
+  </div>
+</template>
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
-import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic'
-import { Essentials } from '@ckeditor/ckeditor5-essentials'
+import { computed, watch } from 'vue'
 import {
+  ClassicEditor,
+  Essentials,
   Bold,
   Italic,
   Underline,
   Strikethrough,
   Code,
   Subscript,
-  Superscript
-} from '@ckeditor/ckeditor5-basic-styles'
-import { List } from '@ckeditor/ckeditor5-list'
-import { Link } from '@ckeditor/ckeditor5-link'
-import { Paragraph } from '@ckeditor/ckeditor5-paragraph'
-import { Table, TableToolbar } from '@ckeditor/ckeditor5-table'
-import { SourceEditing } from '@ckeditor/ckeditor5-source-editing'
-import { Autoformat } from '@ckeditor/ckeditor5-autoformat'
-import { Heading, HeadingButtonsUI } from '@ckeditor/ckeditor5-heading'
-import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format'
-import { Markdown, PasteFromMarkdownExperimental } from '@ckeditor/ckeditor5-markdown-gfm'
-import { SpecialCharacters } from '@ckeditor/ckeditor5-special-characters'
-import { SpecialCharactersEssentials } from '@ckeditor/ckeditor5-special-characters'
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview'
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin'
+  Superscript,
+  List,
+  Link,
+  Paragraph,
+  Table,
+  TableToolbar,
+  SourceEditing,
+  Autoformat,
+  Heading,
+  HeadingButtonsUI,
+  RemoveFormat,
+  Markdown,
+  PasteFromMarkdownExperimental,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  ButtonView,
+  Plugin
+} from 'ckeditor5';
 
 const props = defineProps({
   height: {
@@ -90,7 +103,8 @@ class Template extends Plugin {
   }
 }
 
-import '@/assets/ckeditor.css'
+//import '@/assets/ckeditor.css'
+import 'ckeditor5/ckeditor5.css';
 
 const theme = computed(() => localStorage.getItem('theme') || 'light')
 const emit = defineEmits(['showTemplates'])
@@ -216,7 +230,7 @@ const editorConfig = {
         // It needs to be converted before the standard 'heading2'.
         converterPriority: 'high'
       }
-    ]
+    ] as any[]
   }
 }
 
@@ -253,14 +267,3 @@ const onEditorReady = (editor) => {
   padding: 0 20px;
 }
 </style>
-
-<template>
-  <div>
-    <ckeditor
-      :editor="ClassicEditor"
-      v-model="editorDescription"
-      :config="editorConfig"
-      @ready="onEditorReady"
-    ></ckeditor>
-  </div>
-</template>
