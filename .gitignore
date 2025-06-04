@@ -32,3 +32,6 @@ coverage
 *.sw?
 .env
 Makefile
+.roomodes
+.roo
+.history
