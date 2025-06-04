@@ -13,7 +13,7 @@ install: copy-files npm-install up
 reinstall: remove npm-install up
 
 remove: 
-    $(shell -R node_modules")
+	rm -rfv node_modules package-lock.json
 
 npm-install: 
 	${NPM} install
