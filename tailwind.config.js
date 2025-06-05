@@ -35,10 +35,7 @@ module.exports = {
       }
     }
   },
-  darkMode: 'class',
-  // daisyui: {
-  //   themes: ['light', 'dark']
-  // },
+  darkMode: 'class'
   //plugins: [require('@tailwindcss/typography'), require('daisyui')]
-  plugins: [require('tailwindcss-primeui')]
+  //plugins: [require('tailwindcss-primeui')]
 }

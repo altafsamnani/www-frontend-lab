@@ -1,8 +1,13 @@
 /* color palette from <https://github.com/vuejs/theme> */
-@tailwind base;
+/*@tailwind base;
 @tailwind components;
 @tailwind utilities;
+*/
+@import "tailwindcss";
+@import "tailwindcss-primeui";
 
+/* Optionally, add the correct CSS import for tailwindcss-primeui if it exists, or remove if not needed */
+/* @import "tailwindcss-primeui/dist/tailwindcss-primeui.css"; */
 :root {
 
   --blue-50: rgb(245, 249, 255);
