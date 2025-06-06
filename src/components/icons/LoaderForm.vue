@@ -6,7 +6,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps } from 'vue'
 
 const prop = defineProps<{
   columns: number

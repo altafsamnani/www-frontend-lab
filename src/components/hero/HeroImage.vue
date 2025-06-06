@@ -26,7 +26,6 @@
 <script setup lang="ts">
 
 import type { HeroTiles } from '@/types/Hero';
-import { defineProps } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { locale, t } = useI18n()

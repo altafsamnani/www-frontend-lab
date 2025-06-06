@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
 
@@ -36,6 +36,7 @@ const props = defineProps<{
 const confirm = useConfirm()
 const { t } = useI18n()
 const fileId = ref()
+const fileUrls = ref<string[]>([]);
 const confirmed = ref(false)
 const showdeleteFileConfirmation = (id) => {
     fileId.value = id

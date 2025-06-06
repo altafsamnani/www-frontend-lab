@@ -1,14 +1,15 @@
 import { fileURLToPath, URL } from 'node:url'
-import { createRequire } from 'node:module';
-
+import { createRequire } from 'node:module'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Components from 'unplugin-vue-components/vite';
+import {PrimeVueResolver} from '@primevue/auto-import-resolver'
 
 const require = createRequire( import.meta.url );
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: {
+    build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
@@ -20,8 +21,13 @@ export default defineConfig({
       }
     }
   },
-  plugins: [  
-    vue()
+  plugins: [
+    vue(),
+    Components({
+      resolvers: [
+        PrimeVueResolver()
+      ]
+    })
   ],
   resolve: {
     alias: {

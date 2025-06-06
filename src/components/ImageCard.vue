@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import Image from 'primevue/image'
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
@@ -27,6 +27,7 @@ const props = defineProps<{
 const confirm = useConfirm()
 const { t } = useI18n()
 const imageId = ref()
+const imageUrls = ref<string[]>([]);
 const confirmed = ref(false)
 const showdeleteImageConfirmation = (id) => {
     imageId.value = id

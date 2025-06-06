@@ -9,6 +9,8 @@ export interface FacetAttribute {
 
 export interface ListStyleAttributes {
   [key: string]: {
-    [key: string]: FacetAttribute
+    [key: string]: {
+      [key: string]: FacetAttribute
+    }
   }
 }
