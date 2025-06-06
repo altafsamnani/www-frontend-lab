@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, watch, onMounted, ref } from 'vue'
+import { watch, onMounted, ref } from 'vue'
 import AccordionContent from 'primevue/accordioncontent'
 import AccordionHeader from 'primevue/accordionheader'
 import AccordionPanel from 'primevue/accordionpanel'

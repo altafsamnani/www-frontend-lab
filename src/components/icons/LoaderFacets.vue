@@ -38,7 +38,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 
 const prop = defineProps<{
     count: number

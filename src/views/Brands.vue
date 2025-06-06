@@ -187,6 +187,6 @@ const onDraggableChange = (event: Event) => {
 
 .ghost {
   opacity: 0.8;
-  @apply bg-zinc-200;
+  @reference bg-zinc-200;
 }
 </style>

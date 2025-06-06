@@ -134,10 +134,10 @@
 
 @layer base {
   .label {
-    @apply whitespace-nowrap text-xs font-semibold uppercase;
+    @reference whitespace-nowrap text-xs font-semibold uppercase;
   }
   .error {
-    @apply text-xs font-semibold text-red-600;
+    @reference text-xs font-semibold text-red-600;
   }
 }
 

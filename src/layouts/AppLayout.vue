@@ -52,6 +52,6 @@ watch(toasts, () => {
 
 <style scoped>
 .current {
-  @apply font-bold;
+  @reference font-bold;
 }
 </style>

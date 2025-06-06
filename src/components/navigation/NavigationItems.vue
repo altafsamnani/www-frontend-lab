@@ -42,7 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import type Menu from '@/types/Menu'
 import { useI18n } from 'vue-i18n'
 import MegaMenu from 'primevue/megamenu';
