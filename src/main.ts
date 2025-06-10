@@ -4,13 +4,12 @@ import i18n from './i18n'
 import router from './router'
 import App from './App.vue'
 import PrimeVue from 'primevue/config'
-import Lara from '@primevue/themes/lara';
+import Lara from '@primevue/themes/lara'
 
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 
 import Tooltip from 'primevue/tooltip'
-
 
 import StyleClass from 'primevue/styleclass'
 import VeeValidatePlugin from './includes/validation'
@@ -18,7 +17,6 @@ import CKEditor from '@ckeditor/ckeditor5-vue'
 
 import './assets/main.css'
 /*import './assets/ck-content.css' */
-
 
 const app = createApp(App)
 app.use(router)
@@ -32,12 +30,10 @@ app.use(ToastService)
 app.directive('styleclass', StyleClass)
 app.directive('tooltip', Tooltip)
 
-
 /*import { definePreset } from '@primeuix/themes';
 import LaraOld3 from "./presets/lara";
 const presetValues = definePreset(Lara, LaraOld3) 
 */
-
 
 /* THEMING NOTE: Custom styled mode: Lara & Volt
 To use a theme, npm install @primeuix/themes, 3 ways 
@@ -46,14 +42,14 @@ To use a theme, npm install @primeuix/themes, 3 ways
 3. Custom styled mode: Lara & Volt: Use a Lara preset and import volt customization wherever needed.
 import Button from 'volt/button' etc. 
 */
-app.use(PrimeVue, { 
-    theme: {
-        preset: Lara,
-        options: {
-            darkModeSelector: '.dark',
-        }
+app.use(PrimeVue, {
+  theme: {
+    preset: Lara,
+    options: {
+      darkModeSelector: '.dark'
     }
-}); 
+  }
+})
 
 //If totally unstyled PrimeVue components are needed, uncomment the following line
 /*
