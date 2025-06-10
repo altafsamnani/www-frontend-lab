@@ -16,7 +16,7 @@ import VeeValidatePlugin from './includes/validation'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 
 import './assets/main.css'
-/*import './assets/ck-content.css' */
+import './assets/ck-content.css'
 
 const app = createApp(App)
 app.use(router)
