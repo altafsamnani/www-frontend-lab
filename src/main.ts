@@ -46,7 +46,12 @@ app.use(PrimeVue, {
   theme: {
     preset: Lara,
     options: {
-      darkModeSelector: '.dark'
+      darkModeSelector: '.dark',
+      ripple: true, // Enable ripple effect,
+      cssLayer: {
+        name: 'primevue',
+        order: 'theme, base, primevue' //primevue layer is after theme and base, but before the other Tailwind layers such as utilities.
+      }
     }
   }
 })
