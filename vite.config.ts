@@ -9,7 +9,10 @@ const require = createRequire( import.meta.url );
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    build: {
+  optimizeDeps: {
+    exclude: ['ckeditor5-premium-features', 'ckeditor5-vue', 'vue-chartjs', 'chart.js']
+  },
+  build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
