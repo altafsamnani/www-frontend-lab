@@ -3,7 +3,7 @@
         <nav class="relative w-full flex items-center" @mouseleave="closeMenu">
 
             <div
-                class="hidden osecheader w-full lg:flex flex-1 items-center pb-4 border-b animate-fadeinup absolute lg:static  lg:py-0  top-0 left-0 z-10 bg-surface-0 dark:bg-surface-900">
+                class="hidden osecheader w-full lg:flex flex-1 items-center pb-4 border-b-1 border-surface-200 dark:border-surface-700 animate-fadeinup absolute lg:static  lg:py-0  top-0 left-0 z-10 bg-surface-0 dark:bg-surface-900">
 
                 <ul class="select-none relative flex-1 flex lg:flex-row flex-col lg:mb-0 mb-4 lg:justify-start gap-2 lg:gap-8 pr-4"
                     @mouseleave="hoveredItem = null">
@@ -223,7 +223,7 @@ const navs = ref([
 const submitLogout = async () => {
     await handleLogout()
     notifyStore.notify(t('notification.logout'), NotificationType.Success)
-    router.push({ name: 'login' })
+    window.location.reload()
 }
 
 const storedTheme = localStorage.getItem('theme') || 'light'

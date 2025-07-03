@@ -446,4 +446,9 @@ const radioFilterLabel = (facet: Facet, attributeKey: string): Tags[] => {
         }
     ]
 }
+
+// Expose functions to parent components
+defineExpose({
+    clickOnFilterToInsertEs
+})
 </script>

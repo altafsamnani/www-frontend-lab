@@ -74,21 +74,24 @@ const handleHeaders = (config) => {
 }
 
 const handleError = (error) => {
-  const { showtoast } = usetoastservice();
+  const { showtoast } = usetoastservice()
+  console.error('API Error:', error)
 
-    if (error.response) {
-      if (error.response.status === 401) {
-        const authStore = useAuthStore()
-        const { cleanupForLogout } = authStore
-        cleanupForLogout()
-        router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } })
-        //window.location.replace('/login?redirect=' + location.pathname)
-      } else {
-        // Show a generic error message
-        console.log('An error occurred. Please try again later.')
-      }
+  if (error.response) {
+    if (error.response.status === 401) {
+      cleanupForLogout()
+    } else {
+      // Show a generic error message
+      console.log('Api error occurred. Please check your api and try later.')
     }
-    //notifyStore.notify(i18n().global.t('notification.something_went_wrong'), NotificationType.Error)
-    showtoast();
-    return Promise.reject(error)
   }
+  showtoast()
+  return Promise.reject(error)
+}
+
+const cleanupForLogout = () => {
+  const authStore = useAuthStore()
+  const { cleanupForLogout } = authStore
+  cleanupForLogout()
+  router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } })
+}

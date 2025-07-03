@@ -278,7 +278,7 @@ const navs = ref([
 const submitLogout = async () => {
     await handleLogout()
     notifyStore.notify(t('notification.logout'), NotificationType.Success)
-    router.push({ name: 'login' })
+    window.location.reload()
 }
 
 const storedTheme = localStorage.getItem('theme') || 'light'

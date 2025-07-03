@@ -15,8 +15,9 @@ router.beforeEach(async (to, from) => {
         redirect: to.fullPath
       }
     }
+  } else if (to.meta.guest && isLoggedIn()) {
+    return { name: 'home' }
   }
-  console.log('to', to)
   /*if (to.params.categorySlug !== '') {
     console.log('to2', to)
     return false

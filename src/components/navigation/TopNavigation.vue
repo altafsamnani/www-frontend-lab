@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto">
+    <div class="container max-w-7xl mx-auto">
         <div class="flex items-stretch relative min-h-[80px]">
             <a v-styleclass="{
                 selector: '.osecheader',
@@ -23,7 +23,7 @@
                 <div class="p-input-icon-left w-full p-input-filled">
                     <IconField icon-position="left" class="w-full">
                         <InputIcon class="pi pi-search" />
-                        <InputText v-model="productSearch" placeholder="Product search" class="w-full"
+                        <InputText v-model="productSearch" :placeholder="$t('navigation.product_search')" class="w-full"
                             @keydown.enter="router.push({ name: 'Search', params: { q: productSearch } })" />
                     </IconField>
                 </div>
@@ -31,7 +31,7 @@
             <div class="flex ml-4 lg:ml-12">
                 <Popover ref="notificationsPanel">
                     <div>
-                        <h2 class="mb-2 text-lg font-semibold">Notifications</h2>
+                        <h2 class="mb-2 text-lg font-semibold">{{ $t('navigation.notifications') }}</h2>
                         <p v-for="notification in notifications" :key="notification.id">
                             {{ notification.msg }}
                         </p>
@@ -55,12 +55,12 @@
                                     @click="handleLocaleClick('nl')">
                                     <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'nl' }">{{
                                         $t('languages.nl')
-                                        }}</span>
+                                    }}</span>
                                 </a>
                                 <a v-else @click="handleLocaleClick('en')" class="block p-2 cursor-pointer">
                                     <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'en' }">{{
                                         $t('languages.en')
-                                        }}</span>
+                                    }}</span>
                                 </a>
                             </template>
                         </Menu>
@@ -75,7 +75,8 @@
             </div>
             <div class="flex ml-4 lg:ml-12">
                 <ul class="list-none p-0 m-0 flex">
-                    <li class="inline-flex relative">
+                    <!-- My Account Section - Show only when logged in -->
+                    <li v-if="isUserLoggedIn" class="inline-flex relative">
                         <a v-styleclass="{
                             selector: '@next',
                             enterFromClass: 'hidden',
@@ -86,7 +87,7 @@
                         }"
                             class="text-surface-0 dark:text-surface-900 font-medium inline-flex items-center cursor-pointer px-1 lg:px-4 mr-2 lg:mr-0 border-b-2 border-transparent hover:border-primary select-none">
                             <i class="pi pi-user text-xl" />
-                            <span class="hidden">My Account</span>
+                            <span class="hidden lg:inline ml-2">{{ $t('navigation.my_account') }}</span>
                         </a>
                         <div
                             class="hidden rounded-border bg-surface-0 dark:bg-surface-900 p-4 shadow absolute right-0 top-full z-10 w-60 origin-top">
@@ -95,32 +96,40 @@
                                     <a
                                         class="cursor-pointer text-surface-700 dark:text-surface-100 hover:text-surface-900 dark:hover:text-surface-0 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-border flex items-center px-4 py-2">
                                         <i class="pi pi-fw pi-box text-lg mr-2" />
-                                        <span>Orders</span>
+                                        <span>{{ $t('navigation.orders') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a
                                         class="cursor-pointer text-surface-700 dark:text-surface-100 hover:text-surface-900 dark:hover:text-surface-0 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-border flex items-center px-4 py-2">
                                         <i class="pi pi-fw pi-heart text-lg mr-2" />
-                                        <span>Favorites</span>
+                                        <span>{{ $t('navigation.favorites') }}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a
                                         class="cursor-pointer text-surface-700 dark:text-surface-100 hover:text-surface-900 dark:hover:text-surface-0 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-border flex items-center px-4 py-2">
                                         <i class="pi pi-fw pi-star text-lg mr-2" />
-                                        <span>Reviews</span>
+                                        <span>{{ $t('navigation.reviews') }}</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a
+                                    <a @click="submitLogout"
                                         class="cursor-pointer text-surface-700 dark:text-surface-100 hover:text-surface-900 dark:hover:text-surface-0 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-border flex items-center px-4 py-2">
                                         <i class="pi pi-fw pi-sign-out text-lg mr-2" />
-                                        <span>Sign Out</span>
+                                        <span>{{ $t('navigation.sign_out') }}</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
+                    </li>
+                    <!-- Login Section - Show only when not logged in -->
+                    <li v-else class="inline-flex relative">
+                        <RouterLink to="/login"
+                            class="text-surface-0 dark:text-surface-900 font-medium inline-flex items-center cursor-pointer px-1 lg:px-4 mr-2 lg:mr-0 border-b-2 border-transparent hover:border-primary select-none">
+                            <i class="pi pi-sign-in text-xl" />
+                            <span class="hidden lg:inline ml-2">{{ $t('navigation.login') }}</span>
+                        </RouterLink>
                     </li>
                     <li class="inline-flex relative">
                         <a v-styleclass="{
@@ -135,12 +144,11 @@
                             <OverlayBadge severity="danger">
                                 <i class="pi pi-shopping-cart !text-xl" />
                             </OverlayBadge>
-                            <span class="hidden">My Cart</span>
+                            <span class="hidden">{{ $t('navigation.my_cart') }}</span>
                         </a>
                         <div
                             class="hidden rounded-border bg-surface-0 dark:bg-surface-900 p-6 shadow absolute right-0 top-full z-10 w-80 origin-top">
-                            <span class="text-surface-0 dark:text-surface-900 font-medium mb-4 block">My Cart (1
-                                Item)</span>
+                            <span class="text-surface-0 dark:text-surface-900 font-medium mb-4 block">{{ $t('navigation.my_cart_items', { count: 1 }) }}</span>
                             <div class="flex items-center border-b border-surface pb-4">
                                 <img src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/ecommerce/shoppingcart/shopping-cart-2-2.png"
                                     class="w-16 flex-shrink-0 shadow-sm" />
@@ -152,8 +160,8 @@
                                 </div>
                             </div>
                             <div class="flex pt-4">
-                                <Button class="mr-2" outlined>View Cart</Button>
-                                <Button class="ml-2">Purchase</Button>
+                                <Button class="mr-2" outlined>{{ $t('navigation.view_cart') }}</Button>
+                                <Button class="ml-2">{{ $t('navigation.purchase') }}</Button>
                             </div>
                         </div>
                     </li>
@@ -167,7 +175,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { SUPPORT_LOCALES as supportLocales, setI18nLanguage } from '@/i18n'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore, isLoggedIn } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { useNotifyStore, NotificationType } from '@/stores/notify'
 import { localize } from '@vee-validate/i18n'
@@ -181,6 +189,16 @@ const notifyStore = useNotifyStore()
 const router = useRouter()
 const authStore = useAuthStore()
 const { handleLogout } = authStore
+
+// Create a reactive authentication state that properly updates
+const isUserLoggedIn = computed(() => {
+  // Primary check: if user exists in store (reactive)
+  if (authStore.user) return true
+  // Secondary check: if accessToken exists in store (reactive)
+  if (authStore.accessToken) return true
+  // Fallback: check localStorage directly (for initial page load)
+  return isLoggedIn()
+})
 interface settings {
     theme: string
     locale: string
@@ -192,7 +210,7 @@ const productSearch = ref('')
 const submitLogout = async () => {
     await handleLogout()
     notifyStore.notify(t('notification.logout'), NotificationType.Success)
-    router.push({ name: 'login' })
+    window.location.reload()
 }
 
 const theme = ref()
