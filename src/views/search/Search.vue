@@ -12,12 +12,12 @@
     <Divider v-if="headerTitle || headerDescription" class="!my-6" />
     <div class="flex lg:flex-row flex-col gap-8">
       <div class="w-full lg:w-72">
-        <Facets view='fieldset' :static-es-keys="staticEsKeys" :query="query" @applySearch="applySearch"
+        <Facets ref="facetsRef" view='fieldset' :static-es-keys="staticEsKeys" :query="query" @applySearch="applySearch"
           @setHeader="setHeader" />
       </div>
       <div class="flex-1  rounded-lg min-h-72">
         <FacetTop v-if="categoryFacets" :category-facets="categoryFacets" :query="query"
-          @clickOnFacetTop="applySearch" />
+          @clickOnFilterToInsertEs="handleFacetTopClick" />
         <Listing :query="query" @clickOnSortPaginator="applySearch" />
       </div>
     </div>
@@ -45,6 +45,7 @@ const router = useRouter()
 const categoryFacets = ref(facets)
 const headerTitle = ref('')
 const headerDescription = ref('')
+const facetsRef = ref<InstanceType<typeof Facets> | null>(null)
 const staticEsKeys = ref({
   brand: 'brand.slug',
   price: 'price',
@@ -107,6 +108,15 @@ const resetRoutes = () => {
 function setHeader(title: string, description: string) {
   headerTitle.value = title
   headerDescription.value = description
+}
+
+const handleFacetTopClick = (event: any) => {
+  // Forward the event to Facets component's clickOnFilterToInsertEs function
+  // Using categories key and the filter data from facets
+  if (facetsRef.value) {
+    const filterData = facets.value?.static_categories_agg?.html?.filter_data;
+    facetsRef.value.clickOnFilterToInsertEs(event, staticEsKeys.value.categories, 'general.categories', filterData);
+  }
 }
 
 </script>

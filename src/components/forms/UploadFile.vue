@@ -63,7 +63,7 @@
                 <InputText
                   v-model="externalLinkForm.url"
                   class="w-full gap-6"
-                  :placeholder="$t('documents.external_link')"
+                  :placeholder="$t('document.external_link')"
                 />
                 <Button @click="onExternalLinkUpload" icon="pi pi-check" severity="success" />
                 <Button icon="pi pi-times" severity="danger" @click="externalLink = false" />
@@ -114,7 +114,7 @@
       </div>
     </div>
   </div>
-  <small id="externallink-help">{{ $t('documents.external_link_help') }}</small>
+  <small id="externallink-help">{{ $t('document.external_link_help') }}</small>
 </template>
 
 <script setup lang="ts">

@@ -49,6 +49,10 @@ export default function setupI18n() {
       warnHtmlInMessage: 'off',
       silentTranslationWarn: true,
       fallbackLocale: 'en',
+      messages: {
+        en,
+        nl
+      },
       datetimeFormats: dateTimeFormats()
     })
 

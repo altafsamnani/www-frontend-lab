@@ -107,42 +107,30 @@ const { products, paginator } = storeToRefs(searchStore)
 const sortOptions = ref([
   {
     label: 'Relevance',
-    order: {
-      field: 'createdAt',
-      dir: 'desc'
-    }
+    order: [
+      { field: 'updatedAt', dir: 'desc' },
+      { field: 'createdAt', dir: 'desc' }
+    ]
   },
   {
 
     label: 'Name A - Z',
-    order: {
-      field: 'name',
-      dir: 'asc'
-    }
+    order: [{ field: 'name', dir: 'asc' }]
   },
   {
 
     label: 'Name Z - A',
-    order: {
-      field: 'name',
-      dir: 'desc'
-    }
+    order: [{ field: 'name', dir: 'desc' }]
   },
   {
 
     label: 'Price low - high',
-    order: {
-      field: 'price',
-      dir: 'asc'
-    }
+    order: [{ field: 'price', dir: 'asc' }]
   },
   {
 
     label: 'Price high - low',
-    order: {
-      field: 'price',
-      dir: 'desc'
-    }
+    order: [{ field: 'price', dir: 'desc' }]
   }
 ]);
 
@@ -154,7 +142,13 @@ function clickShopNow() {
 
 const onSortChange = async (event) => {
   query.value.order = []
-  query.value.order.push(event.value.order)
+  //query.value.order.push(event.value.order)
+  event.value.order.map((order) => {
+    query.value.order.push({
+      field: order.field,
+      dir: order.dir
+    })
+  })
 
   emit('clickOnSortPaginator', query.value)
 }

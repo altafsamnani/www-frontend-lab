@@ -1,11 +1,11 @@
 <template>
-
     <div v-for="(item, index) in props.items" :key="index"
         class="col-span-12 sm:col-span-12 md:col-span-6 xl:col-span-4 p-2">
         <div
             class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
             <div class="flex justify-center rounded">
-                <router-link :to="{ name: 'Products', params: { id: item.id } }" target="_blank" rel="noopener noreferrer">
+                <router-link :to="{ name: 'Products', params: { id: item.id } }" target="_blank"
+                    rel="noopener noreferrer">
                     <div class="relative mx-auto">
                         <img class="rounded w-full" :src="item.images.length ? item.images[0].urlFull : defaultUrl"
                             :alt="item.name" style="max-width: 300px" />
@@ -21,7 +21,7 @@
                     <div>
                         <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
                             item.category.map(category => t('categories.' + category.slug)).join(', ')
-                        }}</span>
+                            }}</span>
                         <router-link :to="{ name: 'Products', params: { id: item.id } }">
                             <div class="text-lg font-medium mt-1">{{ item.name }}</div>
                         </router-link>
@@ -31,7 +31,7 @@
                             style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
                             <span class="text-surface-900 dark:text-surface-100 font-medium text-sm">{{ item.rating
                                 ?? 4
-                            }}</span>
+                                }}</span>
                             <i class="pi pi-star-fill text-yellow-500"></i>
                         </div>
                     </div>

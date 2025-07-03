@@ -7,7 +7,7 @@ export const isLoggedIn = (): boolean => (localStorage.getItem('access_token') ?
 export const useAuthStore = defineStore('authStore', () => {
   const user = ref(null)
   const errors = ref({})
-  const accessToken = ref('')
+  const accessToken = ref(localStorage.getItem('access_token') || '')
 
   const fetchUser = async () => {
     try {
@@ -23,7 +23,6 @@ export const useAuthStore = defineStore('authStore', () => {
     const res = await login(credentials)
     accessToken.value = res.headers['x-token']
     localStorage.setItem('access_token', accessToken.value)
-    api.defaults.headers.common['Authorization'] = `Bearer ${accessToken.value}`
     api.defaults.headers.common['Authorization'] = `Bearer ${accessToken.value}`
     uploadApi.defaults.headers.common['Authorization'] = `Bearer ${accessToken.value}`
   }

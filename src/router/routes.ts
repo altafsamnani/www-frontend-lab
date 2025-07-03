@@ -38,7 +38,6 @@ const routes = [
     name: 'Categories',
     component: Categories,
     meta: {
-      guest: true,
       group: 'products'
     }
   },
@@ -47,7 +46,6 @@ const routes = [
     name: 'Brands',
     component: Brands,
     meta: {
-      guest: true,
       group: 'products'
     }
   },
@@ -56,7 +54,6 @@ const routes = [
     name: 'Products',
     component: ProductDetailsMain,
     meta: {
-      guest: true,
       group: 'products'
     }
   },
@@ -65,7 +62,6 @@ const routes = [
     name: 'Search',
     component: Search,
     meta: {
-      guest: true,
       group: 'products'
     }
   },

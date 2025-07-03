@@ -1,14 +1,15 @@
 <template>
-  <div class="sticky top-0 z-40 items-center h-20 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 bg-surface-800 dark:bg-surface-50">
+  <div
+    class="sticky top-0 z-40 items-center h-20 shadow-sm shrink-0 gap-x-4 sm:gap-x-6 bg-surface-800 dark:bg-surface-50">
     <TopNavigationNew />
   </div>
   <div class="flex">
-    <div class="w-full" :class="$route.meta.layout != 'login' ? 'container mx-auto' : ''">
+    <div class="w-full max-w-7xl mx-auto">
       <div>
         <Header />
       </div>
 
-      <main class="py-4" :class="$route.meta.layout != 'login' ? 'lg:pt-6 max-w-[100vw]  ' : ''">
+      <main class="py-4 lg:pt-2 max-w-[100vw]">
         <div class="">
           <slot />
         </div>

@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 /test/
 buildspec.yml
-
+.*laude
 node_modules
 .DS_Store
 dist
@@ -33,5 +33,6 @@ coverage
 .env
 Makefile
 .roomodes
+*.md
 .roo
 .history
