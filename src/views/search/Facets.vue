@@ -136,13 +136,13 @@ onMounted(async () => {
     let esKey
     let esValue
 
-    if (routeCategorySlug.value !== '') {
+    if (routeCategorySlug.value !== '' && routeCategorySlug.value !== undefined) {
         esKey = staticEsKeys.value.categories
         esValue = routeCategorySlug.value
         setFilter(esKey, 'equals', esValue, 'general.categories', t('categories.' + routeCategorySlug.value))
     }
 
-    if (routeBrandSlug.value !== '') {
+    if (routeBrandSlug.value !== '' && routeBrandSlug.value !== undefined) {
         esKey = staticEsKeys.value.brand
         esValue = routeBrandSlug.value
         setFilter(esKey, 'equals', esValue, 'general.brands', capitalizeFirstWord(routeBrandSlug.value.toString()))
@@ -202,7 +202,7 @@ function clickOnFilterToUpdateEs(event, esKey: string, facetItemsKey: string) {
         labelKey: 'attributes.' + facetItemsKey,
         type: 'filter'
     }
-    
+
     resetTags(constTag, 'clear')
     crudQuery(esKey, '', 'clear')
     checkedEsValuesCollection.value[esKey] = [];

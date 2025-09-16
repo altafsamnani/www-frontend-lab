@@ -29,6 +29,7 @@ import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useSearchStore } from '@/stores/search';
+import { useNavigationStore } from '@/stores/navigation';
 
 import Divider from 'primevue/divider';
 import Facets from './Facets.vue';
@@ -42,6 +43,7 @@ const { fetchSearch } = searchStore
 const { facets, products } = storeToRefs(searchStore)
 const { t } = useI18n()
 const router = useRouter()
+const navigationStore = useNavigationStore()
 const categoryFacets = ref(facets)
 const headerTitle = ref('')
 const headerDescription = ref('')
@@ -61,6 +63,8 @@ const query = ref<Query>({
   }
 })
 onMounted(async () => {
+  // Store the current route for "Continue Shopping" functionality
+  navigationStore.setLastVisitedRoute(router.currentRoute.value.fullPath)
   // applySearch(query.value)
 })
 
@@ -78,7 +82,6 @@ const applySearch = async (params?: Query) => {
 const resetRoutes = () => {
   let routeCategory = ''
   let routeBrand = ''
-  let routeOthersToDo = ''
   query.value.filter?.map((filter) => {
     switch (filter.key) {
       case staticEsKeys.value.categories:
@@ -93,11 +96,14 @@ const resetRoutes = () => {
         break;
       default:
         console.log('default route', filter.key);
-        routeOthersToDo = filter.value
+        break;
     }
   })
 
-  history.pushState(null, '', '/search' + (routeCategory === '' && routeBrand ? '/all' : routeCategory) + routeBrand)
+  const newRoute = '/search' + (routeCategory === '' && routeBrand ? '/all' : routeCategory) + routeBrand
+  history.pushState(null, '', newRoute)
+  // Store the updated route for "Continue Shopping" functionality
+  navigationStore.setLastVisitedRoute(newRoute)
   //router.clearRoutes
   //router.currentRoute.value.params.categorySlug = routeParams.categorySlug
   //router.push({ name: 'Search', params: routeParams })

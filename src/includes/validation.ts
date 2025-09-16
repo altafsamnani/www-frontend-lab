@@ -20,6 +20,24 @@ import { localize } from '@vee-validate/i18n'
 import en from '@vee-validate/i18n/dist/locale/en.json'
 import nl from '@vee-validate/i18n/dist/locale/nl.json'
 
+// Custom validation messages
+const customMessages = {
+  en: {
+    ...en,
+    messages: {
+      ...en.messages,
+      phone: 'The {field} field must be a valid phone number (e.g., +31 123456789 or 0123456789)'
+    }
+  },
+  nl: {
+    ...nl,
+    messages: {
+      ...nl.messages,
+      phone: 'Het {field} veld moet een geldig telefoonnummer zijn (bijv. +31 123456789 of 0123456789)'
+    }
+  }
+}
+
 export default {
   install(app) {
     app.component('VeeForm', VeeForm)
@@ -37,12 +55,26 @@ export default {
     defineRule('passwords_mismatch', confirmed)
     defineRule('excluded', excluded)
     defineRule('country_excluded', excluded)
+    
+    // Custom phone number validation rule
+    defineRule('phone', (value) => {
+      if (!value || value.length === 0) {
+        return true // Allow empty values
+      }
+      // Dutch phone number format: +31 or 0 followed by digits, with optional spaces, hyphens, or dots
+      // Clean the value by removing spaces, hyphens, and dots
+      const cleanValue = value.replace(/[\s\-\.]/g, '')
+      
+      // Check for valid Dutch phone number patterns:
+      // - Mobile: +31 6 or 06 followed by 8 digits
+      // - Landline: +31 followed by area code and number, or 0 followed by area code and number
+      const phoneRegex = /^(\+31|0)[1-9]\d{8,9}$/
+      
+      return phoneRegex.test(cleanValue)
+    })
 
     configure({
-      generateMessage: localize({
-        en,
-        nl
-      }),
+      generateMessage: localize(customMessages),
       validateOnBlur: true,
       validateOnChange: true,
       validateOnInput: false,
