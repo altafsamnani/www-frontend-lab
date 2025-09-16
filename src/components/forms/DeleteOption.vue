@@ -53,6 +53,7 @@ import Modal from '@/components/modals/Modal.vue'
 
 const confirm_delete = ref<InstanceType<typeof Modal>>()
 const showDeleteConfirmation = () => confirm_delete.value?.show()
+
 const destroy = () => {
   emit('btnDelete')
 }

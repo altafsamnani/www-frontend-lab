@@ -59,7 +59,7 @@
                     <i class="pi pi-lock text-3xl text-surface-400 dark:text-surface-500 mb-4"></i>
                     <h3 class="text-lg font-semibold text-surface-900 dark:text-surface-0 mb-2">{{
                         t('products.login_to_see_price')
-                    }}</h3>
+                        }}</h3>
                     <p class="text-surface-600 dark:text-surface-300 mb-4">{{ t('products.login_description') }}</p>
                     <Button :label="t('login.label_button')" @click="goToLogin" class="w-full" />
                 </div>
@@ -80,18 +80,14 @@
 
             <!-- Quantity and Cart Section - Show only when logged in -->
             <div v-if="isUserLoggedIn">
-                <div class="font-bold text-surface-900 dark:text-surface-0 mb-4 leading-normal">{{ t('products.quantity') }}</div>
+                <div class="font-bold text-surface-900 dark:text-surface-0 mb-4 leading-normal">{{
+                    t('products.quantity')
+                    }}</div>
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                    <InputNumber v-model="quantity" :show-buttons="true" button-layout="horizontal"
-                        spinner-mode="horizontal" :min="0" class="w-32" input-class="w-12 text-center"
-                        decrement-button-class="p-button-text" increment-button-class="p-button-text"
-                        increment-button-icon="pi pi-plus" decrement-button-icon="pi pi-minus" />
-                    <div class="flex items-center flex-1 mt-4 sm:mt-0 ml-0 sm:ml-8">
-                        <Button :label="t('products.add_to_cart')" class="flex-1 mr-8" />
-                        <i class="pi !text-2xl !leading-normal cursor-pointer" :class="{
-                            'pi-heart text-surface-600 dark:text-surface-200': !liked,
-                            'pi-heart-fill text-pink-500': liked
-                        }" @click="liked = !liked" />
+                    <div class="flex items-center flex-1 mt-4 sm:mt-0 ml-0">
+                        <AddToCart :product="productForCart" :initialQuantity="initialQuantity" :price="product.price"
+                            class="flex-1 mr-4" />
+                        <FavouriteButton :product-id="product.id.toString()" />
                     </div>
                 </div>
             </div>
@@ -132,18 +128,19 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getSeverity } from '@/includes/helpers'
 import { useAuthStore, isLoggedIn } from '@/stores/auth'
+import { useCartStore } from '@/stores/cart'
 import Button from 'primevue/button';
 import type ProductDetails from '@/types/ProductDetails';
+import AddToCart from '@/components/cart/AddToCart.vue';
+import FavouriteButton from '@/components/favourites/FavouriteButton.vue';
 
 const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
+const cartStore = useCartStore()
 
 const selectedImageIndex = ref(0)
-const quantity = ref(1);
-const liked = ref(false);
 const color = ref('blue');
-const size = ref('M');
 const defaultUrl = import.meta.env.VITE_DEFAULT_IMAGE
 
 const props = defineProps<{
@@ -153,12 +150,12 @@ const product = ref(props.product)
 
 // Create a reactive authentication state that properly updates
 const isUserLoggedIn = computed(() => {
-  // Primary check: if user exists in store (reactive)
-  if (authStore.user) return true
-  // Secondary check: if accessToken exists in store (reactive)
-  if (authStore.accessToken) return true
-  // Fallback: check localStorage directly (for initial page load)
-  return isLoggedIn()
+    // Primary check: if user exists in store (reactive)
+    if (authStore.user) return true
+    // Secondary check: if accessToken exists in store (reactive)
+    if (authStore.accessToken) return true
+    // Fallback: check localStorage directly (for initial page load)
+    return isLoggedIn()
 })
 
 // Login navigation function
@@ -177,6 +174,26 @@ const displayImages = computed(() => {
 
 const selectedImage = computed(() => {
     return displayImages.value[selectedImageIndex.value]?.url || defaultUrl
+})
+
+// Get the correct initial quantity from cart if item exists
+const initialQuantity = computed(() => {
+    const existingItem = cartStore.cartItems.find(item => item.productId === product.value.id)
+    return existingItem ? existingItem.quantity : 1
+})
+
+// Transform product data for AddToCart component
+const productForCart = computed(() => {
+    return {
+        id: product.value.id || 0,
+        name: product.value.name,
+        article_nr: (product.value as any).article_nr || `ART-${product.value.id}`,
+        price: product.value.price,
+        image: selectedImage.value,
+        category: product.value.category?.[0]?.name || '',
+        brand: Array.isArray(product.value.brand) && product.value.brand.length > 0 ? (product.value.brand as any)[0]?.name || '' : '',
+        description: product.value.description || ''
+    }
 })
 
 </script>

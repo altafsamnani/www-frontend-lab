@@ -1,13 +1,21 @@
 <template>
-  <div class="flex flex-row gap-1">
-    <div class="space-y-4 basis-1/2" :key="numCol" v-for="numCol in prop.columns">
-      <Skeleton height="1rem" :key="num" v-for="num in prop.rows" />
+  <div class="w-full">
+    <div 
+      class="grid gap-4"
+      :style="`grid-template-columns: repeat(${columns}, 1fr)`"
+    >
+      <div v-for="i in columns" :key="i" class="space-y-2">
+        <div v-for="j in rows" :key="j">
+          <Skeleton height="1.5rem" class="w-full" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import Skeleton from '@/volt/Skeleton.vue'
 
-const prop = defineProps<{
+defineProps<{
   columns: number
   rows: number
 }>()

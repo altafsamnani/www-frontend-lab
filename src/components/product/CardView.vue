@@ -38,11 +38,14 @@
 
                 </div>
                 <div class="flex flex-col gap-6 mt-6">
-                    <span class="text-2xl font-semibold">${{ item.price }}</span>
+                    <span v-if="props.isUserLoggedIn" class="text-2xl font-semibold">${{ item.price }}</span>
                     <div class="flex gap-2">
-                        <Button icon="pi pi-shopping-cart" label="Order Now" :disabled="item.stock.level > 4"
-                            class="flex-auto whitespace-nowrap" @change="clickShopNow"></Button>
-                        <Button icon="pi pi-heart" outlined></Button>
+                        <Button v-if="!props.isUserLoggedIn" :label="t('products.login_to_see_price')"
+                            @click="goToLogin" class="w-full" />
+                        <Button v-else icon="pi pi-shopping-cart" :label="t('products.add_to_cart')"
+                            :disabled="item.stock.level > 4" class="flex-auto whitespace-nowrap"
+                            @click="addToCart(item)"></Button>
+                        <FavouriteButton v-if="props.isUserLoggedIn" :product-id="item.id.toString()" />
                     </div>
                 </div>
             </div>
@@ -53,16 +56,21 @@
 import { ref } from 'vue'
 import { getSeverity } from '@/includes/helpers'
 import { useI18n } from 'vue-i18n'
+import type ProductDetails from '@/types/ProductDetails';
+import FavouriteButton from '@/components/favourites/FavouriteButton.vue';
 const { t } = useI18n()
 const props = defineProps<{
     items: []
-    selectedShopNow?: any
+    isUserLoggedIn?: boolean
 }>()
 const defaultUrl = import.meta.env.VITE_DEFAULT_IMAGE
-const selectedShopNow = ref(props.selectedShopNow)
-const emit = defineEmits(['clickShopNow'])
+const emit = defineEmits(['addToCart', 'goToLogin'])
 
-function clickShopNow() {
-    emit('clickShopNow', selectedShopNow.value)
+function addToCart(ProductDetails: ProductDetails) {
+    emit('addToCart', ProductDetails)
+}
+
+function goToLogin() {
+    emit('goToLogin')
 }
 </script>

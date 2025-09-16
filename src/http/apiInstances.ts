@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '../stores/auth'
-import toasteventbus from 'primevue/toasteventbus';
+import toasteventbus from 'primevue/toasteventbus'
 import i18n from '@/i18n'
 import router from '@/router'
 axios.defaults.withCredentials = true
@@ -24,16 +24,12 @@ api.defaults.headers.delete['Accept'] = 'application/json'
 api.defaults.headers.put['Content-Type'] = 'application/vnd.osec.default.v1+json'
 api.defaults.headers.put['Accept'] = 'application/json'
 
-api.interceptors.request.use(
-  (config) => handleHeaders(config)
-)
+api.interceptors.request.use((config) => handleHeaders(config))
 
 api.interceptors.response.use(
-  (response) : any => response.data,
+  (response): any => response.data,
   (error) => handleError(error)
 )
-
-
 
 export const loginApi = axios.create({
   headers: {
@@ -44,13 +40,11 @@ export const loginApi = axios.create({
 export const uploadApi = axios.create({
   headers: {
     'Content-Type': 'multipart/form-data',
-    'Accept': 'application/vnd.osec.default.v1+json'
+    Accept: 'application/vnd.osec.default.v1+json'
   }
 })
 
-uploadApi.interceptors.request.use(
-  (config) => handleHeaders(config)
-)
+uploadApi.interceptors.request.use((config) => handleHeaders(config))
 uploadApi.interceptors.response.use(
   (response) => response.data,
   (error) => handleError(error)
@@ -60,38 +54,54 @@ export const baseApi = axios.create()
 
 export const usetoastservice = () => {
   const showtoast = () => {
-    toasteventbus.emit('add', { severity: 'error', detail:i18n().global.t('notification.something_went_wrong'), life: 5000 });
+    toasteventbus.emit('add', {
+      severity: 'error',
+      detail: i18n().global.t('notification.something_went_wrong'),
+      life: 5000
+    })
   }
 
-  return { showtoast };
-};
+  return { showtoast }
+}
 
-const handleHeaders = (config) => {
-  config.headers['Accept-Language'] = localStorage.getItem('lang')
-  config.headers['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`
+const handleHeaders = (config: any) => {
+  const lang = localStorage.getItem('lang')
+  const token = localStorage.getItem('access_token')
+  
+  Object.assign(config.headers, {
+    'Accept-Language': lang,
+    'Authorization': token ? `Bearer ${token}` : ''
+  })
 
   return config
 }
 
-const handleError = (error) => {
-  const { showtoast } = usetoastservice()
+const handleError = (error: any) => {
   console.error('API Error:', error)
-
-  if (error.response) {
-    if (error.response.status === 401) {
-      cleanupForLogout()
-    } else {
-      // Show a generic error message
-      console.log('Api error occurred. Please check your api and try later.')
-    }
+  
+  // Handle 401 unauthorized or network errors
+  if (error.response?.status === 401 || error.code === 'ERR_NETWORK') {
+    cleanupForLogout()
   }
+  
+  // Show error toast
+  const { showtoast } = usetoastservice()
   showtoast()
+  
   return Promise.reject(error)
 }
 
 const cleanupForLogout = () => {
   const authStore = useAuthStore()
-  const { cleanupForLogout } = authStore
-  cleanupForLogout()
-  router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } })
+  authStore.cleanupForLogout()
+  
+  const { name, query, fullPath } = router.currentRoute.value
+  
+  // Determine redirect: preserve existing redirect on login page, otherwise use current path
+  const redirect = name === 'login' ? query.redirect : fullPath
+  
+  router.push({ 
+    name: 'login', 
+    query: redirect ? { redirect } : {}
+  })
 }

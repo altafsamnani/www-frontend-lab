@@ -7,6 +7,9 @@
 @import 'tailwindcss-primeui';
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Import Tailwind theme configuration */
+@config '../../tailwind.config.js';
+
 /* Optionally, add the correct CSS import for tailwindcss-primeui if it exists, or remove if not needed */
 /* @import "tailwindcss-primeui/dist/tailwindcss-primeui.css"; */
 :root {

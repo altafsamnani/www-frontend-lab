@@ -22,51 +22,14 @@
       </template>
       <template #list="slotProps">
         <div class="flex flex-col">
-          <div v-for="(item, index) in slotProps.items" :key="index">
-            <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
-              :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
-              <div class="md:w-40 relative">
-                <img class="block xl:block mx-auto rounded w-full"
-                  :src="item.images.length ? item.images[0].url : defaultUrl" :alt="item.name" />
-                <div class="absolute rounded-border" style="left: 4px; top: 4px">
-                  <Tag class="text-xs" :value="t('config.stock_status.' + item.stock.stock_slug)"
-                    :severity="getSeverity(item.stock.level)"></Tag>
-                </div>
-              </div>
-              <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-                  <div>
-                    <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{
-                      item.category.map(category => t('categories.' + category.slug)).join(', ')
-                      }}</span>
-                    <router-link :to="{ name: 'Products', params: { id: item.id } }">
-                      <div class="text-lg font-medium mt-1">{{ item.name }}</div>
-                    </router-link>
-                  </div>
-                  <div class="bg-surface-100 p-1" style="border-radius: 30px">
-                    <div class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"
-                      style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
-                      <span class="text-surface-900 font-medium text-sm">{{ item.rating ?? 4 }}</span>
-                      <i class="pi pi-star-fill text-yellow-500"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-col md:items-end gap-8">
-                  <span class="text-xl font-semibold">${{ item.price }}</span>
-                  <div class="flex flex-row-reverse md:flex-row gap-2">
-                    <Button icon="pi pi-heart" outlined></Button>
-                    <Button icon="pi pi-shopping-cart" label="Order Now" :disabled="item.stock.level > 4"
-                      class="flex-auto md:flex-initial whitespace-nowrap" @change="clickShopNow"></Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ListView :items="slotProps.items" :isUserLoggedIn="isUserLoggedIn" @goToLogin="goToLogin"
+            @addToCart="addToCart" />
         </div>
       </template>
       <template #grid="slotProps">
         <div class="grid grid-cols-12 gap-4">
-          <ProductCard :items="slotProps.items" />
+          <CardView :items="slotProps.items" :isUserLoggedIn="isUserLoggedIn" @goToLogin="goToLogin"
+            @addToCart="addToCart" />
         </div>
       </template>
     </DataView>
@@ -74,33 +37,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useI18n } from 'vue-i18n'
 import { useSearchStore } from '@/stores/search';
-import Button from 'primevue/button';
 import DataView from 'primevue/dataview';
 import SelectButton from 'primevue/selectbutton';
-import { getSeverity } from '@/includes/helpers'
-import Tag from 'primevue/tag';
+import { useRouter } from 'vue-router'
+import { useAuthStore, isLoggedIn } from '@/stores/auth'
+import { useAddToCart } from '@/composables/useAddToCart'
 import type Query from '@/types/Query';
 import LoaderCard from '@/components/icons/LoaderCard.vue';
-import ProductCard from '@/components/product/CardView.vue';
+import ListView from '@/components/product/ListView.vue';
+import CardView from '@/components/product/CardView.vue';
 import NotFoundResults from '../errors/NotFoundResults.vue';
 
 
-const defaultUrl = import.meta.env.VITE_DEFAULT_IMAGE
 const props = defineProps<{
   query: Query
   selectedShopNow?: any
 }>()
-const { t } = useI18n()
+
 const query = ref(props.query)
 const selectedShopNow = ref(props.selectedShopNow)
 const layout = ref<'grid' | 'list'>('grid')
 const options = ref(['list', 'grid']);
 const sortKey = ref();
 const perPage = ref(props.query.page ? [props.query.page.size, props.query.page.size * 2, props.query.page.size * 3] : [15, 30, 45])
+const router = useRouter()
+const authStore = useAuthStore()
 const searchStore = useSearchStore()
 const { products, paginator } = storeToRefs(searchStore)
 
@@ -134,10 +98,40 @@ const sortOptions = ref([
   }
 ]);
 
-const emit = defineEmits(['clickShopNow', 'clickOnSortPaginator'])
+const emit = defineEmits(['clickOnSortPaginator'])
 
-function clickShopNow() {
-  emit('clickShopNow', selectedShopNow.value)
+// Use the common addToCart composable
+const { addToCart: addItemToCart } = useAddToCart({
+  showToast: true
+})
+
+// Wrapper function to handle the product from the event
+function addToCart(product: any) {
+  if (!isUserLoggedIn.value) {
+    goToLogin()
+    return
+  }
+  
+  // Call the common addToCart function
+  addItemToCart(product)
+}
+
+// Create a reactive authentication state that properly updates
+const isUserLoggedIn = computed(() => {
+  // Primary check: if user exists in store (reactive)
+  if (authStore.user) return true
+  // Secondary check: if accessToken exists in store (reactive)
+  if (authStore.accessToken) return true
+  // Fallback: check localStorage directly (for initial page load)
+  return isLoggedIn()
+})
+
+// Login navigation function
+const goToLogin = () => {
+  router.push({
+    name: 'login',
+    query: { redirect: router.currentRoute.value.fullPath }
+  })
 }
 
 const onSortChange = async (event) => {

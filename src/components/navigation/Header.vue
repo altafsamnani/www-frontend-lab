@@ -1,7 +1,6 @@
 <template>
     <div class="h-full w-full">
         <nav class="relative w-full flex items-center" @mouseleave="closeMenu">
-
             <div
                 class="hidden osecheader w-full lg:flex flex-1 items-center pb-4 border-b-1 border-surface-200 dark:border-surface-700 animate-fadeinup absolute lg:static  lg:py-0  top-0 left-0 z-10 bg-surface-0 dark:bg-surface-900">
 
@@ -39,7 +38,9 @@
                     </template>
                     <div v-if="activeItem?.subMenu"
                         :class="activeItem ? 'opacity-100 visible z-[99]' : 'opacity-0 invisible z-[-99]'"
-                        class="lg:block hidden animate-fadein animate-duration-150 max-w-lg w-full absolute top-full p-3 rounded-xl overflow-hidden bg-surface-100 dark:bg-surface-900 transition-all">
+                        class="lg:block hidden animate-fadein animate-duration-150 max-w-lg w-full absolute top-full p-3 rounded-xl overflow-hidden bg-surface-100 dark:bg-surface-900 transition-all"
+                        @transitionstart="onMenuTransitionStart"
+                        @transitionend="onMenuTransitionEnd">
                         <div class="flex gap-4">
                             <ul class="flex-1 flex flex-col rounded-lg overflow-hidden">
                                 <template v-for="(subItem, j) of activeItem?.subMenu" :key="j">
@@ -84,17 +85,19 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { setI18nLanguage } from '@/i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { useNotifyStore, NotificationType } from '@/stores/notify'
+import { useHeaderMenuStore } from '@/stores/headerMenu'
 import { localize } from '@vee-validate/i18n'
 
 const notifyStore = useNotifyStore()
 const router = useRouter()
 const authStore = useAuthStore()
+const headerMenuStore = useHeaderMenuStore()
 const { handleLogout } = authStore
 interface settings {
     theme: string
@@ -123,6 +126,27 @@ const closeMenu = () => {
     hoveredItem.value = null;
     selectedItem.value = null;
 };
+
+// Watch for activeItem changes to update header menu store
+watch(activeItem, (newValue) => {
+    if (newValue && 'subMenu' in newValue && newValue.subMenu) {
+        headerMenuStore.openMenu()
+    } else {
+        headerMenuStore.closeMenu()
+    }
+}, { immediate: true })
+
+const onMenuTransitionStart = () => {
+    if (activeItem.value && 'subMenu' in activeItem.value && activeItem.value.subMenu) {
+        headerMenuStore.openMenu()
+    }
+}
+
+const onMenuTransitionEnd = () => {
+    if (!(activeItem.value && 'subMenu' in activeItem.value && activeItem.value.subMenu)) {
+        headerMenuStore.closeMenu()
+    }
+}
 
 const selectedCategory = ref(0);
 const navs = ref([

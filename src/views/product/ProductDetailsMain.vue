@@ -30,6 +30,7 @@ import { ref, onMounted, computed } from 'vue';
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useSearchStore } from '@/stores/search';
+import { useNavigationStore } from '@/stores/navigation';
 
 import LoaderView from '@/components/icons/LoaderView.vue';
 import ProductDetailsTop from './ProductDetailsTop.vue';
@@ -42,6 +43,7 @@ const searchStore = useSearchStore()
 const { fetchProduct } = searchStore
 const { product } = storeToRefs(searchStore)
 const route = useRoute()
+const navigationStore = useNavigationStore()
 const isLoading = ref(true)
 const productId = ref(route.params.id)
 const selectedImageIndex = ref(0)
@@ -55,15 +57,13 @@ const breadcrumbItems = computed(() => {
         route: `/search/${category.slug}`
     }))
 
-    items.push({
-        label: product.value.name,
-        route: `/products/${product.value.id}`
-    })
-
     return items
 })
 
 onMounted(async () => {
+    // Store the current route for "Continue Shopping" functionality
+    navigationStore.setLastVisitedRoute(route.fullPath)
+    
     await fetchProduct(productId.value).then(() => {
         isLoading.value = false
     })

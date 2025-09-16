@@ -34,11 +34,12 @@
             <div class="col-span-12 ">
                 <div v-for="i in 8" :key="i">
                     <Skeleton height="1.5rem" class="mb-7"></Skeleton>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import Skeleton from '@/volt/Skeleton.vue'
 </script>
