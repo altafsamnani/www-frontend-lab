@@ -2,10 +2,10 @@ import { fileURLToPath, URL } from 'node:url'
 import { createRequire } from 'node:module'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import Components from 'unplugin-vue-components/vite';
-import {PrimeVueResolver} from '@primevue/auto-import-resolver'
+import Components from 'unplugin-vue-components/vite'
+import { PrimeVueResolver } from '@primevue/auto-import-resolver'
 
-const require = createRequire( import.meta.url );
+const require = createRequire(import.meta.url)
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,10 +16,11 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return id.toString().split('node_modules/')[1].split('/')[0];
-          }
+        manualChunks: {
+          'vendor-vue': ['vue', 'vue-router', 'pinia', 'vue-i18n'],
+          'vendor-primevue': ['primevue'],
+          'vendor-chart': ['vue-chartjs', 'chart.js'],
+          'vendor-utils': ['axios', 'dayjs', 'moment', 'vee-validate']
         }
       }
     }
@@ -27,9 +28,7 @@ export default defineConfig({
   plugins: [
     vue(),
     Components({
-      resolvers: [
-        PrimeVueResolver()
-      ]
+      resolvers: [PrimeVueResolver()]
     })
   ],
   resolve: {

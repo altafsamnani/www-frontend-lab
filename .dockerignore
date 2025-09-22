@@ -1,0 +1,21 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+.env
+.env.*
+.nyc_output
+coverage
+.idea
+.vscode
+.DS_Store
+dist
+.history
+test
+buildspec.yml
+Makefile
+CLAUDE.md
+
+# Explicitly include package-lock.json for npm ci
+!package-lock.json

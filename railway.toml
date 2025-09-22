@@ -1,0 +1,14 @@
+# Railway configuration for Vue frontend
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile.railway"
+
+[deploy]
+healthcheckPath = "/ping.txt"
+healthcheckTimeout = 30
+healthcheckInterval = 5
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[variables]
+NODE_ENV = "production"

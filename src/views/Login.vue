@@ -4,12 +4,10 @@
       <!-- Left Side - Static Image -->
       <div
         class="hidden md:block w-6/12 h-full"
-        style="
-          background:
-            linear-gradient(0deg, var(--p-primary-500) 0%, var(--p-primary-500) 100%),
-            url('/src/assets/login_split.webp') lightgray 50% / cover no-repeat;
-          background-blend-mode: overlay, normal;
-        "
+        :style="{
+          background: `linear-gradient(0deg, var(--p-primary-500) 0%, var(--p-primary-500) 100%), url('${loginSplitImage}') lightgray 50% / cover no-repeat`,
+          backgroundBlendMode: 'overlay, normal'
+        }"
       />
       
       <!-- Right Side - Login Form -->
@@ -78,6 +76,7 @@ import { useAuthStore } from '../stores/auth'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
 import Checkbox from 'primevue/checkbox'
+import loginSplitImage from '@/assets/login_split.webp'
 
 const { t } = useI18n()
 
