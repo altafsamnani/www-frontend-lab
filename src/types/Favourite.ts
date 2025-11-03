@@ -4,6 +4,7 @@ export interface Favourite {
   productId: string
   articleNr: string
   name: string
+  price: any
   thumbnail: string
   createdAt: string
   updatedAt: string

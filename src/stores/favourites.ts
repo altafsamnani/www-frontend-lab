@@ -20,6 +20,7 @@ export const useFavouritesStore = defineStore('favourites', () => {
   }
 
   const initializeStore = async (force = false) => {
+    console.log('Initializing favourites store, force:', isInitialized, force)
     if (isInitialized.value && !force) {
       return
     }

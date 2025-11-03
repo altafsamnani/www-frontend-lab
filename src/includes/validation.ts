@@ -10,11 +10,14 @@ import {
   min,
   max,
   alpha_spaces as alphaSpaces,
+  alpha_num as alphaNum,
   email,
   min_value as minVal,
   max_value as maxVal,
   confirmed,
-  not_one_of as excluded
+  not_one_of as excluded,
+  integer,
+  numeric
 } from '@vee-validate/rules'
 import { localize } from '@vee-validate/i18n'
 import en from '@vee-validate/i18n/dist/locale/en.json'
@@ -49,12 +52,15 @@ export default {
     defineRule('min', min)
     defineRule('max', max)
     defineRule('alpha_spaces', alphaSpaces)
+    defineRule('alpha_num', alphaNum)
     defineRule('email', email)
     defineRule('min_value', minVal)
     defineRule('max_value', maxVal)
     defineRule('passwords_mismatch', confirmed)
     defineRule('excluded', excluded)
     defineRule('country_excluded', excluded)
+    defineRule('integer', integer)
+    defineRule('numeric', numeric)
     
     // Custom phone number validation rule
     defineRule('phone', (value) => {

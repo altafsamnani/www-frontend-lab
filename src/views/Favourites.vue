@@ -1,5 +1,5 @@
 <template>
-  <RightLayout :title="$t('menu.wishlist')" :subtitle="$t('favourites.subtitle')">
+  <RightLayout :title="$t('menu.favourites')" :subtitle="$t('favourites.subtitle')">
     <div v-if="loading" class="flex justify-center py-4">
       <LoaderForm :columns="1" :rows="15" />
     </div>

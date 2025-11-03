@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useFavouritesStore } from '@/stores/favourites'
 import { useNotifyStore, NotificationType } from '@/stores/notify'
@@ -29,17 +29,6 @@ const favouritesStore = useFavouritesStore()
 const notifyStore = useNotifyStore()
 
 const loading = ref(false)
-
-// Initialize favourites store if user is logged in
-onMounted(async () => {
-  if (isLoggedIn() && !favouritesStore.isInitialized) {
-    try {
-      await favouritesStore.initializeStore()
-    } catch (error) {
-      console.error('Failed to initialize favourites:', error)
-    }
-  }
-})
 
 const isFavourited = computed(() => {
   // Only check favourite status if user is logged in

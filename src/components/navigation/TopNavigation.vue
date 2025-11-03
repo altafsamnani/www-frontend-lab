@@ -60,12 +60,12 @@
                                     @click="handleLocaleClick('nl')">
                                     <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'nl' }">{{
                                         $t('languages.nl')
-                                    }}</span>
+                                        }}</span>
                                 </a>
                                 <a v-else @click="handleLocaleClick('en')" class="block p-2 cursor-pointer">
                                     <span class="ml-2" :class="{ 'font-semibold': $i18n.locale === 'en' }">{{
                                         $t('languages.en')
-                                    }}</span>
+                                        }}</span>
                                 </a>
                             </template>
                         </Menu>
@@ -212,13 +212,13 @@
                                     <div class="flex justify-between items-center mb-4">
                                         <span class="font-medium text-surface-900 dark:text-surface-0">Total:</span>
                                         <span class="font-bold text-primary">€{{ cartStore.cartTotalAmount.toFixed(2)
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex pt-4 gap-2">
                                 <Button @click="goToCart" class="flex-1" outlined>{{ $t('navigation.view_cart')
-                                }}</Button>
+                                    }}</Button>
                                 <Button v-if="cartStore.isCartEmpty" @click="goToContinueShopping" class="flex-1">
                                     <i class="pi pi-search mr-2"></i>
                                     {{ $t('button.search') }}
@@ -293,6 +293,7 @@ onMounted(() => {
     localStorage.setItem('theme', theme.value)
     if (isUserLoggedIn.value) {
         cartStore.fetchCartSummary()
+        favouritesStore.initializeStore()
     }
 
     // Watch for cart dropdown visibility changes

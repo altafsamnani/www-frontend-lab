@@ -3,7 +3,7 @@
     <slot />
   </div>
   <div v-else class="min-h-screen flex flex-col">
-    <Toast />
+    <Toast position="top-right" />
     <div class="sticky top-0 z-40 items-center shadow-sm shrink-0 gap-x-4 sm:gap-x-6 bg-surface-800 dark:bg-surface-50">
       <TopNavigation />
     </div>
@@ -35,22 +35,20 @@ import { useNotifyStore } from '@/stores/notify'
 import { useToast } from 'primevue/usetoast'
 import { watch } from 'vue'
 import TopNavigation from '@/components/navigation/TopNavigation.vue';
-import Toast from '@/volt/Toast.vue';
+import Toast from 'primevue/toast';
 
 const notifyStore = useNotifyStore()
 const toast = useToast()
 const route = useRoute()
 
-const toasts = notifyStore.notifications
-
-watch(toasts, () => {
-  toasts.forEach((notification) => {
+watch(() => notifyStore.notifications.length, (newLength, oldLength) => {
+  if (newLength > oldLength && newLength > 0) {
+    const latestNotification = notifyStore.notifications[newLength - 1]
     toast.add({
-      severity: notification.type,
-      //summary: 'xx',
-      detail: notification.message,
+      severity: latestNotification.type,
+      detail: latestNotification.message,
       life: 3000
     })
-  })
+  }
 })
 </script>
