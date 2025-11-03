@@ -141,7 +141,7 @@ const menuItems = [
         type: 'group',
         items: [
             { label: 'menu.shoppingCart', icon: 'pi pi-shopping-cart', route: '/cart' },
-            { label: 'menu.wishlist', icon: 'pi pi-bookmark', route: '/favourites' }
+            { label: 'menu.favourites', icon: 'pi pi-bookmark', route: '/favourites' }
         ]
     },
     {
@@ -150,7 +150,7 @@ const menuItems = [
         type: 'group',
         items: [
             { label: 'menu.orders', icon: 'pi pi-box', route: '/orders' },
-            { label: 'menu.myQuotes', icon: 'pi pi-file', route: '/quotes' },
+            { label: 'menu.myOffers', icon: 'pi pi-file', route: '/quotes' },
             { label: 'menu.osecQuotes', icon: 'pi pi-file-export', route: '/osec-quotes' }
         ]
     },
