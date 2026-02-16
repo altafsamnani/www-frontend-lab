@@ -38,7 +38,7 @@
 
                 </div>
                 <div class="flex flex-col gap-6 mt-6">
-                    <span v-if="props.isUserLoggedIn" class="text-2xl font-semibold">${{ item.price }}</span>
+                    <ProductPrice v-if="props.isUserLoggedIn" :price="item.price" :discount="item.discount" />
                     <div class="flex gap-2">
                         <Button v-if="!props.isUserLoggedIn" :label="t('products.login_to_see_price')"
                             @click="goToLogin" class="w-full" />
@@ -53,11 +53,11 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
 import { getSeverity } from '@/includes/helpers'
 import { useI18n } from 'vue-i18n'
-import type ProductDetails from '@/types/ProductDetails';
-import FavouriteButton from '@/components/favourites/FavouriteButton.vue';
+import type ProductDetails from '@/types/ProductDetails'
+import FavouriteButton from '@/components/favourites/FavouriteButton.vue'
+import ProductPrice from '@/components/product/ProductPrice.vue'
 const { t } = useI18n()
 const props = defineProps<{
     items: []

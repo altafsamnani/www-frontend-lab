@@ -62,16 +62,34 @@ const emit = defineEmits<{
 const { t } = useI18n()
 
 const countries: Country[] = [
+  // Benelux & neighbors
   { name: 'Nederland', code: 'NL' },
   { name: 'België', code: 'BE' },
+  { name: 'Luxemburg', code: 'LU' },
   { name: 'Duitsland', code: 'DE' },
   { name: 'Frankrijk', code: 'FR' },
   { name: 'Verenigd Koninkrijk', code: 'GB' },
+  // Central Europe
   { name: 'Oostenrijk', code: 'AT' },
   { name: 'Zwitserland', code: 'CH' },
+  { name: 'Tsjechië', code: 'CZ' },
+  { name: 'Polen', code: 'PL' },
+  // Southern Europe
   { name: 'Italië', code: 'IT' },
   { name: 'Spanje', code: 'ES' },
-  { name: 'Portugal', code: 'PT' }
+  { name: 'Portugal', code: 'PT' },
+  { name: 'Kroatië', code: 'HR' },
+  // Northern Europe
+  { name: 'Denemarken', code: 'DK' },
+  { name: 'Zweden', code: 'SE' },
+  { name: 'Noorwegen', code: 'NO' },
+  { name: 'Finland', code: 'FI' },
+  { name: 'Ierland', code: 'IE' },
+  // Caribbean Netherlands
+  { name: 'Aruba', code: 'AW' },
+  { name: 'Bonaire', code: 'BQ' },
+  { name: 'Curaçao', code: 'CW' },
+  { name: 'Sint Maarten', code: 'SX' }
 ]
 
 // Computed placeholder with fallback
@@ -350,4 +368,9 @@ img.flag {
 .flag-zm { background-position: 0 99.173554%; }
 .flag-zr { background-position: 0 99.586777%; }
 .flag-zw { background-position: 0 100%; }
+
+/* Caribbean Netherlands - use NL flag as fallback (part of Kingdom of the Netherlands) */
+.flag-bq { background-position: 0 65.289256%; } /* Bonaire - uses NL position */
+.flag-cw { background-position: 0 65.289256%; } /* Curaçao - uses NL position */
+.flag-sx { background-position: 0 65.289256%; } /* Sint Maarten - uses NL position */
 </style>

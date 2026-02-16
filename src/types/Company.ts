@@ -1,5 +1,5 @@
-export default interface Company {
-  id: null
+export interface Company {
+  id: string | null
   debnr: number
   companyName: string
   street?: string
@@ -9,12 +9,12 @@ export default interface Company {
   city: string
   country: string
   email?: string
-  phone: string
+  phone?: string
   mobile?: string
   kvk?: string
   taxId?: string
   comments?: string
-  created_at: string
-  updatedAt: string
-  deletedAt: string
+  createdBy?: number
 }
+
+export default Company

@@ -158,7 +158,7 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cart'
-import { useShippingStore } from '@/stores/shipping'
+import { useAddressStore } from '@/stores/addresses'
 import { storeConfig } from '@/config/store'
 import LoaderForm from '@/components/icons/LoaderForm.vue'
 import CheckoutCart from './CheckoutCart.vue'
@@ -183,21 +183,21 @@ const emit = defineEmits<{
 
 
 const cartStore = useCartStore()
-const shippingStore = useShippingStore()
+const addressStore = useAddressStore()
 
 const { cartItems, cartSummary } = storeToRefs(cartStore)
-const { myShippingAddresses } = storeToRefs(shippingStore)
+const { myAddresses } = storeToRefs(addressStore)
 
 const pickupAddress = computed(() => storeConfig.pickup.defaultAddress)
 
 const selectedBillingAddress = computed(() => {
   if (!props.orderData?.billingId) return null
-  return myShippingAddresses.value.find(addr => addr.id === props.orderData?.billingId)
+  return myAddresses.value.find(addr => addr.id === props.orderData?.billingId)
 })
 
 const selectedShippingAddress = computed(() => {
   if (!props.orderData?.shippingId || props.orderData?.pickup) return null
-  return myShippingAddresses.value.find(addr => addr.id === props.orderData?.shippingId)
+  return myAddresses.value.find(addr => addr.id === props.orderData?.shippingId)
 })
 
 const hasShippingAddress = computed(() => {

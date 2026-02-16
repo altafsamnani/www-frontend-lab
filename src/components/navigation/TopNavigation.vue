@@ -25,13 +25,8 @@
 
             <!-- Right side: Search and other elements -->
             <div class="flex items-center flex-1 ml-2 lg:ml-0">
-                <div class="p-input-icon-left w-full p-input-filled">
-                    <IconField icon-position="left" class="w-full">
-                        <InputIcon class="pi pi-search" />
-                        <InputText v-model="productSearch" :placeholder="$t('navigation.product_search')" class="w-full"
-                            @keydown.enter="router.push({ name: 'Search', params: { q: productSearch } })" />
-                    </IconField>
-                </div>
+                <ProductSearchAutoComplete class="w-full" @product-select="onProductSelected" @search="onSearch"
+                    @clear="onClearSearch" />
             </div>
 
             <!-- Notifications section -->
@@ -93,8 +88,11 @@
                             hideOnOutsideClick: true
                         }"
                             class="text-surface-0 dark:text-surface-900 font-medium inline-flex items-center cursor-pointer px-1 lg:px-4 mr-2 lg:mr-0 border-b-2 border-transparent hover:border-primary select-none">
-                            <i class="pi pi-user text-xl" />
-                            <span class="hidden lg:inline ml-2">{{ $t('navigation.my_account') }}</span>
+                            <div
+                                class="w-7 h-7 rounded-full bg-primary-600 flex items-center justify-center text-white font-semibold text-xs">
+                                {{ userInitials }}
+                            </div>
+                            <span class="hidden lg:inline ml-2">{{ userName }}</span>
                         </a>
                         <div
                             class="hidden rounded-border bg-surface-0 dark:bg-surface-900 p-4 shadow absolute right-0 top-full z-10 w-60 origin-top">
@@ -146,21 +144,14 @@
                         </RouterLink>
                     </li>
                     <li v-if="isUserLoggedIn" class="inline-flex relative">
-                        <a v-styleclass="{
-                            selector: '@next',
-                            enterFromClass: 'hidden',
-                            enterActiveClass: 'animate-scalein',
-                            leaveToClass: 'hidden',
-                            leaveActiveClass: 'animate-fadeout',
-                            hideOnOutsideClick: true
-                        }" :class="[
+                        <a :class="[
                             'font-medium inline-flex items-center cursor-pointer py-1 px-1 lg:px-4 border-b-2 border-transparent ',
                             isCartDropdownOpen ? 'bg-surface-0 dark:bg-surface-900 text-surface-900 dark:text-surface-0' : 'text-surface-0 dark:text-surface-900'
                         ]" @click="toggleCartDropdown">
-                            <CartBadge @click="openCartDropdown" />
+                            <CartBadge />
                         </a>
-                        <div ref="cartDropdownRef"
-                            class="hidden bg-surface-0 dark:bg-surface-900 p-6 shadow absolute right-0 top-full z-10 w-[28rem] origin-top">
+                        <Popover ref="cartPopover" @show="isCartDropdownOpen = true" @hide="isCartDropdownOpen = false">
+                            <div class="bg-surface-0 dark:bg-surface-900 p-6 w-[28rem]">
                             <div v-if="cartStore.loading" class="text-center py-8">
                                 <i class="pi pi-spin pi-spinner text-2xl text-gray-400 mb-4"></i>
                                 <p class="text-gray-600 dark:text-gray-300">Loading cart...</p>
@@ -177,42 +168,69 @@
                                 <p class="text-gray-600 dark:text-gray-300">{{ $t('navigation.cart_empty') }}</p>
                             </div>
                             <div v-else>
-                                <span class="text-surface-900 dark:text-surface-0 font-medium mb-4 block">
-                                    {{ $t('navigation.my_cart_items', { count: cartStore.cartItemCount }) }}
-                                </span>
-                                <div class="max-h-60 overflow-y-auto">
+                                <!-- Cart Items List -->
+                                <div class="max-h-52 overflow-y-auto -mx-6 px-6">
                                     <div v-for="item in cartStore.cartItems.slice(0, 3)" :key="item.id"
-                                        class="flex items-center border-b border-surface-200 dark:border-surface-700 pb-4 mb-4 last:border-b-0 last:mb-0">
+                                        class="flex gap-3 py-3 border-b border-surface-100 dark:border-surface-800 last:border-b-0">
                                         <img :src="item.thumbnail || '/images/default-product.png'"
-                                            class="w-12 h-12 flex-shrink-0 rounded object-cover" />
-                                        <div class="flex flex-col pl-3 flex-1 min-w-0">
+                                            class="w-14 h-14 flex-shrink-0 rounded-md object-cover bg-surface-100 dark:bg-surface-800" />
+                                        <div class="flex-1 min-w-0">
                                             <router-link :to="{ name: 'Products', params: { id: item.productId } }"
-                                                class="text-surface-900 dark:text-surface-0 font-medium mb-1 hover:text-primary transition-colors duration-200 break-words">
+                                                class="text-sm font-medium text-surface-900 dark:text-surface-0 hover:text-primary line-clamp-1">
                                                 {{ item.name }}
                                             </router-link>
-                                            <span class="text-surface-600 dark:text-surface-300 text-sm mb-1">
-                                                {{ item.articleNr }}
-                                            </span>
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-surface-600 dark:text-surface-300 text-sm">
-                                                    Qty: {{ item.quantity }}
+                                            <div class="flex items-center gap-2 mt-0.5">
+                                                <span class="text-xs text-surface-500">{{ item.articleNr }}</span>
+                                                <span v-if="item.discountPercentage > 0"
+                                                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
+                                                    -{{ item.discountPercentage }}%
                                                 </span>
-                                                <span class="text-primary font-bold">
-                                                    €{{ (item.totalNetPrice || 0).toFixed(2) }}
-                                                </span>
+                                            </div>
+                                            <div class="flex items-center justify-between mt-1">
+                                                <span class="text-xs text-surface-500">{{ item.quantity }}x</span>
+                                                <div class="flex items-center gap-1.5">
+                                                    <span v-if="item.discountPercentage > 0"
+                                                        class="text-xs text-surface-400 line-through">
+                                                        {{ (item.totalPrice || 0).toFixed(2) }}
+                                                    </span>
+                                                    <span
+                                                        class="text-sm font-semibold text-surface-900 dark:text-surface-0">
+                                                        €{{ (item.totalNetPrice || 0).toFixed(2) }}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div v-if="cartStore.cartItems.length > 3"
-                                        class="text-center text-sm text-surface-600 dark:text-surface-300">
-                                        +{{ cartStore.cartItems.length - 3 }} more items
-                                    </div>
                                 </div>
-                                <div class="border-t border-surface-200 dark:border-surface-700 pt-4 mt-4">
-                                    <div class="flex justify-between items-center mb-4">
-                                        <span class="font-medium text-surface-900 dark:text-surface-0">Total:</span>
-                                        <span class="font-bold text-primary">€{{ cartStore.cartTotalAmount.toFixed(2)
-                                            }}</span>
+
+                                <!-- More Items Indicator -->
+                                <div v-if="cartStore.cartItems.length > 3"
+                                    class="py-2 text-center text-xs text-surface-500 border-b border-surface-100 dark:border-surface-800">
+                                    +{{ cartStore.cartItems.length - 3 }} {{ $t('navigation.more_items') }}
+                                </div>
+
+                                <!-- Compact Summary -->
+                                <div class="pt-3 space-y-1.5">
+                                    <div class="flex justify-between text-xs text-surface-600 dark:text-surface-400">
+                                        <span>{{ $t('cart.orderSummary.items') }} ({{ cartStore.cartSummary.itemCount
+                                        }})</span>
+                                        <span>€{{ (cartStore.cartTotalAmount + cartStore.cartTotalDiscount).toFixed(2)
+                                        }}</span>
+                                    </div>
+                                    <div v-if="cartStore.cartTotalDiscount > 0" class="flex justify-between text-xs">
+                                        <span class="text-green-600 dark:text-green-400">{{
+                                            $t('cart.orderSummary.discount')
+                                        }}</span>
+                                        <span class="text-green-600 dark:text-green-400 font-medium">-€{{
+                                            cartStore.cartTotalDiscount.toFixed(2) }}</span>
+                                    </div>
+                                    <div
+                                        class="flex justify-between items-center pt-2 border-t border-surface-200 dark:border-surface-700">
+                                        <span class="text-sm font-medium text-surface-900 dark:text-surface-0">{{
+                                            $t('cart.orderSummary.total') }}</span>
+                                        <span class="text-base font-bold text-primary">€{{
+                                            cartStore.cartTotalAmount.toFixed(2)
+                                        }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +244,8 @@
                                 <Button v-else @click="goToCheckout" class="flex-1">{{
                                     $t('navigation.purchase') }}</Button>
                             </div>
-                        </div>
+                            </div>
+                        </Popover>
                     </li>
                 </ul>
             </div>
@@ -235,18 +254,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n'
-import { SUPPORT_LOCALES as supportLocales, setI18nLanguage } from '@/i18n'
+import { setI18nLanguage } from '@/i18n'
 import { useAuthStore, isLoggedIn } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { useNotifyStore, NotificationType } from '@/stores/notify'
 import { localize } from '@vee-validate/i18n'
-import IconField from 'primevue/iconfield';
-import InputText from 'primevue/inputtext';
-import InputIcon from 'primevue/inputicon';
 import Button from 'primevue/button';
-import OverlayBadge from 'primevue/overlaybadge';
+import Popover from 'primevue/popover';
+import ProductSearchAutoComplete from '@/components/search/ProductSearchAutoComplete.vue';
 import CartBadge from '@/components/cart/CartBadge.vue';
 import { useCartStore } from '@/stores/cart';
 import { useMobileMenuStore } from '@/stores/mobileMenu';
@@ -258,25 +276,56 @@ const authStore = useAuthStore()
 const mobileMenuStore = useMobileMenuStore()
 const cartStore = useCartStore()
 const favouritesStore = useFavouritesStore()
+const { user } = storeToRefs(authStore)
 const { handleLogout } = authStore
 
 // Create a reactive authentication state that properly updates
 const isUserLoggedIn = computed(() => {
     // Primary check: if user exists in store (reactive)
-    if (authStore.user) return true
+    if (user.value) return true
     // Secondary check: if accessToken exists in store (reactive)
     if (authStore.accessToken) return true
     // Fallback: check localStorage directly (for initial page load)
     return isLoggedIn()
 })
-interface settings {
-    theme: string
-    locale: string
-}
 
 const { t } = useI18n()
-const productSearch = ref('')
 const isCartDropdownOpen = ref(false)
+
+// Computed properties for user display
+const userName = computed(() => {
+    if (user.value?.firstName && user.value?.lastName) {
+        return `${user.value.firstName} ${user.value.lastName}`
+    }
+    return user.value?.email || t('navigation.my_account')
+})
+
+const userInitials = computed(() => {
+    if (user.value?.firstName && user.value?.lastName) {
+        return `${user.value.firstName.charAt(0)}${user.value.lastName.charAt(0)}`.toUpperCase()
+    }
+    if (user.value?.email) {
+        return user.value.email.charAt(0).toUpperCase()
+    }
+    return 'U'
+})
+
+// Product search handlers
+const onProductSelected = (product: any) => {
+    // Product selection is already handled in the component itself
+    // This is just for additional tracking or analytics if needed
+    console.log('Product selected:', product)
+}
+
+const onSearch = (query: string) => {
+    // Track search query for analytics if needed
+    console.log('Search query:', query)
+}
+
+const onClearSearch = () => {
+    // Handle clear search if needed
+    console.log('Search cleared')
+}
 
 const submitLogout = async () => {
     await handleLogout()
@@ -286,36 +335,16 @@ const submitLogout = async () => {
 
 const theme = ref()
 
-onMounted(() => {
+onMounted(async () => {
     theme.value = (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : localStorage.getItem('theme') || 'light';
     document.querySelector('html')?.setAttribute('data-theme', theme.value)
     document.querySelector('html')?.setAttribute('class', theme.value)
     localStorage.setItem('theme', theme.value)
     if (isUserLoggedIn.value) {
+        authStore.fetchUser()
         cartStore.fetchCartSummary()
         favouritesStore.initializeStore()
     }
-
-    // Watch for cart dropdown visibility changes
-    nextTick(() => {
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    const target = mutation.target as HTMLElement
-                    const isHidden = target.classList.contains('hidden')
-                    isCartDropdownOpen.value = !isHidden
-                }
-            })
-        })
-
-        // Start observing the cart dropdown element
-        if (cartDropdownRef.value) {
-            observer.observe(cartDropdownRef.value, {
-                attributes: true,
-                attributeFilter: ['class']
-            })
-        }
-    })
 })
 
 const handleToggleDarkModeClick = () => {
@@ -344,7 +373,6 @@ const localeItems = ref([
     }
 ])
 
-const notificationMenu = ref()
 const notifications = computed(() => {
     return [
         {
@@ -355,20 +383,12 @@ const notifications = computed(() => {
 })
 
 const notificationsPanel = ref()
-const toggleNotifications = (event) => {
-    notificationsPanel.value.toggle(event)
-}
 
 // Cart navigation methods
-const cartDropdownRef = ref()
+const cartPopover = ref()
 
-const toggleCartDropdown = () => {
-    // The MutationObserver will handle the state changes automatically
-    // This method is now just for triggering the dropdown
-}
-
-const openCartDropdown = () => {
-    // This method can be used for additional cart actions if needed
+const toggleCartDropdown = (event: Event) => {
+    cartPopover.value.toggle(event)
 }
 
 const goToCart = () => {

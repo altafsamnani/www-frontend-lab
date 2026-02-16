@@ -7,7 +7,9 @@ export const getSearch = (params?: Query) =>
     params: params
   })
 
-export const getProduct = (id) => api.get(`/search/products/${id}`)
+export const getProduct = (id: number | string | string[]) => api.get(`/search/products/${id}`)
+
+export const getProductOverlays = (id: number | string | string[]) => api.get(`/products/${id}/overlays`)
 
 export const getDocuments = (params?: Query) =>
   api.get('/search/documents', {
@@ -18,3 +20,12 @@ export const getSuggestions = (query: string, limit: number = 10): Promise<Axios
   api.get('/search/suggest', {
     params: { q: query, limit }
   })
+
+export const getProductCrosssells = (id: number | string | string[]): Promise<AxiosResponse> =>
+  api.get(`/products/${id}/crosssells`)
+
+export const getProductCrosssellProducts = (id: number | string | string[]): Promise<AxiosResponse> =>
+  api.get(`/products/${id}/crosssell-products`)
+
+export const getProductCrosssellCategories = (id: number | string | string[]): Promise<AxiosResponse> =>
+  api.get(`/products/${id}/crosssell-categories`)

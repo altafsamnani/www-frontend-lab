@@ -1,4 +1,5 @@
 import type Containers from './Containers'
+import type { ProductDiscount } from './Discount'
 
 export interface Category {
   id: number
@@ -8,8 +9,17 @@ export interface Category {
   parentSlug: string | null
 }
 
+export interface FilterIcon {
+  id: number
+  fileName: string
+  name: string
+  order: number
+  url: string
+  urlFull: string
+}
+
 export default interface ProductDetails {
-  id: null
+  id: number | null
   name: string
   description: string
   price: number
@@ -24,6 +34,8 @@ export default interface ProductDetails {
     stock_slug: string
   }
   images: []
+  filterIcons?: FilterIcon[]
+  discount: ProductDiscount | null
   createdAt: string
   updatedAt: string
 }

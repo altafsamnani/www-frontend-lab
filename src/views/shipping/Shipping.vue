@@ -1,7 +1,7 @@
 <template>
   <RightLayout :title="$t('shipping.addresses.title')" :subtitle="$t('shipping.addresses.subtitle')">
     <template #actions>
-      <router-link :to="{ name: 'shipping-create' }">
+      <router-link :to="{ name: 'addresses-create' }">
         <Button>
           <i class="pi pi-plus mr-2"></i>
           {{ $t('shipping.addresses.addNew') }}
@@ -13,9 +13,9 @@
       <LoaderForm :columns="1" :rows="15" />
     </div>
 
-    <div v-else-if="myShippingAddresses.length === 0" class="text-center py-12">
+    <div v-else-if="myAddresses.length === 0" class="text-center py-12">
       <p class="text-gray-500 mb-4">{{ $t('shipping.addresses.noAddresses') }}</p>
-      <router-link :to="{ name: 'shipping-create' }">
+      <router-link :to="{ name: 'addresses-create' }">
         <Button>
           <i class="pi pi-plus mr-2"></i>
           {{ $t('shipping.addresses.addFirst') }}
@@ -24,11 +24,11 @@
     </div>
 
     <div v-else class="card">
-      <DataTable :value="myShippingAddresses" :paginator="myShippingAddresses.length > 10" :rows="10" dataKey="id" :rowHover="true"
+      <DataTable :value="myAddresses" :paginator="myAddresses.length > 10" :rows="10" dataKey="id" :rowHover="true"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
         :rowsPerPageOptions="[10, 20, 50]"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" class="p-datatable-sm"
-        :globalFilterFields="['companyName', 'name', 'street', 'city', 'zipcode', 'country']">
+        :globalFilterFields="['companyName', 'firstname', 'lastname', 'street', 'city', 'zipcode', 'country']">
 
         <Column field="companyName" :header="$t('shipping.addresses.form.companyName')" :sortable="true">
           <template #body="slotProps">
@@ -36,9 +36,9 @@
           </template>
         </Column>
 
-        <Column field="name" :header="$t('shipping.addresses.form.contactPerson')" :sortable="true">
+        <Column field="firstname" :header="$t('shipping.addresses.form.contactPerson')" :sortable="true">
           <template #body="slotProps">
-            {{ slotProps.data.name || '-' }}
+            {{ [slotProps.data.firstname, slotProps.data.lastname].filter(Boolean).join(' ') || '-' }}
           </template>
         </Column>
 
@@ -66,11 +66,11 @@
           :header="$t('common.actions', 'Actions')">
           <template #body="slotProps">
             <div class="flex justify-center gap-2">
-              <router-link :to="{ name: 'shipping-edit', params: { id: slotProps.data.id } }">
+              <router-link :to="{ name: 'addresses-edit', params: { id: slotProps.data.id } }">
                 <Button icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-sm"
                   v-tooltip.top="$t('common.edit')" />
               </router-link>
-              <Button v-if="myShippingAddresses.length > 1" icon="pi pi-trash"
+              <Button v-if="myAddresses.length > 1" icon="pi pi-trash"
                 class="p-button-rounded p-button-text p-button-danger p-button-sm"
                 @click="confirmDelete(slotProps.data)" v-tooltip.top="$t('common.delete')" />
             </div>
@@ -97,7 +97,7 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
-import { useShippingStore } from '@/stores/shipping'
+import { useAddressStore } from '@/stores/addresses'
 import { useNotifyStore, NotificationType } from '@/stores/notify'
 import RightLayout from '@/layouts/RightLayout.vue'
 import DataTable from 'primevue/datatable'
@@ -106,23 +106,23 @@ import Button from '@/volt/Button.vue'
 import SecondaryButton from '@/volt/SecondaryButton.vue'
 import DangerButton from '@/volt/DangerButton.vue'
 import Dialog from '@/volt/Dialog.vue'
-import type { ShippingAddress } from '@/types/ShippingAddress'
+import type { Address } from '@/types/Address'
 import LoaderForm from '@/components/icons/LoaderForm.vue'
 
 const { t } = useI18n()
-const shippingAddressesStore = useShippingStore()
+const addressStore = useAddressStore()
 const notifyStore = useNotifyStore()
 
-const { myShippingAddresses, loading } = storeToRefs(shippingAddressesStore)
+const { myAddresses, loading } = storeToRefs(addressStore)
 
 const showDeleteDialog = ref(false)
-const addressToDelete = ref<ShippingAddress | null>(null)
+const addressToDelete = ref<Address | null>(null)
 
 onMounted(() => {
-  shippingAddressesStore.fetchMyShippingAddresses()
+  addressStore.fetchMyAddresses()
 })
 
-const confirmDelete = (address: ShippingAddress) => {
+const confirmDelete = (address: Address) => {
   addressToDelete.value = address
   showDeleteDialog.value = true
 }
@@ -131,7 +131,8 @@ const handleDelete = async () => {
   if (!addressToDelete.value) return
 
   try {
-    await shippingAddressesStore.deleteAddress(addressToDelete.value.id)
+    await addressStore.deleteAddress(addressToDelete.value.id)
+    await addressStore.fetchMyAddresses()
     notifyStore.notify(
       t('shipping.addresses.messages.deleteSuccess'),
       NotificationType.Success

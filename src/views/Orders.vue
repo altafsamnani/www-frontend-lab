@@ -83,14 +83,10 @@
                       </span>
                     </div>
 
-                    <!-- Total Amount -->
+                    <!-- Total Amount (Net = Gross - Discount) -->
                     <div class="flex items-center gap-1 flex-shrink-0">
                       <span class="font-bold text-lg text-surface-900 dark:text-surface-0">
-                        €{{ formatPrice(data.totalAmount || data.total_amount) }}
-                      </span>
-                      <span v-if="(data.totalDiscount || data.total_discount || 0) > 0"
-                        class="text-xs text-green-600 dark:text-green-400">
-                        (-€{{ formatPrice(data.totalDiscount || data.total_discount) }})
+                        €{{ formatPrice((data.totalAmount || 0) - (data.totalDiscount || 0)) }}
                       </span>
                     </div>
 
@@ -262,23 +258,22 @@
                           <div class="flex justify-between">
                             <span class="text-surface-600 dark:text-surface-400">{{ $t('orders.subtotal') }}:</span>
                             <span class="text-surface-900 dark:text-surface-0">€{{
-                              formatPrice((orderDetails[data.id].totalAmount || orderDetails[data.id].total_amount || 0)
-                                + (orderDetails[data.id].totalDiscount || orderDetails[data.id].total_discount || 0))
+                              formatPrice(orderDetails[data.id].totalAmount || 0)
                             }}</span>
                           </div>
                           <div
-                            v-if="(orderDetails[data.id].totalDiscount || orderDetails[data.id].total_discount || 0) > 0"
+                            v-if="(orderDetails[data.id].totalDiscount || 0) > 0"
                             class="flex justify-between">
                             <span class="text-surface-600 dark:text-surface-400">{{ $t('orders.discount') }}:</span>
                             <span class="text-green-600 dark:text-green-400">-€{{
-                              formatPrice(orderDetails[data.id].totalDiscount || orderDetails[data.id].total_discount)
+                              formatPrice(orderDetails[data.id].totalDiscount)
                             }}</span>
                           </div>
                           <Divider />
                           <div class="flex justify-between font-semibold text-lg">
                             <span class="text-surface-900 dark:text-surface-0">{{ $t('orders.total') }}:</span>
                             <span class="text-surface-900 dark:text-surface-0">€{{
-                              formatPrice(orderDetails[data.id].totalAmount || orderDetails[data.id].total_amount)
+                              formatPrice((orderDetails[data.id].totalAmount || 0) - (orderDetails[data.id].totalDiscount || 0))
                             }}</span>
                           </div>
                         </div>

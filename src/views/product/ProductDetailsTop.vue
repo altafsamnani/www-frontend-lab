@@ -12,7 +12,34 @@
                         <Tag :value="t('config.stock_status.' + product.stock.stock_slug)"
                             :severity="getSeverity(product.stock.level)"></Tag>
                     </div>
-                    <img :src="selectedImage" class="w-full rounded-border" />
+                    <div class="relative">
+                        <img :src="selectedImage" class="w-full rounded-border" />
+
+                        <!-- Product Overlays - Display as transparent overlays on top of image -->
+                        <template v-if="productOverlays && productOverlays.length">
+                            <div v-for="overlay in productOverlays" :key="overlay.id" class="absolute inset-0">
+                                <img v-if="overlay.images?.length" :src="getOverlayImageUrl(overlay.images[0])"
+                                    :alt="overlay.name" class="w-full h-full object-contain pointer-events-none" />
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Product Features Icons - Below Image -->
+                    <div v-if="product.filterIcons && product.filterIcons.length > 0" class="mt-4">
+                        <div class="flex flex-wrap gap-1.5">
+                            <div v-for="icon in product.filterIcons" :key="icon.id" class="group relative">
+                                <div
+                                    class="w-10 h-10 p-1 rounded bg-surface-50 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 hover:border-primary dark:hover:border-primary hover:shadow-sm transition-all duration-200 flex items-center justify-center cursor-pointer">
+                                    <img :src="icon.url" :alt="icon.name" class="w-full h-full object-contain" />
+                                </div>
+                                <!-- Tooltip on hover -->
+                                <div
+                                    class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-surface-900 dark:bg-surface-700 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                                    {{ getIconLabel(icon.name) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,26 +57,23 @@
             </div>
             <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">
                 {{ t('products.view_more') }}
-                <template v-for="(category, index) in product.category" :key="category.id">
-                    <router-link :to="{ name: 'Search', params: { categorySlug: category.slug } }"
+                <template v-for="(category, index) in product.categories" :key="category.id">
+                    <router-link v-if="category.slug" :to="{ name: 'Search', params: { categorySlug: category.slug } }"
                         class="hover:text-primary transition-colors duration-150">
                         {{ t('categories.' + category.slug) }}
                     </router-link>
-                    <span v-if="index < product.category.length - 1">, </span>
+                    <span v-else class="text-surface-500 dark:text-surface-400">
+                        {{ category.name }}
+                    </span>
+                    <span v-if="index < product.categories.length - 1">, </span>
                 </template>
             </span>
             <div class="flex items-center text-xl font-medium text-surface-900 dark:text-surface-0 mb-6">{{
                 product.name }}</div>
 
             <!-- Price Section - Show only when logged in -->
-            <div v-if="isUserLoggedIn" class="flex items-center justify-between ">
-                <div class="text-surface-900 dark:text-surface-0 font-medium text-3xl block">€{{ product.price }}
-                </div>
-            </div>
             <div v-if="isUserLoggedIn" class="mb-8">
-                <span class="text-surface-600 dark:text-surface-200 line-through">€{{ product.price -
-                    (product.price * 0.25) }}</span>
-                <span class="ml-2 text-primary font-medium">%25</span>
+                <ProductPrice :price="product.price" :discount="product.discount" size="large" />
             </div>
 
             <!-- Login to see price section -->
@@ -123,21 +147,28 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getSeverity } from '@/includes/helpers'
 import { useAuthStore, isLoggedIn } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
-import Button from 'primevue/button';
-import type ProductDetails from '@/types/ProductDetails';
-import AddToCart from '@/components/cart/AddToCart.vue';
-import FavouriteButton from '@/components/favourites/FavouriteButton.vue';
+import { useProductStore } from '@/stores/products'
+import { storeToRefs } from 'pinia'
+import Button from 'primevue/button'
+import type ProductDetails from '@/types/ProductDetails'
+import AddToCart from '@/components/cart/AddToCart.vue'
+import FavouriteButton from '@/components/favourites/FavouriteButton.vue'
+import ProductPrice from '@/components/product/ProductPrice.vue'
 
 const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
+const productStore = useProductStore()
+
+const { productOverlays } = storeToRefs(productStore)
+const { fetchProductOverlays } = productStore
 
 const selectedImageIndex = ref(0)
 const color = ref('blue');
@@ -195,5 +226,34 @@ const productForCart = computed(() => {
         description: product.value.description || ''
     }
 })
+
+// Fetch product overlays
+onMounted(async () => {
+    if (product.value.id) {
+        await fetchProductOverlays(product.value.id)
+    }
+})
+
+// Helper function to get overlay image URL
+const getOverlayImageUrl = (image: any) => {
+    if (!image) return ''
+    return image.url || `/api/images/${image.id}`
+}
+
+// Helper function to format icon label from filename
+const getIconLabel = (filename: string): string => {
+    if (!filename) return ''
+
+    // Remove file extension and icon prefix
+    const cleanName = filename
+        .replace(/^icon-/, '')
+        .replace(/\.(png|jpg|jpeg|svg)$/i, '')
+
+    // Replace underscores and hyphens with spaces, capitalize words
+    return cleanName
+        .split(/[-_]/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+}
 
 </script>

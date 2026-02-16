@@ -1,9 +1,11 @@
 <template>
   <div v-if="route.meta?.layout === 'login'" class="h-screen w-full">
+    <Toast position="top-right" />
     <slot />
   </div>
   <div v-else class="min-h-screen flex flex-col">
     <Toast position="top-right" />
+    <GdprConsent />
     <div class="sticky top-0 z-40 items-center shadow-sm shrink-0 gap-x-4 sm:gap-x-6 bg-surface-800 dark:bg-surface-50">
       <TopNavigation />
     </div>
@@ -26,16 +28,18 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import Footer from '@/layouts/Footer.vue';
-import Header from '@/components/navigation/Header.vue';
-import LeftMenu from '@/components/navigation/LeftMenu.vue';
+import Footer from '@/layouts/Footer.vue'
+import Header from '@/components/navigation/Header.vue'
+import LeftMenu from '@/components/navigation/LeftMenu.vue'
+import GdprConsent from '@/components/navigation/GdprConsent.vue'
 import { useNotifyStore } from '@/stores/notify'
 import { useToast } from 'primevue/usetoast'
 import { watch } from 'vue'
-import TopNavigation from '@/components/navigation/TopNavigation.vue';
-import Toast from 'primevue/toast';
+import TopNavigation from '@/components/navigation/TopNavigation.vue'
+import Toast from 'primevue/toast'
 
 const notifyStore = useNotifyStore()
 const toast = useToast()

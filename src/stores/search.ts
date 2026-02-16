@@ -1,10 +1,17 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { getSearch, getProduct, getDocuments, getSuggestions } from '@/http/search'
+import {
+  getSearch,
+  getProduct,
+  getDocuments,
+  getSuggestions,
+  getProductCrosssells
+} from '@/http/search'
 import type Paginator from '@/types/Paginator'
 import type Query from '@/types/Query'
 import type Facets from '@/types/Facets'
 import type ProductDetails from '@/types/ProductDetails'
+import type { CrosssellData } from '@/types/Crosssell'
 
 export const useSearchStore = defineStore('searchStore', () => {
   const product = ref<ProductDetails>({} as ProductDetails)
@@ -20,6 +27,7 @@ export const useSearchStore = defineStore('searchStore', () => {
   const documentsFacets = ref<Facets>({} as Facets)
   const documentsPaginator = ref<Paginator>({} as Paginator)
   const loading = ref(false)
+  const crosssells = ref<CrosssellData>({ products: [], categories: [] })
 
   const fetchSearch = async (params?: Query) => {
     const { data, extra } = await getSearch(params)
@@ -50,6 +58,11 @@ export const useSearchStore = defineStore('searchStore', () => {
     return data
   }
 
+  const fetchProductCrosssells = async (id: string | string[]) => {
+    const { data } = await getProductCrosssells(id)
+    crosssells.value = data
+  }
+
   return {
     product,
     products,
@@ -59,9 +72,11 @@ export const useSearchStore = defineStore('searchStore', () => {
     documentsFacets,
     documentsPaginator,
     loading,
+    crosssells,
     fetchSearch,
     fetchProduct,
     fetchDocuments,
-    fetchSuggestions
+    fetchSuggestions,
+    fetchProductCrosssells
   }
 })

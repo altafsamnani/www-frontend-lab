@@ -9,8 +9,8 @@ import Search from '@/views/search/Search.vue'
 import ProductDetailsMain from '@/views/product/ProductDetailsMain.vue'
 import Cart from '@/views/Cart.vue'
 import Checkout from '@/views/checkout/Checkout.vue'
-import Shipping from '@/views/shipping/Shipping.vue'
-import ShippingAddressForm from '@/views/shipping/ShippingAddressForm.vue'
+import Addresses from '@/views/shipping/Shipping.vue'
+import AddressForm from '@/views/shipping/ShippingAddressForm.vue'
 import Companies from '@/views/Companies.vue'
 import CompanyEdit from '@/views/CompanyEdit.vue'
 
@@ -91,9 +91,9 @@ const routes = [
     }
   },
   {
-    path: '/shipping',
-    name: 'shipping',
-    component: Shipping,
+    path: '/addresses',
+    name: 'addresses',
+    component: Addresses,
     meta: {
       auth: true,
       group: 'user',
@@ -101,9 +101,9 @@ const routes = [
     }
   },
   {
-    path: '/shipping/add',
-    name: 'shipping-create',
-    component: ShippingAddressForm,
+    path: '/addresses/add',
+    name: 'addresses-create',
+    component: AddressForm,
     meta: {
       auth: true,
       group: 'user',
@@ -111,9 +111,9 @@ const routes = [
     }
   },
   {
-    path: '/shipping/:id/edit',
-    name: 'shipping-edit',
-    component: ShippingAddressForm,
+    path: '/addresses/:id/edit',
+    name: 'addresses-edit',
+    component: AddressForm,
     meta: {
       auth: true,
       group: 'user',
@@ -178,15 +178,6 @@ const routes = [
     path: '/academy',
     name: 'Academy',
     component: () => import('@/views/Academy.vue'),
-    meta: {
-      auth: true,
-      layout: 'user'
-    }
-  },
-  {
-    path: '/profile',
-    name: 'Profile',
-    component: () => import('@/views/Profile.vue'),
     meta: {
       auth: true,
       layout: 'user'

@@ -67,9 +67,11 @@ export const useCartStore = defineStore('cartStore', () => {
       // Calculate summary from cart items
       if (cartItems.value.length > 0) {
         const totalItems = cartItems.value.reduce((sum, item) => sum + item.quantity, 0)
-        const totalAmount = cartItems.value.reduce((sum, item) => sum + (item.totalPrice || 0), 0)
+        // Use totalNetPrice from backend (already in euros)
+        const totalAmount = cartItems.value.reduce((sum, item) => sum + (item.totalNetPrice || 0), 0)
+        // Calculate total discount: totalPrice - totalNetPrice (both in euros)
         const totalDiscount = cartItems.value.reduce((sum, item) => {
-          const discount = ((item.price || 0) - (item.netPrice || 0)) * item.quantity
+          const discount = (item.totalPrice || 0) - (item.totalNetPrice || 0)
           return sum + discount
         }, 0)
 

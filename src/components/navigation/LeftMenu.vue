@@ -100,9 +100,11 @@
                     leaveActiveClass: 'animate-fadeout'
                 }"
                     class="flex items-center cursor-pointer p-2 gap-2 text-surface-900 dark:text-surface-0 hover:text-primary transition-colors duration-150">
-                    <img :src="user?.avatar || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
-                        class="w-8 h-8 rounded-full" />
-                    <span class="font-medium text-base">{{ user?.name || 'User' }}</span>
+                    <div
+                        class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-sm">
+                        {{ userInitials }}
+                    </div>
+                    <span class="font-medium text-base">{{ userName }}</span>
                     <i
                         class="pi pi-angle-up !text-base !leading-normal text-surface-500 dark:text-surface-400 ml-auto" />
                 </a>
@@ -113,6 +115,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useMobileMenuStore } from '@/stores/mobileMenu';
@@ -123,7 +126,30 @@ const route = useRoute();
 const authStore = useAuthStore();
 const mobileMenuStore = useMobileMenuStore();
 const headerMenuStore = useHeaderMenuStore();
-const user = computed(() => authStore.user);
+const { user } = storeToRefs(authStore);
+
+// Computed properties for user display
+const userName = computed(() => {
+    if (user.value?.firstName && user.value?.lastName) {
+        return `${user.value.firstName} ${user.value.lastName}`;
+    }
+    return user.value?.email || 'User';
+});
+
+const userInitials = computed(() => {
+    if (user.value?.firstName && user.value?.lastName) {
+        return `${user.value.firstName.charAt(0)}${user.value.lastName.charAt(0)}`.toUpperCase();
+    }
+    if (user.value?.email) {
+        return user.value.email.charAt(0).toUpperCase();
+    }
+    return 'U';
+});
+
+// Check if user has manager role
+const isManager = computed(() => {
+    return user.value?.permissions?.includes('manage users') || false;
+});
 
 const activeItem = ref(0);
 const activeSubItem = ref(-1);
@@ -166,10 +192,19 @@ const menuItems = [
     }
 ];
 
-const userMenuItems = [
-    { label: 'menu.myProfile', icon: 'pi pi-user', route: '/profile' },
-    { label: 'menu.shipping', icon: 'pi pi-map-marker', route: '/shipping' }
-];
+const userMenuItems = computed(() => {
+    const items = [
+        { label: 'menu.myProfile', icon: 'pi pi-user', route: '/profile' },
+        { label: 'menu.addresses', icon: 'pi pi-map-marker', route: '/addresses' }
+    ];
+
+    // Add Users menu item for managers
+    if (isManager.value) {
+        items.push({ label: 'menu.users', icon: 'pi pi-users', route: '/users' });
+    }
+
+    return items;
+});
 
 const setActiveItem = (index: number) => {
     activeItem.value = index;

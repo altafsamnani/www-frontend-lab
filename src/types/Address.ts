@@ -1,34 +1,28 @@
-export interface ShippingAddress {
+export interface Address {
   id: number
-  userId: number
   companyName: string
-  name: string
   firstname?: string
   lastname?: string
-  street: string
-  number: string
-  numberExt: string
-  zipcode: string
-  city: string
   country: string
+  zipcode: string
+  number?: string
+  numberExt?: string
+  street?: string
+  city: string
   phone?: string
   mobile?: string
-  email?: string
-  defaultShipping?: boolean
-  defaultBilling?: boolean
-  createdAt: string
-  updatedAt: string
+  defaultBilling: boolean
+  defaultShipping: boolean
 }
 
-export interface ShippingAddressList {
-  data: ShippingAddress[]
+export interface AddressList {
+  data: Address[]
   totalCount: number
   page?: number
 }
 
-export interface ShippingAddressInput {
+export interface AddressInput {
   companyName: string
-  name: string
   firstname?: string
   lastname?: string
   street: string
@@ -39,12 +33,11 @@ export interface ShippingAddressInput {
   country: string
   phone?: string
   mobile?: string
-  email?: string
   defaultShipping?: boolean
   defaultBilling?: boolean
 }
 
-export interface ShippingAddressOption {
+export interface AddressOption {
   id: number
   label: string
   value: number

@@ -37,6 +37,15 @@
     "support": "Support",
     "settings": "Instellingen",
     "logout": "Uitloggen",
+    "dashboard": "Dashboard",
+    "team": "Team",
+    "projects": "Projecten",
+    "calendar": "Kalender",
+    "viewNotifications": "Bekijk meldingen",
+    "selectDarkMode": "Selecteer Donkere Modus",
+    "selectLanguage": "Selecteer Taal",
+    "profile": "Profiel",
+    "new": "Nieuw",
     "customers": "Klanten",
     "orders": "Bestellingen",
     "events": "Evenementen",
@@ -79,7 +88,8 @@
     "my_cart_items": "Mijn Winkelwagen ({count} Item) | Mijn Winkelwagen ({count} Items)",
     "view_cart": "Bekijk Winkelwagen",
     "purchase": "Kopen",
-    "cart_empty": "Je winkelwagen is leeg"
+    "cart_empty": "Je winkelwagen is leeg",
+    "more_items": "meer items"
   },
   "menu": {
     "dashboard": "Dashboard",
@@ -99,6 +109,8 @@
     "myProfile": "Mijn Profiel",
     "shippingAddresses": "Verzendadressen",
     "shipping": "Verzending",
+    "addresses": "Adressen",
+    "users": "Gebruikers",
     "signOut": "Uitloggen"
   },
   "button": {
@@ -298,6 +310,8 @@
     "or": "of",
     "remember_me": "Onthoud mij",
     "social_login_coming_soon": "Social login komt binnenkort!",
+    "noAccount": "Heeft u nog geen account?",
+    "registerHere": "Registreer als nieuwe klant",
     "features_security_title": "Dahua UHD Android monitor",
     "features_security_text": "De Dahua LM32-U400P is op bestelling verkrijgbaar. De Dahua LM32-U400P is een 32 UHD-monitor met Android OS en ingebouwde accu, speciaal ontwikkeld voor omgevingen waar flexibiliteit en kwaliteit samenkomen. ",
     "features_analytics_title": "Hikvision PTRZ Dome Camera",
@@ -398,7 +412,14 @@
       "customer_rating": "Klantbeoordeling 9,2/10",
       "request_quote": "Gemakkelijk een offerte aanvragen",
       "personal_advice": "Persoonlijk advies van een van onze accountmanagers"
-    }
+    },
+    "crosssells": {
+      "customers_also_bought": "Klanten Kochten Ook",
+      "related_categories": "Bekijk Gerelateerde Categorieën",
+      "title": "Gerelateerde Producten & Categorieën"
+    },
+    "article_no": "Artikelnummer",
+    "features": "Kenmerken"
   },
   "software": {
     "title_listing": "Software",
@@ -652,8 +673,24 @@
   },
   "search": {
     "filter": "Filter",
+    "clear": "Zoekopdracht wissen",
     "clear_all": "Alles wissen",
-    "rangeTag": "Van {min} tot {max}"
+    "rangeTag": "Van {min} tot {max}",
+    "no_results_for": "Geen resultaten gevonden voor",
+    "try_different_keywords": "Probeer andere zoekwoorden of controleer uw spelling",
+    "start_typing": "Begin met typen om naar producten te zoeken",
+    "press_enter_to_browse": "Druk Enter om alles te bekijken",
+    "searching": "Zoeken",
+    "in_stock": "Op voorraad",
+    "out_of_stock": "Niet op voorraad",
+    "showing_results": "{count} resultaten weergeven",
+    "view_all_results": "Alle resultaten bekijken",
+    "popular_searches": "Populaire zoekopdrachten",
+    "navigate": "Navigeren",
+    "select": "Selecteren",
+    "close": "Sluiten",
+    "accessibility_hint": "Typ minimaal 2 karakters om naar producten te zoeken. Gebruik pijltoetsen om te navigeren en Enter om te selecteren.",
+    "advanced_search": "Geavanceerd zoeken"
   },
   "shipping": {
     "addresses": {
@@ -670,10 +707,12 @@
       "deleteConfirm": "Adres verwijderen",
       "deleteMessage": "Weet u zeker dat u dit verzendadres wilt verwijderen?",
       "form": {
+        "recipientSection": "Ontvanger Informatie",
         "companyName": "Bedrijfsnaam",
         "contactPerson": "Contactpersoon",
-        "firstname": "Voornaam",
-        "lastname": "Achternaam",
+        "contactFirstname": "Voornaam",
+        "contactLastname": "Achternaam",
+        "addressSection": "Adres",
         "street": "Straatnaam",
         "houseNumber": "Huisnummer",
         "extension": "Toevoeging",
@@ -682,13 +721,16 @@
         "country": "Land",
         "selectCountry": "Selecteer een land",
         "availableCountries": "Beschikbare Landen",
+        "contactSection": "Contactgegevens",
         "phone": "Telefoon",
         "mobile": "Mobiel",
         "phonePlaceholder": "bijv. +31 123456789 of 0123456789",
         "mobilePlaceholder": "bijv. +31 612345678 of 0612345678",
         "defaultSettings": "Standaard Adres Instellingen",
         "defaultShipping": "Instellen als standaard verzendadres",
-        "defaultBilling": "Instellen als standaard factuuradres"
+        "defaultBilling": "Instellen als standaard factuuradres",
+        "firstname": "Voornaam",
+        "lastname": "Achternaam"
       },
       "messages": {
         "deleteSuccess": "Verzendadres succesvol verwijderd",
@@ -725,6 +767,7 @@
       "title": "Je winkelwagen is leeg",
       "message": "Voeg producten toe om te beginnen"
     },
+    "emptyMessage": "Je winkelwagen is leeg",
     "startShopping": "Begin met winkelen",
     "orderSummary": {
       "title": "Besteloverzicht",
@@ -765,7 +808,39 @@
     "selected": "Geselecteerd",
     "confirmDelete": "Verwijderen bevestigen",
     "success": "Succes",
-    "error": "Fout"
+    "error": "Fout",
+    "view": "Bekijken",
+    "retry": "Opnieuw proberen",
+    "reset": "Reset",
+    "paginatorTemplate": "Toont {first} tot {last} van {total}"
+  },
+  "users": {
+    "title": "Bedrijfsgebruikers",
+    "subtitle": "Beheer gebruikers binnen uw bedrijf",
+    "viewTitle": "Gebruikersdetails",
+    "viewSubtitle": "Bekijk gebruikersinformatie",
+    "editTitle": "Gebruiker Bewerken",
+    "editSubtitle": "Gebruikersinformatie bijwerken",
+    "searchPlaceholder": "Zoeken op naam...",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "email": "E-mail",
+    "mobile": "Mobiel",
+    "countryCode": "Landcode",
+    "status": "Status",
+    "approved": "Goedgekeurd",
+    "pending": "In behandeling",
+    "noUsersFound": "Geen gebruikers gevonden",
+    "personalInfo": "Persoonlijke Informatie",
+    "contactInfo": "Contactinformatie",
+    "statusInfo": "Statusinformatie",
+    "emailCannotBeChanged": "E-mailadres kan niet worden gewijzigd",
+    "mobilePlaceholder": "bijv. 612345678",
+    "messages": {
+      "loadError": "Kan gebruikers niet laden",
+      "updateSuccess": "Gebruiker succesvol bijgewerkt",
+      "updateError": "Kan gebruiker niet bijwerken"
+    }
   },
   "companies": {
     "title_listing": "Bedrijven",
@@ -850,8 +925,11 @@
       "subtotal": "Subtotaal",
       "discount": "Korting",
       "tax": "BTW",
-      "shipping": "Verzendkosten"
+      "shipping": "Verzendkosten",
+      "youSaved": "Je hebt bespaard!",
+      "includingTaxes": "Inclusief BTW"
     },
+    "noItems": "Geen artikelen in je bestelling",
     "noAddresses": "Geen verzendadressen gevonden. Voeg eerst een verzendadres toe.",
     "reference": "Referentie (Optioneel)",
     "deliveryDate": "Leveringsdatum (Optioneel)",
@@ -910,7 +988,8 @@
       "price": "Prijs",
       "subtotal": "Subtotaal",
       "discount": "Korting",
-      "total": "Totaal"
+      "total": "Totaal",
+      "deliveryInfo": "Bezorginformatie"
     },
     "security": {
       "checkoutTitle": "Veilige Checkout",
@@ -1246,5 +1325,185 @@
       "confirmSend": "Offerte verzenden"
     },
     "subject": "Referentie"
+  },
+  "stock": {
+    "in_stock": "Op Voorraad",
+    "limited_stock": "Beperkte Voorraad",
+    "out_of_stock": "Niet Op Voorraad"
+  },
+  "discount": {
+    "save": "Bespaar",
+    "off": "korting",
+    "yourDiscount": "Uw Korting",
+    "specialPrice": "Speciale Prijs",
+    "originalPrice": "Originele Prijs",
+    "netPrice": "Netto Prijs",
+    "percentage": "{percentage}% korting",
+    "productSpecific": "Product Korting",
+    "codeDiscount": "Kortingscode Toegepast"
+  },
+  "profile": {
+    "title": "Mijn Profiel",
+    "subtitle": "Beheer uw persoonlijke gegevens en voorkeuren",
+    "personalInfo": "Persoonlijke Gegevens",
+    "contactInfo": "Contactgegevens",
+    "preferences": "Voorkeuren",
+    "companyInfo": "Bedrijfsgegevens",
+    "defaultAddresses": "Standaard Adressen",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "email": "E-mailadres",
+    "countryCode": "Landcode",
+    "mobile": "Mobiel Nummer",
+    "mobilePlaceholder": "Voer uw mobiele nummer in",
+    "defaultShippingAddress": "Standaard Verzendadres",
+    "defaultBillingAddress": "Standaard Factuuradres",
+    "selectAddress": "Selecteer een adres",
+    "noAddressSelected": "Geen adres geselecteerd",
+    "mailing": "Marketing Communicatie",
+    "mailingDescription": "Ontvang updates over nieuwe producten, aanbiedingen en nieuws",
+    "emailBcc": "BCC E-mail",
+    "emailBccDescription": "Ontvang een kopie van alle orderbevestigingen",
+    "emailBccPlaceholder": "Voer BCC e-mailadres in",
+    "emailOrder": "Orderbevestiging E-mail",
+    "emailOrderDescription": "E-mailadres voor orderbevestigingen",
+    "emailOrderPlaceholder": "Voer order e-mailadres in",
+    "invoiceDownload": "Factuur Download",
+    "invoiceDownloadDescription": "Sta het downloaden van facturen toe vanuit ordergeschiedenis",
+    "viewCompany": "Bedrijf Bekijken",
+    "editCompany": "Bedrijf Bewerken",
+    "messages": {
+      "updateSuccess": "Profiel succesvol bijgewerkt",
+      "updateError": "Bijwerken van profiel mislukt",
+      "loadError": "Laden van profiel mislukt"
+    },
+    "validation": {
+      "firstNameRequired": "Voornaam is verplicht",
+      "lastNameRequired": "Achternaam is verplicht"
+    }
+  },
+  "register": {
+    "title": "Registreren als Nieuwe Klant",
+    "subtitle": "Maak uw zakelijk account aan om te beginnen met bestellen",
+    "companyDetails": "Bedrijfsgegevens",
+    "contactDetails": "Contactgegevens",
+    "addressDetails": "Adresgegevens",
+    "additionalInfo": "Aanvullende Informatie",
+    "companyName": "Bedrijfsnaam",
+    "companyNamePlaceholder": "Voer uw bedrijfsnaam in",
+    "firstName": "Voornaam",
+    "firstNamePlaceholder": "Voer uw voornaam in",
+    "lastName": "Achternaam",
+    "lastNamePlaceholder": "Voer uw achternaam in",
+    "position": "Functie/Rol",
+    "positionPlaceholder": "Voer uw functie of rol in",
+    "email": "E-mailadres",
+    "emailPlaceholder": "Voer uw zakelijk e-mailadres in",
+    "phone": "Telefoonnummer",
+    "phonePlaceholder": "Voer uw telefoonnummer in",
+    "mobile": "Mobiel Nummer",
+    "mobilePlaceholder": "Voer uw mobiele nummer in",
+    "street": "Straatnaam",
+    "streetPlaceholder": "Voer straatnaam in",
+    "number": "Huisnummer",
+    "numberPlaceholder": "Nr.",
+    "numberExt": "Toevoeging",
+    "numberExtPlaceholder": "Toev.",
+    "zipcode": "Postcode",
+    "zipcodePlaceholder": "Voer postcode in",
+    "city": "Plaats",
+    "cityPlaceholder": "Voer plaats in",
+    "country": "Land",
+    "countryPlaceholder": "Selecteer land",
+    "kvk": "Kamer van Koophandel (KvK)",
+    "kvkPlaceholder": "Voer KvK nummer in",
+    "taxId": "BTW Nummer",
+    "taxIdPlaceholder": "Voer BTW nummer in",
+    "comments": "Aanvullende Opmerkingen",
+    "commentsPlaceholder": "Vertel ons over uw bedrijf en waarom u zich wilt registreren",
+    "submit": "Registratie Verzenden",
+    "submitting": "Verzenden...",
+    "alreadyHaveAccount": "Heeft u al een account?",
+    "loginHere": "Log hier in",
+    "backToLogin": "Terug naar Inloggen",
+    "messages": {
+      "submitSuccess": "Registratie succesvol verzonden! Wij beoordelen uw aanvraag en nemen spoedig contact met u op.",
+      "submitError": "Verzenden van registratie mislukt. Probeer het opnieuw."
+    },
+    "validation": {
+      "companyNameRequired": "Bedrijfsnaam is verplicht",
+      "firstNameRequired": "Voornaam is verplicht",
+      "lastNameRequired": "Achternaam is verplicht",
+      "positionRequired": "Functie is verplicht",
+      "emailRequired": "E-mail is verplicht",
+      "emailInvalid": "Voer een geldig e-mailadres in",
+      "streetRequired": "Straatnaam is verplicht",
+      "numberRequired": "Huisnummer is verplicht",
+      "zipcodeRequired": "Postcode is verplicht",
+      "cityRequired": "Plaats is verplicht",
+      "countryRequired": "Land is verplicht"
+    }
+  },
+  "application": {
+    "typeCreate": "Nieuwe Registratie",
+    "typeEdit": "Bedrijfswijziging Aanvraag"
+  },
+  "footer": {
+    "securityWholesaler": "Osec B.V.",
+    "termsAndConditions": "Algemene Voorwaarden",
+    "privacyStatement": "Privacyverklaring",
+    "allRightsReserved": "Alle rechten voorbehouden."
+  },
+  "cookies": {
+    "title": "Wij waarderen uw privacy",
+    "description": "Wij gebruiken cookies om uw browse-ervaring te verbeteren, gepersonaliseerde inhoud te tonen en ons verkeer te analyseren. Door op \"Alles accepteren\" te klikken, stemt u in met ons gebruik van cookies.",
+    "learnMore": "Meer informatie over ons cookiebeleid",
+    "acceptAll": "Alles accepteren",
+    "rejectNonEssential": "Alleen essentieel",
+    "customize": "Aanpassen",
+    "preferencesTitle": "Cookie Voorkeuren",
+    "preferencesDescription": "Beheer hieronder uw cookievoorkeuren. Essentiële cookies zijn nodig voor de werking van de website en kunnen niet worden uitgeschakeld.",
+    "savePreferences": "Voorkeuren opslaan",
+    "essential": {
+      "title": "Essentiële Cookies",
+      "description": "Noodzakelijk voor de werking van de website. Deze cookies zorgen voor basisfuncties zoals beveiliging, netwerkbeheer en toegankelijkheid."
+    },
+    "analytics": {
+      "title": "Analytische Cookies",
+      "description": "Helpen ons te begrijpen hoe bezoekers onze website gebruiken door anoniem informatie te verzamelen en te rapporteren."
+    },
+    "marketing": {
+      "title": "Marketing Cookies",
+      "description": "Worden gebruikt om bezoekers op websites te volgen en relevante advertenties te tonen op basis van uw surfgedrag."
+    },
+    "functional": {
+      "title": "Functionele Cookies",
+      "description": "Maken verbeterde functionaliteit en personalisatie mogelijk, zoals het onthouden van uw voorkeuren en instellingen."
+    }
+  },
+  "company": {
+    "viewTitle": "Mijn Bedrijf",
+    "viewSubtitle": "Bekijk uw bedrijfsinformatie",
+    "editTitle": "Bedrijfsgegevens Wijzigen",
+    "editSubtitle": "Vraag wijzigingen aan voor uw bedrijfsinformatie",
+    "addressInfo": "Adresgegevens",
+    "contactInfo": "Contactgegevens",
+    "businessInfo": "Bedrijfsgegevens",
+    "backToProfile": "Terug naar Profiel",
+    "backToCompany": "Terug naar Bedrijf",
+    "noCompany": "Geen Bedrijf Gevonden",
+    "noCompanyMessage": "U bent niet gekoppeld aan een bedrijf. Neem contact op met support als u denkt dat dit een fout is.",
+    "editInfoTitle": "Bedrijfswijziging Aanvraag",
+    "editInfoMessage": "Wijzigingen aan bedrijfsgegevens vereisen goedkeuring. Uw aanvraag wordt beoordeeld door ons team.",
+    "changeReason": "Reden voor Wijzigingen",
+    "changeReasonPlaceholder": "Beschrijf waarom u de bedrijfsinformatie wilt wijzigen",
+    "submitRequest": "Wijzigingsaanvraag Verzenden",
+    "submitting": "Verzenden...",
+    "messages": {
+      "loadError": "Laden van bedrijfsinformatie mislukt",
+      "editRequestSuccess": "Uw bedrijfswijzigingsaanvraag is succesvol verzonden. Ons team beoordeelt de wijzigingen en neemt indien nodig contact met u op.",
+      "editRequestError": "Verzenden van bedrijfswijzigingsaanvraag mislukt. Probeer het opnieuw.",
+      "notAuthorized": "U bent niet gemachtigd om bedrijfsgegevens te wijzigen. Alleen managers kunnen bedrijfswijzigingen aanvragen."
+    }
   }
 }

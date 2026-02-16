@@ -99,11 +99,11 @@
 
         <!-- Shipping Address Selection -->
         <div v-else>
-          <div v-if="shippingStore.loading" class="flex justify-center py-4">
+          <div v-if="addressStore.loading" class="flex justify-center py-4">
             <LoaderForm :columns="2" :rows="4" />
           </div>
 
-          <div v-else-if="myShippingAddresses.length === 0"
+          <div v-else-if="myAddresses.length === 0"
             class="bg-white dark:bg-surface-950 border-2 border-dashed border-surface-300 dark:border-surface-600 rounded-xl p-8 text-center">
             <div class="mb-4">
               <i class="pi pi-map-marker text-4xl text-surface-400 dark:text-surface-500"></i>
@@ -111,7 +111,7 @@
             <h4 class="text-lg font-medium text-surface-900 dark:text-surface-0 mb-2">No shipping address found</h4>
             <p class="text-surface-600 dark:text-surface-400 mb-6">Add your first shipping address to continue with
               checkout</p>
-            <router-link :to="{ name: 'shipping-create' }">
+            <router-link :to="{ name: 'addresses-create' }">
               <Button>
                 <i class="pi pi-plus mr-2"></i>
                 Add Address
@@ -124,7 +124,7 @@
 
             <!-- Shipping Address Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              <ShippingAddressCard v-for="address in myShippingAddresses" :key="address.id" :address="address"
+              <ShippingAddressCard v-for="address in myAddresses" :key="address.id" :address="address"
                 :is-selected="formData.shippingId === address.id" @select="selectShippingAddress" />
 
               <!-- Add New Address Card -->
@@ -143,18 +143,18 @@
           </h3>
         </div>
 
-        <div v-if="shippingStore.loading" class="flex justify-center py-4">
+        <div v-if="addressStore.loading" class="flex justify-center py-4">
           <LoaderForm :columns="2" :rows="4" />
         </div>
 
-        <div v-else-if="myShippingAddresses.length === 0"
+        <div v-else-if="myAddresses.length === 0"
           class="bg-white dark:bg-surface-950 border-2 border-dashed border-surface-300 dark:border-surface-600 rounded-xl p-8 text-center">
           <div class="mb-4">
             <i class="pi pi-credit-card text-4xl text-surface-400 dark:text-surface-500"></i>
           </div>
           <h4 class="text-lg font-medium text-surface-900 dark:text-surface-0 mb-2">No billing address found</h4>
           <p class="text-surface-600 dark:text-surface-400 mb-6">Add your billing address to complete your order</p>
-          <router-link :to="{ name: 'shipping-create' }">
+          <router-link :to="{ name: 'addresses-create' }">
             <Button>
               <i class="pi pi-plus mr-2"></i>
               Add Address
@@ -220,7 +220,7 @@
     <!-- Billing Address Selection Dialog -->
     <Dialog v-model:visible="showBillingDialog" :header="$t('checkout.selectBillingAddress')" :modal="true"
       class="w-full max-w-4xl" :dismissableMask="true">
-      <div v-if="shippingStore.loading" class="flex justify-center py-8">
+      <div v-if="addressStore.loading" class="flex justify-center py-8">
         <LoaderForm :columns="2" :rows="3" />
       </div>
 
@@ -230,7 +230,7 @@
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <ShippingAddressCard v-for="address in myShippingAddresses" :key="address.id" :address="address"
+          <ShippingAddressCard v-for="address in myAddresses" :key="address.id" :address="address"
             :is-selected="formData.billingId === address.id" @select="selectBillingAddress" />
         </div>
       </div>
@@ -244,7 +244,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useForm, useField } from 'vee-validate'
 import { useOrderStore } from '@/stores/orders'
-import { useShippingStore } from '@/stores/shipping'
+import { useAddressStore } from '@/stores/addresses'
 import { useCartStore } from '@/stores/cart'
 import { storeConfig } from '@/config/store'
 import LoaderForm from '@/components/icons/LoaderForm.vue'
@@ -272,11 +272,11 @@ const emit = defineEmits<{
 
 const router = useRouter()
 const orderStore = useOrderStore()
-const shippingStore = useShippingStore()
+const addressStore = useAddressStore()
 const cartStore = useCartStore()
 
 // Get reactive store data
-const { myShippingAddresses } = storeToRefs(shippingStore)
+const { myAddresses } = storeToRefs(addressStore)
 const { cartItems, cartSummary } = storeToRefs(cartStore)
 
 // Get pickup address from config
@@ -339,27 +339,27 @@ const selectBillingAddress = (addressId: number) => {
 
 // Get selected billing address
 const selectedBillingAddress = computed(() => {
-  return myShippingAddresses.value.find(addr => addr.id === formData.billingId)
+  return myAddresses.value.find(addr => addr.id === formData.billingId)
 })
 
 // Get default billing address or first address as fallback
 const defaultBillingAddress = computed(() => {
-  const defaultAddr = myShippingAddresses.value.find(addr => addr.defaultBilling)
-  return defaultAddr || myShippingAddresses.value[0] || null
+  const defaultAddr = myAddresses.value.find(addr => addr.defaultBilling)
+  return defaultAddr || myAddresses.value[0] || null
 })
 
 // Get default shipping address or first address as fallback
 const defaultShippingAddress = computed(() => {
-  const defaultAddr = myShippingAddresses.value.find(addr => addr.defaultShipping)
-  return defaultAddr || myShippingAddresses.value[0] || null
+  const defaultAddr = myAddresses.value.find(addr => addr.defaultShipping)
+  return defaultAddr || myAddresses.value[0] || null
 })
 
 // Helper functions for billing address display
 const getBillingFullName = (address: any) => {
   if (!address) return '-'
   const parts: string[] = []
-  if (address.firstname || address.name) {
-    parts.push(address.firstname || address.name || '')
+  if (address.firstname) {
+    parts.push(address.firstname)
   }
   if (address.lastname) {
     parts.push(address.lastname)
@@ -379,8 +379,8 @@ const getBillingFullAddress = (address: any) => {
 
 // Initialize data and setup watchers
 onMounted(async () => {
-  // Load shipping addresses first
-  await shippingStore.fetchMyShippingAddresses()
+  // Load addresses first
+  await addressStore.fetchMyAddresses()
 
   if (defaultShippingAddress.value) {
     formData.shippingId = defaultShippingAddress.value.id

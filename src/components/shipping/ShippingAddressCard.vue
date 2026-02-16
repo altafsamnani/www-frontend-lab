@@ -51,10 +51,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Card from 'primevue/card'
-import type { ShippingAddress } from '@/types/ShippingAddress'
+import type { Address } from '@/types/Address'
 
 const props = defineProps<{
-  address: ShippingAddress
+  address: Address
   isSelected: boolean
 }>()
 
@@ -63,9 +63,9 @@ defineEmits<{
 }>()
 
 const fullName = computed(() => {
-  const parts = []
-  if (props.address.firstname || props.address.name) {
-    parts.push(props.address.firstname || props.address.name)
+  const parts: string[] = []
+  if (props.address.firstname) {
+    parts.push(props.address.firstname)
   }
   if (props.address.lastname) {
     parts.push(props.address.lastname)

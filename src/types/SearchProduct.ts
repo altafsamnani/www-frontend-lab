@@ -1,5 +1,7 @@
+import type { ProductDiscount } from './Discount'
+
 export default interface SearchProduct {
-    id: null
+    id: number | null
     name: string
     images: []
     price: number
@@ -7,6 +9,7 @@ export default interface SearchProduct {
     category: []
     brand: []
     stock: []
+    discount: ProductDiscount | null
     createdAt: string
     updatedAt: string
 }

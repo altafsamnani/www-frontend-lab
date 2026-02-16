@@ -22,6 +22,6 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const navigateToCreateAddress = () => {
-  router.push({ name: 'shipping-create' })
+  router.push({ name: 'addresses-create' })
 }
 </script>

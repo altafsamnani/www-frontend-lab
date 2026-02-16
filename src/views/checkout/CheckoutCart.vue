@@ -19,7 +19,7 @@
     <div v-else-if="items.length === 0" class="text-center py-8">
       <i class="pi pi-shopping-cart text-4xl text-surface-400 dark:text-surface-500 mb-4"></i>
       <p class="text-surface-600 dark:text-surface-400 text-lg mb-4">
-        {{ isOrderItems ? $t('checkout.noItems') : $t('cart.empty') }}
+        {{ isOrderItems ? $t('checkout.noItems') : $t('cart.emptyMessage') }}
       </p>
     </div>
 
@@ -64,11 +64,11 @@
               <div class="text-right ml-4">
                 <div class="space-y-1">
                   <p class="text-lg font-bold text-surface-900 dark:text-surface-0">
-                    €{{ formatPrice(item.totalPrice || item.price * item.quantity) }}
+                    €{{ formatPrice(item.totalNetPrice || item.totalPrice || item.price * item.quantity) }}
                   </p>
                   <div v-if="item.discountPercentage && item.discountPercentage > 0" class="space-y-1">
                     <p class="text-sm text-surface-500 dark:text-surface-400 line-through">
-                      €{{ formatPrice(item.price * item.quantity) }}
+                      €{{ formatPrice(item.totalPrice || item.price * item.quantity) }}
                     </p>
                     <p class="text-sm font-medium text-green-600 dark:text-green-400">
                       -{{ item.discountPercentage }}% saved
@@ -139,6 +139,8 @@ interface CartItem {
   quantity: number
   price: number
   totalPrice?: number
+  netPrice?: number
+  totalNetPrice?: number
   discountPercentage?: number
   discountActionName?: string
   thumbnail?: string
