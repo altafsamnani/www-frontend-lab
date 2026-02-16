@@ -1,15 +1,16 @@
 <template>
     <div class="flex items-center justify-between gap-2 py-4">
-        <FloatLabel class=" w-full md:w-80" variant="in">
-            <MultiSelect :id="'in_label' + facetItemsKey" :name="facetItemsKey" v-model="selectedValues" :options="filterOptions"
-                optionLabel="label" optionValue="value" class="w-full" @change="onSelectionChange" variant="filled" >
-            <template #option="slotProps">
+        <FloatLabel class="w-full" variant="in">
+            <MultiSelect :id="'in_label' + facetItemsKey" :name="facetItemsKey" v-model="selectedValues"
+                :options="filterOptions" optionLabel="label" optionValue="value" class="w-full"
+                @change="onSelectionChange" variant="filled">
+                <template #option="slotProps">
                     <div class="flex justify-between w-full">
                         <span>{{ slotProps.option.label }}</span>
                         <span :class="facetCountClass(slotProps.option.count)" class="rounded-full flex items-center justify-center text-xs 
             font-bold bg-surface-200 dark:bg-surface-700 text-surface-900 dark:text-surface-0">
-            {{ slotProps.option.count }}
-            </span>
+                            {{ slotProps.option.count }}
+                        </span>
                     </div>
                 </template>
             </MultiSelect>
@@ -23,7 +24,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import {  getAttributeOptionTranslation, facetCountClass } from '@/includes/helpers'
+import { getAttributeOptionTranslation, facetCountClass } from '@/includes/helpers'
 
 const props = withDefaults(defineProps<{
     esKey: string
