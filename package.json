@@ -2,6 +2,7 @@
   "name": "www-frontend",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" -- && npm run postbuild",
@@ -10,7 +11,9 @@
     "postbuild": "cp -r node_modules/primeicons/fonts dist/ && mkdir -p dist/assets && cp -r node_modules/primeicons/fonts dist/assets/ 2>/dev/null || true",
     "start": "serve -s dist -l $PORT",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "format": "prettier --write src/",
+    "lint": "eslint --fix src/",
+    "prepare": "husky"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
@@ -25,6 +28,7 @@
     "ckeditor5-premium-features": "^45.2.0",
     "ckeditor5-vue": "^0.0.7",
     "dayjs": "^1.11.13",
+    "marked": "^17.0.5",
     "moment": "^2.30.1",
     "pinia": "^3.0.3",
     "primeicons": "^7.0.0",
@@ -40,11 +44,13 @@
     "vue-router": "^4.5.1",
     "vuedraggable": "^4.1.0"
   },
+  "lint-staged": {
+    "*.{js,ts,vue,css,scss,md,json}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "serve": "^14.2.4",
     "@primevue/auto-import-resolver": "^4.3.5",
-    "@rushstack/eslint-patch": "^1.11.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4.1.8",
     "@tailwindcss/typography": "^0.5.16",
@@ -55,9 +61,14 @@
     "@vue/tsconfig": "^0.7.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.12",
+    "serve": "^14.2.4",
     "typescript": "~5.8.3",
     "unplugin-vue-components": "^28.7.0",
     "vue-tsc": "^2.2.10"

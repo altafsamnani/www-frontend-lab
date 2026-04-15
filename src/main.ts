@@ -25,6 +25,8 @@ import Dialog from 'primevue/dialog'
 import ConfirmDialog from 'primevue/confirmdialog'
 import Card from 'primevue/card'
 import Tag from 'primevue/tag'
+import Badge from 'primevue/badge'
+import BadgeDirective from 'primevue/badgedirective'
 import Toast from 'primevue/toast'
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
@@ -86,6 +88,8 @@ app.component('Divider', Divider)
 app.component('ConfirmDialog', ConfirmDialog)
 app.component('Dialog', Dialog)
 app.component('Tag', Tag)
+app.component('Badge', Badge)
+app.directive('badge', BadgeDirective)
 app.component('Card', Card)
 app.component('Toast', Toast)
 app.component('TabMenu', TabMenu)
@@ -130,10 +134,10 @@ app.use(PrimeVue, {
       ripple: true, // Enable ripple effect,
       cssLayer: {
         name: 'primevue',
-        order: 'theme, base, primevue' //primevue layer is after theme and base, but before the other Tailwind layers such as utilities.
-      }
-    }
-  }
+        order: 'theme, base, primevue', //primevue layer is after theme and base, but before the other Tailwind layers such as utilities.
+      },
+    },
+  },
 })
 
 app.mount('#app')
