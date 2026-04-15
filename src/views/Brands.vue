@@ -61,7 +61,7 @@
         <draggable
           tag="div"
           class="dragArea list-group flex w-full flex-wrap gap-6"
-          :list="brands"
+          v-model="brands"
           handle=".handle"
           ghostClass="ghost"
           direction="horizontal"
@@ -79,114 +79,114 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, reactive } from 'vue'
-import { storeToRefs } from 'pinia'
-import draggable from 'vuedraggable'
-import BrandCard from '@/components/BrandCard.vue'
-import PageHeader from '@/components/PageHeader.vue'
-import TableFilterBar from '@/components/TableFilterBar.vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
-import type Brand from '@/types/Brand'
-import { useBrandStore } from '@/stores/brands'
-import LoaderCard from '@/components/icons/LoaderCard.vue'
+  import { ref, onMounted, computed, reactive } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import draggable from 'vuedraggable'
+  import BrandCard from '@/components/BrandCard.vue'
+  import PageHeader from '@/components/PageHeader.vue'
+  import TableFilterBar from '@/components/TableFilterBar.vue'
+  import { useI18n } from 'vue-i18n'
+  import { useRoute } from 'vue-router'
+  import { useToast } from 'primevue/usetoast'
+  import type Brand from '@/types/Brand'
+  import { useBrandStore } from '@/stores/brands'
+  import LoaderCard from '@/components/icons/LoaderCard.vue'
 
-const brandStore = useBrandStore()
-const { brands } = storeToRefs(brandStore)
-const { fetchAllBrands, updateBrand } = brandStore
-const route = useRoute()
-const brandId = ref(route.params.id)
-const { t } = useI18n()
-const toast = useToast()
-const formHasChanges = ref(false)
-const isDisabled = ref(false)
-const isLoading = ref(true)
-const isFiltering = ref(false)
+  const brandStore = useBrandStore()
+  const { brands } = storeToRefs(brandStore)
+  const { fetchAllBrands, updateBrand } = brandStore
+  const route = useRoute()
+  const brandId = ref(route.params.id)
+  const { t } = useI18n()
+  const toast = useToast()
+  const formHasChanges = ref(false)
+  const isDisabled = ref(false)
+  const isLoading = ref(true)
+  const isFiltering = ref(false)
 
-const filters = reactive({
-  status: '',
-  search: '',
-  ...useRoute().query
-})
-
-const filterSearch = () => {
-  console.log(filters)
-  isFiltering.value = true
-  isDisabled.value = true
-  fetchAllBrands(filters)
-}
-
-const resetSearch = () => {
-  filters.search = ''
-  filters.status = ''
-  isFiltering.value = false
-  isDisabled.value = false
-  fetchAllBrands(filters)
-}
-
-const selectedStatus = ref()
-const statusses = computed(() => {
-  return [
-    { name: t('brands.published'), value: 'published' },
-    { name: t('brands.published_pending'), value: 'pending' },
-    { name: t('brands.unpublished'), value: 'unpublished' },
-    { name: t('brands.deleted'), value: 'deleted' }
-  ]
-})
-
-const handleStatusChange = () => {
-  filters.status = selectedStatus.value
-}
-
-const form: Brand = reactive({ fileUpload: null, ...brands.value })
-
-onMounted(async () => {
-  brands.value = []
-  await fetchAllBrands(filters).then(() => {
-    isLoading.value = false
-    Object.assign(form, { ...brands.value })
-    console.log('old order', brands.value)
+  const filters = reactive({
+    status: '',
+    search: '',
+    ...useRoute().query,
   })
-})
 
-// const dragging = ref(false)
-
-// const log = (event) => {
-//   console.log(event)
-// }
-
-const onDraggableChange = (event: Event) => {
-  let origBrands = []
-  formHasChanges.value = true
-  if ((event as any).moved) {
-    for (let i = 0; i < brands.value.length; i++) {
-      if (brands.value[i].order !== i) {
-        isDisabled.value = false
-        brands.value[i].order = i
-        updateBrand(brands.value[i].id, brands.value[i])
-        origBrands.push(brands.value[i])
-      }
-    }
-
-    toast.add({
-      severity: 'success',
-      detail: t('notification.brand_order_update'),
-      life: 5000
-    })
-
-    isDisabled.value = false
+  const filterSearch = () => {
+    console.log(filters)
+    isFiltering.value = true
+    isDisabled.value = true
+    fetchAllBrands(filters)
   }
-}
+
+  const resetSearch = () => {
+    filters.search = ''
+    filters.status = ''
+    isFiltering.value = false
+    isDisabled.value = false
+    fetchAllBrands(filters)
+  }
+
+  const selectedStatus = ref()
+  const statusses = computed(() => {
+    return [
+      { name: t('brands.published'), value: 'published' },
+      { name: t('brands.published_pending'), value: 'pending' },
+      { name: t('brands.unpublished'), value: 'unpublished' },
+      { name: t('brands.deleted'), value: 'deleted' },
+    ]
+  })
+
+  const handleStatusChange = () => {
+    filters.status = selectedStatus.value
+  }
+
+  const form: Brand = reactive({ fileUpload: null, ...brands.value })
+
+  onMounted(async () => {
+    brands.value = []
+    await fetchAllBrands(filters).then(() => {
+      isLoading.value = false
+      Object.assign(form, { ...brands.value })
+      console.log('old order', brands.value)
+    })
+  })
+
+  // const dragging = ref(false)
+
+  // const log = (event) => {
+  //   console.log(event)
+  // }
+
+  const onDraggableChange = (event: Event) => {
+    let origBrands = []
+    formHasChanges.value = true
+    if ((event as any).moved) {
+      for (let i = 0; i < brands.value.length; i++) {
+        if (brands.value[i].order !== i) {
+          isDisabled.value = false
+          brands.value[i].order = i
+          updateBrand(brands.value[i].id, brands.value[i])
+          origBrands.push(brands.value[i])
+        }
+      }
+
+      toast.add({
+        severity: 'success',
+        detail: t('notification.brand_order_update'),
+        life: 5000,
+      })
+
+      isDisabled.value = false
+    }
+  }
 </script>
 
 <style scoped>
-.handle {
-  cursor: move;
-}
+  .handle {
+    cursor: move;
+  }
 
-.ghost {
-  opacity: 0.8;
-  @reference bg-zinc-200;
-}
+  .ghost {
+    opacity: 0.8;
+    @reference bg-zinc-200;
+  }
 </style>

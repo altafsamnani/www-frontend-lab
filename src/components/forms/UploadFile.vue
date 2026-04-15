@@ -80,7 +80,6 @@
                 ghostClass="ghost"
                 direction="horizontal"
                 v-model="fileUrls"
-                :list="fileUrls"
                 item-key="id"
                 @change="onDraggableChange"
                 :disabled="isDisabled"
@@ -96,7 +95,7 @@
                   <LoaderCard :count="loader" v-if="loader" class="flex flex-wrap gap-6">
                   </LoaderCard>
                   <div
-                    class="list-group-item relative w-full place-content-between rounded-md bg-zinc-900/5 shadow-md transition-shadow dark:bg-white/10 sm:w-56 lg:max-w-64"
+                    class="list-group-item relative w-full place-content-between rounded-md bg-zinc-900/5 shadow-md transition-shadow sm:w-56 lg:max-w-64 dark:bg-white/10"
                   >
                     <figure class="text-center">
                       <i class="pi pi-file-pdf text-100 min-h-56 p-10 text-9xl" />
@@ -118,178 +117,180 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { usePrimeVue } from 'primevue/config'
-import FileUpload from 'primevue/fileupload'
-import Message from 'primevue/message'
-import { useI18n } from 'vue-i18n'
-import { useToast } from 'primevue/usetoast'
-import { useFilesStore } from '@/stores/files'
-import { useConfirm } from 'primevue/useconfirm'
-import draggable from 'vuedraggable'
-import type Files from '@/types/Files'
-import FileCard from '@/components/FileCard.vue'
-import LoaderCard from '@/components/icons/LoaderCard.vue'
-import InputText from 'primevue/inputtext'
-import InputGroup from 'primevue/inputgroup'
-import Button from 'primevue/button'
+  import { ref, computed } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import { usePrimeVue } from 'primevue/config'
+  import FileUpload from 'primevue/fileupload'
+  import Message from 'primevue/message'
+  import { useI18n } from 'vue-i18n'
+  import { useToast } from 'primevue/usetoast'
+  import { useFilesStore } from '@/stores/files'
+  import { useConfirm } from 'primevue/useconfirm'
+  import draggable from 'vuedraggable'
+  import type Files from '@/types/Files'
+  import FileCard from '@/components/FileCard.vue'
+  import LoaderCard from '@/components/icons/LoaderCard.vue'
+  import InputText from 'primevue/inputtext'
+  import InputGroup from 'primevue/inputgroup'
+  import Button from 'primevue/button'
 
-const props = withDefaults(
-  defineProps<{
-    multiple: boolean
-    type: string
-    files: Files[]
-    width?: string
-    maxFileSize: number
-  }>(),
-  {
-    multiple: false,
-    width: 'col-span-full',
-    maxFileSize: 250000000
-  }
-)
+  const props = withDefaults(
+    defineProps<{
+      multiple: boolean
+      type: string
+      files: Files[]
+      width?: string
+      maxFileSize: number
+    }>(),
+    {
+      multiple: false,
+      width: 'col-span-full',
+      maxFileSize: 250000000,
+    }
+  )
 
-const emit = defineEmits(['setUploadFiles'])
-const formHasChanges = defineModel<boolean>({ default: false })
-const $primevue = usePrimeVue()
-const toast = useToast()
-const confirm = useConfirm()
-const { t } = useI18n()
+  const emit = defineEmits(['setUploadFiles'])
+  const formHasChanges = defineModel<boolean>({ default: false })
+  const $primevue = usePrimeVue()
+  const toast = useToast()
+  const confirm = useConfirm()
+  const { t } = useI18n()
 
-const filesStore = useFilesStore()
-const { storeFiles, storeLinks } = filesStore
-const { storedFiles, storedLinks } = storeToRefs(filesStore)
+  const filesStore = useFilesStore()
+  const { storeFiles, storeLinks } = filesStore
+  const { storedFiles, storedLinks } = storeToRefs(filesStore)
 
-const totalSize = ref(0)
-const totalSizePercent = ref(0)
-const docFiles = ref<File[]>([])
-const fileId = ref()
-const isDisabled = ref(false)
-const multiple = ref(props.multiple)
-const fileUrls = ref(props.files ?? [])
-const uploadedFiles = computed(() => (fileUrls.value ? fileUrls.value.map((file) => file.id) : []))
-const maxFileSizeMb = ref(props.maxFileSize / 1000000)
-const isUploading = ref(false)
-const confirmed = ref(false)
-const hasError = ref('')
-const loader = ref(0)
-const externalLink = ref(false)
-const externalLinkForm = ref<{ type: string; url: string }>({})
-const acceptedFileTypes = import.meta.env.VITE_ALLOWED_FILE_TYPES.split(',')
+  const totalSize = ref(0)
+  const totalSizePercent = ref(0)
+  const docFiles = ref<File[]>([])
+  const fileId = ref()
+  const isDisabled = ref(false)
+  const multiple = ref(props.multiple)
+  const fileUrls = ref(props.files ?? [])
+  const uploadedFiles = computed(() =>
+    fileUrls.value ? fileUrls.value.map((file) => file.id) : []
+  )
+  const maxFileSizeMb = ref(props.maxFileSize / 1000000)
+  const isUploading = ref(false)
+  const confirmed = ref(false)
+  const hasError = ref('')
+  const loader = ref(0)
+  const externalLink = ref(false)
+  const externalLinkForm = ref<{ type: string; url: string }>({})
+  const acceptedFileTypes = import.meta.env.VITE_ALLOWED_FILE_TYPES.split(',')
 
-const onSelectedFiles = (event) => {
-  totalSize.value = 0
-  hasError.value = ''
-  docFiles.value = event.files
-  if (docFiles.value.length > 1 && !multiple.value) {
-    hasError.value = t('file_upload.allowed_files')
-    return
-  }
-
-  docFiles.value.map((file) => {
-    console.log('fileType', file.type)
-    if (!acceptedFileTypes.includes(file.type)) {
-      hasError.value = t('file_upload.file_invalid_type', { fileType: acceptedFileTypes })
+  const onSelectedFiles = (event) => {
+    totalSize.value = 0
+    hasError.value = ''
+    docFiles.value = event.files
+    if (docFiles.value.length > 1 && !multiple.value) {
+      hasError.value = t('file_upload.allowed_files')
       return
     }
-    totalSize.value += parseFloat(formatSize(file.size, 'MB'))
-    if (totalSize.value > maxFileSizeMb.value) {
-      totalSize.value = 0
-      hasError.value = t('file_upload.file_too_big', { maxFileSize: maxFileSizeMb.value })
-      return
-    }
-  })
-}
 
-const uploadEvent = (callback) => {
-  totalSizePercent.value = totalSize.value / 10
-  callback()
-}
-
-const onTemplatedUpload = async (event) => {
-  if (hasError.value) {
-    toast.add({ severity: 'error', summary: 'File upload', detail: hasError.value, life: 3000 })
-    return
+    docFiles.value.map((file) => {
+      console.log('fileType', file.type)
+      if (!acceptedFileTypes.includes(file.type)) {
+        hasError.value = t('file_upload.file_invalid_type', { fileType: acceptedFileTypes })
+        return
+      }
+      totalSize.value += parseFloat(formatSize(file.size, 'MB'))
+      if (totalSize.value > maxFileSizeMb.value) {
+        totalSize.value = 0
+        hasError.value = t('file_upload.file_too_big', { maxFileSize: maxFileSizeMb.value })
+        return
+      }
+    })
   }
 
-  toast.add({
-    severity: 'info',
-    summary: 'File upload',
-    detail: t('file_upload.file_upload_progress'),
-    life: 3000
-  })
-  docFiles.value = event.files
-  loader.value = docFiles.value.length
-  for (let i = 0; i < docFiles.value.length; i++) {
+  const uploadEvent = (callback) => {
+    totalSizePercent.value = totalSize.value / 10
+    callback()
+  }
+
+  const onTemplatedUpload = async (event) => {
+    if (hasError.value) {
+      toast.add({ severity: 'error', summary: 'File upload', detail: hasError.value, life: 3000 })
+      return
+    }
+
+    toast.add({
+      severity: 'info',
+      summary: 'File upload',
+      detail: t('file_upload.file_upload_progress'),
+      life: 3000,
+    })
+    docFiles.value = event.files
+    loader.value = docFiles.value.length
+    for (let i = 0; i < docFiles.value.length; i++) {
+      isUploading.value = true
+      const formData = new FormData()
+      formData.append('name', docFiles.value[i])
+      formData.append('type', props.type)
+      await storeFiles(formData)
+      if (!multiple.value) {
+        fileUrls.value = []
+      }
+      console.log('storedFiles', storedFiles.value)
+      fileUrls.value.push(storedFiles.value)
+      loader.value -= 1
+    }
+    emit('setUploadFiles', fileUrls)
+    formHasChanges.value = true
+    isUploading.value = false
+    toast.add({
+      severity: 'success',
+      summary: 'File upload',
+      detail: t('file_upload.file_upload_success'),
+      life: 3000,
+    })
+  }
+
+  const onExternalLinkUpload = async (event) => {
+    externalLink.value = false
+    toast.add({
+      severity: 'info',
+      summary: 'File upload',
+      detail: t('file_upload.file_upload_progress'),
+      life: 3000,
+    })
+    loader.value = 1
     isUploading.value = true
-    const formData = new FormData()
-    formData.append('name', docFiles.value[i])
-    formData.append('type', props.type)
-    await storeFiles(formData)
-    if (!multiple.value) {
-      fileUrls.value = []
-    }
-    console.log('storedFiles', storedFiles.value)
-    fileUrls.value.push(storedFiles.value)
+    externalLinkForm.value.type = props.type
+    await storeLinks(externalLinkForm.value)
+    fileUrls.value.push(storedLinks.value)
+
     loader.value -= 1
-  }
-  emit('setUploadFiles', fileUrls)
-  formHasChanges.value = true
-  isUploading.value = false
-  toast.add({
-    severity: 'success',
-    summary: 'File upload',
-    detail: t('file_upload.file_upload_success'),
-    life: 3000
-  })
-}
 
-const onExternalLinkUpload = async (event) => {
-  externalLink.value = false
-  toast.add({
-    severity: 'info',
-    summary: 'File upload',
-    detail: t('file_upload.file_upload_progress'),
-    life: 3000
-  })
-  loader.value = 1
-  isUploading.value = true
-  externalLinkForm.value.type = props.type
-  await storeLinks(externalLinkForm.value)
-  fileUrls.value.push(storedLinks.value)
-
-  loader.value -= 1
-
-  formHasChanges.value = true
-  isUploading.value = false
-  toast.add({
-    severity: 'success',
-    summary: 'File upload',
-    detail: t('file_upload.file_upload_success'),
-    life: 3000
-  })
-}
-
-const formatSize = (bytes, only) => {
-  const k = 1024
-  const dm = 3
-  const sizes = $primevue.config.locale.fileSizeTypes
-
-  if (bytes === 0) {
-    return `0 ${sizes[0]}`
+    formHasChanges.value = true
+    isUploading.value = false
+    toast.add({
+      severity: 'success',
+      summary: 'File upload',
+      detail: t('file_upload.file_upload_success'),
+      life: 3000,
+    })
   }
 
-  if (only === 'MB') return (bytes / (k * k)).toFixed(dm) + ' MB'
+  const formatSize = (bytes, only) => {
+    const k = 1024
+    const dm = 3
+    const sizes = $primevue.config.locale.fileSizeTypes
 
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm))
+    if (bytes === 0) {
+      return `0 ${sizes[0]}`
+    }
 
-  return `${formattedSize} ${sizes[i]}`
-}
+    if (only === 'MB') return (bytes / (k * k)).toFixed(dm) + ' MB'
 
-const onDraggableChange = (event) => {
-  /* let productFiles = []
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm))
+
+    return `${formattedSize} ${sizes[i]}`
+  }
+
+  const onDraggableChange = (event) => {
+    /* let productFiles = []
 if (event.moved) {
   for (let i = 0; i < fileUrls.value.length; i++) {
     if (fileUrls.value[i].order !== i) {
@@ -308,32 +309,32 @@ if (event.moved) {
     life: 5000
   })
 } */
-}
+  }
 
-const showdeleteFileConfirmation = (id) => {
-  fileId.value = id
-  confirmDeleteFile()
-}
+  const showdeleteFileConfirmation = (id) => {
+    fileId.value = id
+    confirmDeleteFile()
+  }
 
-const confirmDeleteFile = () => {
-  confirm.require({
-    message: t('modals.delete_item_text'),
-    header: t('modals.delete_item_title'),
-    acceptLabel: t('modals.yes_delete'),
-    rejectLabel: t('modals.cancel'),
-    accept: () => {
-      confirmed.value = true
-      fileUrls.value = []
-      // uploadedFiles.value = [];
-    },
-    reject: () => {
-      cancelDeleteFile()
-      console.log('canceled')
-    }
-  })
-}
+  const confirmDeleteFile = () => {
+    confirm.require({
+      message: t('modals.delete_item_text'),
+      header: t('modals.delete_item_title'),
+      acceptLabel: t('modals.yes_delete'),
+      rejectLabel: t('modals.cancel'),
+      accept: () => {
+        confirmed.value = true
+        fileUrls.value = []
+        // uploadedFiles.value = [];
+      },
+      reject: () => {
+        cancelDeleteFile()
+        console.log('canceled')
+      },
+    })
+  }
 
-const cancelDeleteFile = () => {
-  confirmed.value = false
-}
+  const cancelDeleteFile = () => {
+    confirmed.value = false
+  }
 </script>

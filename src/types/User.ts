@@ -1,10 +1,12 @@
+import type { Role, Permission } from '@/types/Role'
+
 export type User = {
   id: number
   firstName: string
   lastName: string
   email: string
-  permissions?: any[]
-  roles?: any[]
+  permissions?: Permission[]
+  roles?: Role[]
 }
 
 export type UserProfile = {
@@ -21,8 +23,9 @@ export type UserProfile = {
   emailBcc: string | null
   emailOrder: string | null
   invoiceDownload: boolean
-  roles: string[]
-  permissions: string[]
+  locale: string
+  roles: Role[]
+  permissions: Permission[]
   company: UserCompany | null
 }
 
@@ -54,6 +57,7 @@ export type UserProfileUpdate = {
   emailBcc?: string
   emailOrder?: string
   invoiceDownload?: boolean
+  locale?: string
 }
 
 export type CompanyUser = {
@@ -64,7 +68,9 @@ export type CompanyUser = {
   companyId: number | null
   countrycode: string | null
   mobile: string | null
+  locale?: string
   approvedAt: string | null
+  roles?: Role[]
 }
 
 export type CompanyUserList = {
@@ -83,4 +89,6 @@ export type CompanyUserUpdate = {
   lastName?: string
   countrycode?: string
   mobile?: string
+  locale?: string
+  role?: string
 }

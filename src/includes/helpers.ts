@@ -57,18 +57,70 @@ export const capitalizeFirstWord = (str: string) => {
     .join(' ')
 }
 
-export const getAttributeOptionTranslation = (t, facetItemLabelKey: number | string, facetItemsKey?: string) => {
+export const getAttributeOptionTranslation = (
+  t,
+  facetItemLabelKey: number | string,
+  facetItemsKey?: string
+) => {
   if (!isNaN(Number(facetItemLabelKey))) {
-      return facetItemLabelKey.toString()
+    return facetItemLabelKey.toString()
   }
 
   return facetItemsKey
-      ? t('attributeOptions.' + facetItemsKey + '.' + facetItemLabelKey)
-      : capitalizeFirstWord(facetItemLabelKey.toString())
+    ? t('attributeOptions.' + facetItemsKey + '.' + facetItemLabelKey)
+    : capitalizeFirstWord(facetItemLabelKey.toString())
 }
 
 export const facetCountClass = (str: any): string => {
-  const count = 5 + str.toString().length;
+  const count = 5 + str.toString().length
 
   return 'w-' + count + ' h-' + count
+}
+
+/**
+ * Supported locale codes
+ */
+export const LOCALE_CODES = ['nl', 'en'] as const
+export type LocaleCode = (typeof LOCALE_CODES)[number]
+export const DEFAULT_LOCALE: LocaleCode = 'nl'
+
+/**
+ * Get supported locales with translated labels
+ * @param t - i18n translation function
+ * @returns Array of locale options with value, label, and language
+ */
+export const getSupportedLocales = (t: (key: string) => string) => {
+  return LOCALE_CODES.map((code) => ({
+    value: code,
+    label: t(`languages.${code}`),
+    language: code,
+  }))
+}
+
+/**
+ * Get locale label by code
+ * @param t - i18n translation function
+ * @param code - locale code
+ * @returns Translated label for the locale
+ */
+export const getLocaleLabel = (t: (key: string) => string, code: string): string => {
+  return t(`languages.${code}`)
+}
+
+import { marked } from 'marked'
+
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+})
+
+const renderer = new marked.Renderer()
+renderer.link = ({ href, text }: { href: string; text: string }) => {
+  return `<a href="${href}" target="_blank" rel="noopener" class="underline text-primary">${text}</a>`
+}
+marked.use({ renderer })
+
+export const markdownToHtml = (md: string): string => {
+  if (!md) return ''
+  return marked.parse(md) as string
 }
