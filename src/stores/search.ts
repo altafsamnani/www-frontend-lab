@@ -2,16 +2,18 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import {
   getSearch,
+  getSearchFacets,
   getProduct,
   getDocuments,
   getSuggestions,
-  getProductCrosssells
+  getProductCrosssells,
 } from '@/http/search'
 import type Paginator from '@/types/Paginator'
 import type Query from '@/types/Query'
 import type Facets from '@/types/Facets'
 import type ProductDetails from '@/types/ProductDetails'
 import type { CrosssellData } from '@/types/Crosssell'
+import type ResponseData from '@/types/ResponseData'
 
 export const useSearchStore = defineStore('searchStore', () => {
   const product = ref<ProductDetails>({} as ProductDetails)
@@ -22,12 +24,14 @@ export const useSearchStore = defineStore('searchStore', () => {
     manual: [],
     software: [],
     firmware: [],
-    document: []
+    document: [],
   })
   const documentsFacets = ref<Facets>({} as Facets)
   const documentsPaginator = ref<Paginator>({} as Paginator)
   const loading = ref(false)
   const crosssells = ref<CrosssellData>({ products: [], categories: [] })
+  const categoryFacets = ref<Facets>({} as Facets)
+  const categoryFacetsTotal = ref(0)
 
   const fetchSearch = async (params?: Query) => {
     const { data, extra } = await getSearch(params)
@@ -35,6 +39,13 @@ export const useSearchStore = defineStore('searchStore', () => {
     products.value = data
     facets.value = extra.facets
     paginator.value = extra.paginator
+  }
+
+  const fetchCategoryFacets = async (params?: Query) => {
+    const response: ResponseData = await getSearchFacets(params)
+
+    categoryFacets.value = response.extra.facets
+    categoryFacetsTotal.value = response.extra.paginator?.total ?? 0
   }
 
   const fetchProduct = async (id: string | string[]) => {
@@ -73,10 +84,13 @@ export const useSearchStore = defineStore('searchStore', () => {
     documentsPaginator,
     loading,
     crosssells,
+    categoryFacets,
+    categoryFacetsTotal,
     fetchSearch,
+    fetchCategoryFacets,
     fetchProduct,
     fetchDocuments,
     fetchSuggestions,
-    fetchProductCrosssells
+    fetchProductCrosssells,
   }
 })

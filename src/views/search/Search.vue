@@ -1,128 +1,144 @@
 <template>
-  <div class="relative bg-surface-0 dark:bg-surface-950 py-4">
-    <div class="flex sm:flex-row flex-col items-start sm:items-end gap-2">
+  <div class="bg-surface-0 dark:bg-surface-950 relative py-4">
+    <div class="flex flex-col items-start gap-2 sm:flex-row sm:items-end">
       <div class="flex-1">
-        <h2 v-if="headerTitle"
-          class="text-3xl text-surface-900 dark:text-surface-0 font-bold inline-flex items-center gap-2">{{
-            t(headerTitle) }}</h2>
-        <p v-if="headerDescription" class="mt-2 text-surface-600 dark:text-surface-400 text-xl"
-          v-html="t(headerDescription)"></p>
+        <h2
+          v-if="headerTitle"
+          class="text-surface-900 dark:text-surface-0 inline-flex items-center gap-2 text-3xl font-bold"
+        >
+          {{ t(headerTitle) }}
+        </h2>
+        <p
+          v-if="headerDescription"
+          class="text-surface-600 dark:text-surface-400 mt-2 hidden text-xl"
+          v-html="t(headerDescription)"
+        ></p>
       </div>
     </div>
-    <Divider v-if="headerTitle || headerDescription" class="!my-6" />
-    <div class="flex lg:flex-row flex-col gap-8">
+    <Divider v-if="headerTitle" class="!my-6" />
+    <div class="flex flex-col gap-8 lg:flex-row">
       <div class="w-full lg:w-72">
-        <Facets ref="facetsRef" view='fieldset' :static-es-keys="staticEsKeys" :query="query" @applySearch="applySearch"
-          @setHeader="setHeader" />
+        <Facets
+          ref="facetsRef"
+          view="fieldset"
+          :static-es-keys="staticEsKeys"
+          :query="query"
+          @applySearch="applySearch"
+          @setHeader="setHeader"
+        />
       </div>
-      <div class="flex-1  rounded-lg min-h-72">
-        <FacetTop v-if="categoryFacets" :category-facets="categoryFacets" :query="query"
-          @clickOnFilterToInsertEs="handleFacetTopClick" />
+      <div class="min-h-72 flex-1 rounded-lg">
+        <FacetTop
+          v-if="categoryFacets"
+          :category-facets="categoryFacets"
+          :query="query"
+          @clickOnFilterToInsertEs="handleFacetTopClick"
+        />
         <Listing :query="query" @clickOnSortPaginator="applySearch" />
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { storeToRefs } from 'pinia'
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useSearchStore } from '@/stores/search';
-import { useNavigationStore } from '@/stores/navigation';
+  import { ref, onMounted } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import { useI18n } from 'vue-i18n'
+  import { useRouter } from 'vue-router'
+  import { useSearchStore } from '@/stores/search'
+  import { useNavigationStore } from '@/stores/navigation'
 
-import Divider from 'primevue/divider';
-import Facets from './Facets.vue';
-import Listing from '@/views/search/Listing.vue';
-import type Query from '@/types/Query';
-import FacetTop from './FacetTop.vue';
+  import Divider from 'primevue/divider'
+  import Facets from './Facets.vue'
+  import Listing from '@/views/search/Listing.vue'
+  import type Query from '@/types/Query'
+  import FacetTop from './FacetTop.vue'
 
-
-const searchStore = useSearchStore()
-const { fetchSearch } = searchStore
-const { facets, products } = storeToRefs(searchStore)
-const { t } = useI18n()
-const router = useRouter()
-const navigationStore = useNavigationStore()
-const categoryFacets = ref(facets)
-const headerTitle = ref('')
-const headerDescription = ref('')
-const facetsRef = ref<InstanceType<typeof Facets> | null>(null)
-const staticEsKeys = ref({
-  brand: 'brand.slug',
-  price: 'price',
-  categories: 'categoriesAll.slug'
-})
-
-const query = ref<Query>({
-  filter: [],
-  order: [],
-  page: {
-    size: 12,
-    number: 1
-  }
-})
-onMounted(async () => {
-  // Store the current route for "Continue Shopping" functionality
-  navigationStore.setLastVisitedRoute(router.currentRoute.value.fullPath)
-  // applySearch(query.value)
-})
-
-
-
-const applySearch = async (params?: Query) => {
-  if (!params) return;
-  products.value = []
-  query.value = params
-  resetRoutes()
-  await fetchSearch(params)
-
-}
-
-const resetRoutes = () => {
-  let routeCategory = ''
-  let routeBrand = ''
-  query.value.filter?.map((filter) => {
-    switch (filter.key) {
-      case staticEsKeys.value.categories:
-        console.log('push cat route', filter.key)
-        routeCategory = '/' + filter.value
-
-        break;
-      case staticEsKeys.value.brand:
-        console.log('push brand route', filter.key)
-        routeBrand = '/' + filter.value
-
-        break;
-      default:
-        console.log('default route', filter.key);
-        break;
-    }
+  const searchStore = useSearchStore()
+  const { fetchSearch } = searchStore
+  const { facets, products } = storeToRefs(searchStore)
+  const { t } = useI18n()
+  const router = useRouter()
+  const navigationStore = useNavigationStore()
+  const categoryFacets = ref(facets)
+  const headerTitle = ref('')
+  const headerDescription = ref('')
+  const facetsRef = ref<InstanceType<typeof Facets> | null>(null)
+  const staticEsKeys = ref({
+    brand: 'brand.slug',
+    price: 'price',
+    categories: 'categoriesAll.slug',
   })
 
-  const newRoute = '/search' + (routeCategory === '' && routeBrand ? '/all' : routeCategory) + routeBrand
-  history.pushState(null, '', newRoute)
-  // Store the updated route for "Continue Shopping" functionality
-  navigationStore.setLastVisitedRoute(newRoute)
-  //router.clearRoutes
-  //router.currentRoute.value.params.categorySlug = routeParams.categorySlug
-  //router.push({ name: 'Search', params: routeParams })
-  //router.replace({ name: 'Search', params: routeParams })
+  const query = ref<Query>({
+    filter: [],
+    order: [],
+    page: {
+      size: 12,
+      number: 1,
+    },
+  })
+  onMounted(async () => {
+    // Store the current route for "Continue Shopping" functionality
+    navigationStore.setLastVisitedRoute(router.currentRoute.value.fullPath)
+    // applySearch(query.value)
+  })
 
-}
-
-function setHeader(title: string, description: string) {
-  headerTitle.value = title
-  headerDescription.value = description
-}
-
-const handleFacetTopClick = (event: any) => {
-  // Forward the event to Facets component's clickOnFilterToInsertEs function
-  // Using categories key and the filter data from facets
-  if (facetsRef.value) {
-    const filterData = facets.value?.static_categories_agg?.html?.filter_data;
-    facetsRef.value.clickOnFilterToInsertEs(event, staticEsKeys.value.categories, 'general.categories', filterData);
+  const applySearch = async (params?: Query) => {
+    if (!params) return
+    products.value = []
+    query.value = params
+    resetRoutes()
+    await fetchSearch(params)
   }
-}
 
+  const resetRoutes = () => {
+    let routeCategory = ''
+    let routeBrand = ''
+    query.value.filter?.map((filter) => {
+      switch (filter.key) {
+        case staticEsKeys.value.categories:
+          console.log('push cat route', filter.key)
+          routeCategory = '/' + filter.value
+
+          break
+        case staticEsKeys.value.brand:
+          console.log('push brand route', filter.key)
+          routeBrand = '/' + filter.value
+
+          break
+        default:
+          console.log('default route', filter.key)
+          break
+      }
+    })
+
+    const newRoute =
+      '/search' + (routeCategory === '' && routeBrand ? '/all' : routeCategory) + routeBrand
+    history.pushState(null, '', newRoute)
+    // Store the updated route for "Continue Shopping" functionality
+    navigationStore.setLastVisitedRoute(newRoute)
+    //router.clearRoutes
+    //router.currentRoute.value.params.categorySlug = routeParams.categorySlug
+    //router.push({ name: 'Search', params: routeParams })
+    //router.replace({ name: 'Search', params: routeParams })
+  }
+
+  function setHeader(title: string, description: string) {
+    headerTitle.value = title
+    headerDescription.value = description
+  }
+
+  const handleFacetTopClick = (event: any) => {
+    // Forward the event to Facets component's clickOnFilterToInsertEs function
+    // Using categories key and the filter data from facets
+    if (facetsRef.value) {
+      const filterData = facets.value?.static_categories_agg?.html?.filter_data
+      facetsRef.value.clickOnFilterToInsertEs(
+        event,
+        staticEsKeys.value.categories,
+        'general.categories',
+        filterData
+      )
+    }
+  }
 </script>

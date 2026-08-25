@@ -1,0 +1,32 @@
+Prompts
+--> For Checkout <--
+For /checkout please implement following changes
+1) For Shipping Address, remove existing implementation and replace it with Primevue dropdown or any other relevant Primevue component with prepopulated shipping addresses list from the store, you can shipping.ts store method for listing, also at the bottom give link for adding new shipping address. 
+
+2) For Billing address it should be in view mode and should use company store and fetchEditCompany to retreive it and below it should give edit link which should redirect user to /profile  at the bottom it should display current cart
+
+Please organize the page best standard way it should be for checkout page
+
+--> For Left Menus <--
+Change leftmenu layout according to provided code below and use menu submenu structure according to following and respected routes as well or use if its available example for shipping, shopping cart and after adding also add i18n translations for 
+the new menu items.
+
+Dashboard (Home/Overview)
+
+Shopping
+  Shopping Cart
+  Favorites/Wishlist
+
+Orders & Quotes
+  Orders
+  My Quotes
+  Osec Quotes
+
+Support & Learning
+  Manuals/Guides
+  RMAs
+  Osec Academy
+
+Account Settings
+  My Profile
+  Shipping Addresses
