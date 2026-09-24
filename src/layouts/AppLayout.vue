@@ -34,7 +34,6 @@
 <script setup lang="ts">
   import { useRoute } from 'vue-router'
   import Footer from '@/layouts/Footer.vue'
-  import Header from '@/components/navigation/Header.vue'
   import LeftMenu from '@/components/navigation/LeftMenu.vue'
   import GdprConsent from '@/components/navigation/GdprConsent.vue'
   import { useNotifyStore } from '@/stores/notify'
