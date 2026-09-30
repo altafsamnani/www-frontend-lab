@@ -55,8 +55,10 @@
                     : 'text-surface-700 dark:text-surface-200 hover:text-primary font-medium',
                 ]"
                 @click="
-                  setActiveItem(index)
-                  navigateToRoute(item.route)
+                  () => {
+                    setActiveItem(index)
+                    navigateToRoute(item.route)
+                  }
                 "
               >
                 <i :class="[item.icon, 'mr-2 !text-base !leading-normal']" />
