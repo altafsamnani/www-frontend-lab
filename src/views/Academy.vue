@@ -1,6 +1,10 @@
 <template>
   <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-surface-900 dark:text-surface-0 mb-6">{{ $t('menu.academy') }}</h1>
+    <h1
+      class="text-surface-900 dark:text-surface-0 mb-6 text-2xl leading-7 font-bold sm:text-3xl sm:tracking-tight"
+    >
+      {{ $t('menu.academy') }}
+    </h1>
     <div class="text-surface-600 dark:text-surface-400">
       <p>{{ $t('common.coming_soon') }}</p>
     </div>
@@ -8,5 +12,5 @@
 </template>
 
 <script setup lang="ts">
-// Osec Academy view - placeholder for now
+  // Osec Academy view - placeholder for now
 </script>

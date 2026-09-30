@@ -3,22 +3,24 @@
     <Toast position="top-right" />
     <slot />
   </div>
-  <div v-else class="min-h-screen flex flex-col">
+  <div v-else class="flex min-h-screen flex-col">
     <Toast position="top-right" />
     <GdprConsent />
-    <div class="sticky top-0 z-40 items-center shadow-sm shrink-0 gap-x-4 sm:gap-x-6 bg-surface-800 dark:bg-surface-50">
+    <div
+      class="bg-primary-500 dark:bg-primary-100 sticky top-0 z-40 shrink-0 items-center gap-x-4 shadow-sm sm:gap-x-6"
+    >
       <TopNavigation />
     </div>
-    <div class="flex flex-col flex-1">
-      <div class="w-full max-w-7xl mx-auto relative flex-1">
+    <div class="flex flex-1 flex-col">
+      <div class="relative mx-auto w-full max-w-7xl flex-1">
         <div>
-          <Header />
+          <SecondaryNavigation />
         </div>
 
-        <main class="py-2 lg:pt-1 max-w-[100vw] flex-1">
-          <div class="flex relative">
+        <main class="max-w-[100vw] flex-1 py-2 lg:pt-1">
+          <div class="relative flex">
             <LeftMenu v-if="route.meta?.layout === 'user'" />
-            <div class="flex-1 p-4">
+            <div class="min-w-0 flex-1 p-4">
               <slot />
             </div>
           </div>
@@ -30,29 +32,32 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import Footer from '@/layouts/Footer.vue'
-import Header from '@/components/navigation/Header.vue'
-import LeftMenu from '@/components/navigation/LeftMenu.vue'
-import GdprConsent from '@/components/navigation/GdprConsent.vue'
-import { useNotifyStore } from '@/stores/notify'
-import { useToast } from 'primevue/usetoast'
-import { watch } from 'vue'
-import TopNavigation from '@/components/navigation/TopNavigation.vue'
-import Toast from 'primevue/toast'
+  import { useRoute } from 'vue-router'
+  import Footer from '@/layouts/Footer.vue'
+  import LeftMenu from '@/components/navigation/LeftMenu.vue'
+  import GdprConsent from '@/components/navigation/GdprConsent.vue'
+  import { useNotifyStore } from '@/stores/notify'
+  import { useToast } from 'primevue/usetoast'
+  import { watch } from 'vue'
+  import TopNavigation from '@/components/navigation/TopNavigation.vue'
+  import Toast from 'primevue/toast'
+  import SecondaryNavigation from '@/components/navigation/SecondaryNavigation.vue'
 
-const notifyStore = useNotifyStore()
-const toast = useToast()
-const route = useRoute()
+  const notifyStore = useNotifyStore()
+  const toast = useToast()
+  const route = useRoute()
 
-watch(() => notifyStore.notifications.length, (newLength, oldLength) => {
-  if (newLength > oldLength && newLength > 0) {
-    const latestNotification = notifyStore.notifications[newLength - 1]
-    toast.add({
-      severity: latestNotification.type,
-      detail: latestNotification.message,
-      life: 3000
-    })
-  }
-})
+  watch(
+    () => notifyStore.notifications.length,
+    (newLength, oldLength) => {
+      if (newLength > oldLength && newLength > 0) {
+        const latestNotification = notifyStore.notifications[newLength - 1]
+        toast.add({
+          severity: latestNotification.type,
+          detail: latestNotification.message,
+          life: 3000,
+        })
+      }
+    }
+  )
 </script>

@@ -1,131 +1,167 @@
 <template>
-    <div class="overflow-hidden py-8 sm:py-8">
-        <div class="mx-auto max-w-7xl md:px-6 lg:px-8">
-            <div class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start">
-                <div class="px-6 lg:px-0 lg:pr-4 lg:pt-4">
-                    <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
-                        <h2 class="text-base font-semibold leading-7 text-indigo-600">Osec, Training</h2>
-                        <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Osec, Training</p>
-                        <p class="mt-6 text-lg leading-8 text-gray-600">Portfolio of electronic security products in the
-                            areas of Burglary, Video, Intercom, Access Control, Building Automation and Fire.</p>
-                        <dl class="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                            <div v-for="feature in features" :key="feature.name" class="relative pl-9">
-                                <i :class="[feature.icon, 'text-lg']"></i>
-                                {{ ' ' }}
-                                <dd class="inline">{{ feature.description }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-                </div>
-                <div class="sm:px-24 lg:px-24 py-24 lg:py-24">
-                    <ul role="list" class="-mb-8">
-                        <li v-for="(event, eventIdx) in timeline" :key="event.id">
-                            <div class="relative pb-8">
-                                <span v-if="eventIdx !== timeline.length - 1"
-                                    class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
-                                <div class="relative flex space-x-3">
-                                    <div>
-                                        <span
-                                            :class="[event.iconBackground, 'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white']">
-                                            <component :is="event.icon" class="h-5 w-5 text-white" aria-hidden="true" />
-                                        </span>
-                                    </div>
-                                    <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                                        <div>
-                                            <p class="text-sm text-gray-500">
-                                                {{ event.content }} <a :href="event.href"
-                                                    class="font-medium text-gray-900">{{ event.target }}</a>
-                                            </p>
-                                        </div>
-                                        <div class="whitespace-nowrap text-right text-sm text-gray-500">
-                                            <time :datetime="event.datetime">{{ event.date }}</time>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+  <div
+    class="bg-surface-50 ring-surface-900/5 dark:bg-surface-800/50 overflow-hidden rounded-3xl py-12 ring-1 dark:ring-white/10"
+  >
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <h2 class="text-primary-600 dark:text-primary-400 text-base leading-7 font-semibold">
+        {{ t('home.training.eyebrow') }}
+      </h2>
+      <p
+        class="text-surface-900 dark:text-surface-0 mt-2 text-3xl font-bold tracking-tight sm:text-4xl"
+      >
+        {{ t('home.training.title') }}
+      </p>
+      <p class="text-surface-600 dark:text-surface-400 mt-6 text-lg leading-8">
+        {{ t('home.training.subtitle') }}
+      </p>
+      <Carousel
+        :value="trainings"
+        :numVisible="3"
+        :numScroll="1"
+        :responsiveOptions="responsiveOptions"
+        circular
+        class="-mx-3 mt-10"
+        :pt="{
+          contentContainer: { class: 'w-full min-w-0' },
+          content: { class: 'flex w-full min-w-0 items-center' },
+          viewport: { class: 'w-full min-w-0 flex-1 overflow-hidden' },
+          itemList: { class: 'flex' },
+          item: { class: 'shrink-0 grow-0 basis-full min-w-0 px-3 sm:basis-1/2 lg:basis-1/3' },
+        }"
+      >
+        <template #item="{ data }">
+          <article class="group relative flex h-full flex-col">
+            <div class="relative w-full">
+              <img
+                :src="data.imageUrl"
+                :alt="data.title"
+                class="bg-surface-100 dark:bg-surface-800 aspect-[3/2] w-full rounded-2xl object-cover"
+                loading="lazy"
+              />
+              <div
+                class="ring-surface-900/10 absolute inset-0 rounded-2xl ring-1 ring-inset dark:ring-white/10"
+              />
             </div>
-        </div>
+            <div class="mt-6 flex items-center gap-x-4 text-xs">
+              <time :datetime="data.datetime" class="text-surface-500 dark:text-surface-400">{{
+                data.date
+              }}</time>
+              <span
+                class="bg-surface-100 text-surface-600 dark:bg-surface-700 dark:text-surface-300 rounded-full px-3 py-1.5 font-medium"
+                >{{ data.level }}</span
+              >
+            </div>
+            <h3
+              class="text-surface-900 group-hover:text-surface-600 dark:text-surface-0 dark:group-hover:text-surface-300 mt-3 text-lg leading-6 font-semibold"
+            >
+              <a :href="data.href">
+                <span class="absolute inset-0" />
+                {{ data.title }}
+              </a>
+            </h3>
+            <p class="text-surface-600 dark:text-surface-400 mt-3 line-clamp-2 text-sm leading-6">
+              {{ data.description }}
+            </p>
+            <div class="mt-auto flex items-center justify-between pt-5 text-sm">
+              <span class="text-surface-500 dark:text-surface-400 flex items-center gap-x-1.5">
+                <i class="pi pi-map-marker text-xs" />{{ data.location }}
+              </span>
+              <span class="text-primary-600 dark:text-primary-400 font-semibold"
+                >{{ t('home.training.register') }} <span aria-hidden="true">&rarr;</span></span
+              >
+            </div>
+          </article>
+        </template>
+      </Carousel>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { CheckIcon, HandThumbUpIcon, UserIcon, CalendarDaysIcon } from '@heroicons/vue/20/solid'
-const features = [
+  import { ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import Carousel from 'primevue/carousel'
+  import type { Training } from '@/types/Training'
+
+  const { t } = useI18n()
+
+  const responsiveOptions = ref([
+    { breakpoint: '1023px', numVisible: 2, numScroll: 1 },
+    { breakpoint: '639px', numVisible: 1, numScroll: 1 },
+  ])
+
+  const trainings = ref<Training[]>([
     {
-        name: 'Best in class',
-        description:
-            'We have a team of experts who are passionate about what they do.',
-        href: '#',
-        icon: 'pi pi-bell',
+      id: 1,
+      title: 'Axxon One certificeringstraining',
+      description:
+        'Word gecertificeerd Axxon One-installateur en haal alles uit dit krachtige VMS-platform, van slimme zoekfuncties tot AI-analytics.',
+      imageUrl: 'https://osec.nl/files/images/cat/448204a13b4e3ac93ea5d230fd046d6a.jpg',
+      level: 'Certificering',
+      date: 'Sep 15, 2026',
+      datetime: '2026-09-15',
+      location: 'Osec Experience Center',
+      href: '#',
     },
     {
-        name: 'Quality trainings',
-        description:
-            'Everyone is welcome to attend our trainings and attend our events.',
-        href: '#',
-        icon: 'pi pi-shield',
+      id: 2,
+      title: 'Ajax Fibra en Superior training',
+      description:
+        'Praktische verdieping in de bekabelde Fibra-lijn en de Superior-serie: topologie, voeding en configuratie in de praktijk.',
+      imageUrl: 'https://osec.nl/files/images/cat/f0b9862a8d8a1e6396c4bbc022e5b346.jpg',
+      level: 'Verdieping',
+      date: 'Sep 29, 2026',
+      datetime: '2026-09-29',
+      location: 'Osec Experience Center',
+      href: '#',
     },
     {
-        name: 'No 1 on the market',
-        description:
-            'We have a huge portfolio of products and services from all the security sectors.',
-        href: '#',
-        icon: 'pi pi-lock',
+      id: 3,
+      title: 'BAS-IP kennismakingstraining',
+      description:
+        'Maak kennis met het BAS-IP intercomplatform: opbouw van een project, koppelingen en de belangrijkste apps en diensten.',
+      imageUrl: 'https://osec.nl/files/images/cat/05bdafa02ff1b7cfe35abbbb5480b69a.jpg',
+      level: 'Kennismaking',
+      date: 'Okt 8, 2026',
+      datetime: '2026-10-08',
+      location: 'Online',
+      href: '#',
     },
-];
-const timeline = [
-  {
-    id: 1,
-    content: 'Registration is open for',
-    target: 'Axxon One certificeringstraining',
-    href: '#',
-    date: 'July 20',
-    datetime: '2020-09-20',
-    icon: CalendarDaysIcon,
-    iconBackground: 'bg-orange-400',
-  },
-  {
-    id: 2,
-    content: 'Enhance your skills by attending',
-    target: 'Ajax Fibra en Superior training',
-    href: '#',
-    date: 'Jun 28',
-    datetime: '2020-09-22',
-    icon: CalendarDaysIcon,
-    iconBackground: 'bg-orange-500',
-  },
-  {
-    id: 3,
-    content: 'Completed phone screening with',
-    target: 'BAS-IP kennismaking training',
-    href: '#',
-    date: 'May 28',
-    datetime: '2020-09-28',
-    icon: CheckIcon,
-    iconBackground: 'bg-green-500',
-  },
-  {
-    id: 4,
-    content: 'Advanced to interview by',
-    target: 'After Work Training - Dahua IP video voor starters',
-    href: '#',
-    date: 'May 20',
-    datetime: '2020-09-30',
-    icon: CheckIcon,
-    iconBackground: 'bg-green-500',
-  },
-  {
-    id: 5,
-    content: 'Completed interview with',
-    target: 'BAS-IP kennismaking training',
-    href: '#',
-    date: 'Apr 4',
-    datetime: '2020-10-04',
-    icon: CheckIcon,
-    iconBackground: 'bg-green-500',
-  },
-];
+    {
+      id: 4,
+      title: 'After Work: Dahua IP video voor starters',
+      description:
+        "Laagdrempelige avondtraining voor starters: camera's aansluiten, recorders configureren en beelden veilig op afstand bekijken.",
+      imageUrl: 'https://osec.nl/images/1200x600px-DoLynk-Care.jpg',
+      level: 'Starters',
+      date: 'Okt 22, 2026',
+      datetime: '2026-10-22',
+      location: 'Osec Experience Center',
+      href: '#',
+    },
+    {
+      id: 5,
+      title: 'Satel ACSP producttraining',
+      description:
+        'Alles over de adresseerbare ACSP-brandmeldcentrale: projectering, lusbekabeling en inbedrijfstelling volgens de norm.',
+      imageUrl: 'https://www.osec.nl/newsletters/images/Introductie_ACSP_1200x600pxV2_original.jpg',
+      level: 'Product',
+      date: 'Nov 5, 2026',
+      datetime: '2026-11-05',
+      location: 'Osec Experience Center',
+      href: '#',
+    },
+    {
+      id: 6,
+      title: 'Hikvision AcuSense workshop',
+      description:
+        'Hands-on workshop over AcuSense-technologie: nauwkeurige detectie instellen en loze meldingen tot een minimum beperken.',
+      imageUrl: 'https://osec.nl/files/images/cat/9264f3a249e69e5ad944e65da9b96a0d.jpg',
+      level: 'Workshop',
+      date: 'Nov 19, 2026',
+      datetime: '2026-11-19',
+      location: 'Online',
+      href: '#',
+    },
+  ])
 </script>
